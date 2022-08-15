@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2682,6 +2682,100 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4062349944913877690, guid: 00e7f0c7f4e16de468a3b204548f8a8f, type: 3}
   m_PrefabInstance: {fileID: 439910029}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &445878417
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 445878421}
+  - component: {fileID: 445878420}
+  - component: {fileID: 445878419}
+  - component: {fileID: 445878418}
+  m_Layer: 0
+  m_Name: Justice Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &445878418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445878417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f8d04c47c63be45bad7deea139c6f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goal:
+    Value:
+      x: 0
+      y: 0
+      z: 0
+  exit:
+    Value:
+      x: 0
+      y: 0
+      z: 0
+--- !u!114 &445878419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445878417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d7e4ac1cd508f4e9ef4aad25e3b458, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  random:
+    state: 10
+  goal: {fileID: 703494106}
+  exit: {fileID: 815075394}
+  agent: {fileID: 4062349944913877694, guid: ac53670c8ebebc04ebd4a66a0239bec1, type: 3}
+  antifa: {fileID: 4062349944913877694, guid: 0662c74b11602eb4abd5c7503bdbf62d, type: 3}
+  spawnRadius:
+    x: 10
+    y: 0
+    z: 10
+  crowdSize: 4
+  antifaSize: 1
+  spawned: 0
+  done: 0
+--- !u!114 &445878420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445878417}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
+--- !u!4 &445878421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 445878417}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -75, y: 1.5, z: -73}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &452099316
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7424,100 +7518,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4062349944913877690, guid: 00e7f0c7f4e16de468a3b204548f8a8f, type: 3}
   m_PrefabInstance: {fileID: 1120500041}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1120784780
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1120784784}
-  - component: {fileID: 1120784783}
-  - component: {fileID: 1120784782}
-  - component: {fileID: 1120784781}
-  m_Layer: 0
-  m_Name: Justice Spawner
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1120784781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120784780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76f8d04c47c63be45bad7deea139c6f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goal:
-    Value:
-      x: 0
-      y: 0
-      z: 0
-  exit:
-    Value:
-      x: 0
-      y: 0
-      z: 0
---- !u!114 &1120784782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120784780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d7e4ac1cd508f4e9ef4aad25e3b458, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  random:
-    state: 10
-  goal: {fileID: 703494106}
-  exit: {fileID: 815075394}
-  agent: {fileID: 4062349944913877694, guid: ac53670c8ebebc04ebd4a66a0239bec1, type: 3}
-  antifa: {fileID: 4062349944913877694, guid: 0662c74b11602eb4abd5c7503bdbf62d, type: 3}
-  spawnRadius:
-    x: 10
-    y: 0
-    z: 10
-  crowdSize: 4
-  antifaSize: 1
-  spawned: 0
-  done: 0
---- !u!114 &1120784783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120784780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 0
---- !u!4 &1120784784
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1120784780}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -75, y: 1.5, z: -73}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 10
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1129004850
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10887,6 +10887,78 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4062349944913877690, guid: 00e7f0c7f4e16de468a3b204548f8a8f, type: 3}
   m_PrefabInstance: {fileID: 1648570156}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1649964271
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1649964275}
+  - component: {fileID: 1649964274}
+  - component: {fileID: 1649964272}
+  - component: {fileID: 1649964276}
+  m_Layer: 0
+  m_Name: Counter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1649964272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649964271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ConversionMode: 0
+--- !u!33 &1649964274
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649964271}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1649964275
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649964271}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.9, y: 0, z: -14.2}
+  m_LocalScale: {x: 37.766724, y: 23.56, z: 147.75}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1649964276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649964271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ca5977404ad4ab40b8c2a2237b82164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  frequency: 0
+  lastCount: 0
+  minX: 0
+  maxX: 0
+  minZ: 0
+  maxZ: 0
 --- !u!1001 &1655228401
 PrefabInstance:
   m_ObjectHideFlags: 0

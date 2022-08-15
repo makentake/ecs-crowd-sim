@@ -120,8 +120,8 @@ MonoBehaviour:
   attractionFac: 0
   attractionRot: 90
   repulsionFac: 0.5
+  baseTolerance: 0
   tolerance: -1
-  aggression: 0
   heading:
     value:
       x: 0
@@ -163,6 +163,11 @@ MonoBehaviour:
       x: 0
       y: 0
       z: 0
+  exit:
+    Value:
+      x: 0
+      y: 0
+      z: 0
 --- !u!114 &-1658100972986550465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,12 +180,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c807a45c32ac994f92e715466c4b36b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionTarget: {fileID: 0}
   squadHeading:
     x: 0
     y: 0
     z: 0
     w: 0
-  angerDefuse: 1
+  angerDefuse: 2
   radius: 10
 --- !u!114 &7303309130732959854
 MonoBehaviour:
