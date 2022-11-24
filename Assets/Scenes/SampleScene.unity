@@ -474,7 +474,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 74847319}
-  - component: {fileID: 74847318}
   - component: {fileID: 74847317}
   - component: {fileID: 74847316}
   m_Layer: 0
@@ -532,19 +531,6 @@ MonoBehaviour:
   antifaSize: 0
   spawned: 0
   done: 0
---- !u!114 &74847318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 74847314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 0
 --- !u!4 &74847319
 Transform:
   m_ObjectHideFlags: 0
@@ -3415,7 +3401,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 558999984}
-  - component: {fileID: 558999983}
   m_Layer: 0
   m_Name: Red Goal (Temp Unused)
   m_TagString: Untagged
@@ -3423,19 +3408,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &558999983
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558999981}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea7d7495833204790ba1d3a8755397f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ConversionMode: 0
 --- !u!4 &558999984
 Transform:
   m_ObjectHideFlags: 0

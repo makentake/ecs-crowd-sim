@@ -13,9 +13,11 @@ public partial class SpawningSystem : SystemBase
     {
         end = World.GetOrCreateSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
 
+        uint osTime = (uint)System.DateTime.Now.Ticks;
+
         Entities.ForEach((int entityInQueryIndex, ref Spawner s) =>
         {
-            s.random = Random.CreateFromIndex((uint)entityInQueryIndex);
+            s.random.InitState(osTime + (uint)entityInQueryIndex + 0b1);
         }).ScheduleParallel();
     }
 
