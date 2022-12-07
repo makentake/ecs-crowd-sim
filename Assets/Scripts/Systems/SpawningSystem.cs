@@ -13,8 +13,10 @@ public partial class SpawningSystem : SystemBase
     {
         end = World.GetOrCreateSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
 
+        // Get the current time to use for random number generation
         uint osTime = (uint)System.DateTime.Now.Ticks;
 
+        // Initialize all the random components
         Entities.ForEach((int entityInQueryIndex, ref Spawner s) =>
         {
             s.random.InitState(osTime + (uint)entityInQueryIndex + 0b1);
@@ -25,10 +27,12 @@ public partial class SpawningSystem : SystemBase
     {
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
+        // Spawn agents
         Entities.ForEach((int entityInQueryIndex, ref Spawner s, ref Goal g, in Translation translation) =>
         {
             if (!s.done)
             {
+                // Calculate the goal position
                 float3 minValue = translation.Value;
                 float3 maxValue = s.spawnRadius + minValue;
                 //g.goal = GetComponentDataFromEntity<Translation>(true)[s.goal];
@@ -38,6 +42,7 @@ public partial class SpawningSystem : SystemBase
                 g.goal = goalPos;
                 g.exit = GetComponentDataFromEntity<Translation>(true)[s.exit];
 
+                // Create crowd members
                 for (int i = 0; i < s.crowdSize; i++)
                 {
                     float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
@@ -48,6 +53,7 @@ public partial class SpawningSystem : SystemBase
                     ecb.SetComponent(entityInQueryIndex, newAgent, g);
                 }
 
+                // Create instigators
                 for (int i = 0; i < s.antifaSize; i++)
                 {
                     float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
@@ -60,6 +66,7 @@ public partial class SpawningSystem : SystemBase
 
                 s.spawned += s.crowdSize + s.antifaSize;
 
+                // Stop spawning if the target number of agents has been reached
                 if (s.spawned >= 100)
                 {
                     s.done = true;
