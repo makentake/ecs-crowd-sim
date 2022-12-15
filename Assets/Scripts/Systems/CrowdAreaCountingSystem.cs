@@ -7,8 +7,8 @@ using Unity.Burst;
 using Unity.Collections;
 using System.IO;
 
-[UpdateAfter(typeof(SpawningSystem))]
 // A system for counting (and outputting) the crowd agents in the simulation
+[UpdateAfter(typeof(SpawningSystem))]
 public partial class CrowdAreaCountingSystem : SystemBase {
     private NativeArray<int> count;
     private static float lastCountTime;
@@ -16,6 +16,7 @@ public partial class CrowdAreaCountingSystem : SystemBase {
     protected override void OnStartRunning(){
         lastCountTime = (float)Time.ElapsedTime;
     }
+
     protected override void OnDestroy(){
         count.Dispose();
     }
@@ -53,6 +54,7 @@ public partial class CrowdAreaCountingSystem : SystemBase {
             }
         }
     }
+
     protected override void OnUpdate(){
         float time = (float)Time.ElapsedTime;
         float frequency = 1f;
@@ -77,9 +79,6 @@ public partial class CrowdAreaCountingSystem : SystemBase {
                 time = time,
                 count = count
             }.Schedule();
-
-
         }
-        
     }
 }
