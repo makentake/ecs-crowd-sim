@@ -8,6 +8,9 @@ using Unity.Transforms;
 using Unity.Physics;
 using Unity.Jobs;
 using Unity.Entities.UniversalDelegates;
+using static UnityEngine.UI.Image;
+using System.Security.Cryptography;
+using JetBrains.Annotations;
 
 // System for moving a peaceful crowd
 [UpdateAfter(typeof(CrowdMovementSystem))]
@@ -24,75 +27,146 @@ public partial class PedestrianMovementSystem : SystemBase
         physWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
     }
 
-    /*private partial struct ObjectAvoidanceJob : IJobEntity
+    private partial struct ObjectAvoidanceJob : IJobEntity
     {
-        public Unity.Physics.Systems.BuildPhysicsWorld physicsWorld;
         public Unity.Physics.CollisionWorld collisionWorld;
+        float3 origin, direction, leftmostRay, resultingMovement, firstNoHitVector;
+        quaternion leftmostRotation;
+        quaternion angleBetweenRays;
+        bool hitOccurred;
+        bool foundFirstNoHitVector;
+        int maxNoHitRayNum, minNoHitRayNum, multiplier, rayNumber, midRayNumber;
+        float distance, minDistance;
 
-        public void Excecute(Entity entity, int entityInQueryIndex, ref Pedestrian p, in Translation t, in Rotation r, in ObstacleAvoidance o)
+        public bool SingleRay(int angle, Translation t, Rotation r, ObstacleAvoidance o)
         {
-            float3 origin = t.Value;
-            float3 direction = new float3(0, 0, 1); // this value would change depending on what direction is 'forward' for the agent
+            float3 from = t.Value, to = t.Value + (math.mul(quaternion.RotateY(angle), math.forward(r.Value)) * o.visionLength);
+
+            RaycastInput input = new RaycastInput()
+            {
+                Start = from,
+                End = to,
+                Filter = new CollisionFilter
+                {
+                    BelongsTo = 1 << 0,
+                    CollidesWith = 1 << 1,
+                }
+            };
+
+            Unity.Physics.RaycastHit hit;
+            bool hasHit = collisionWorld.CastRay(input, out hit);
+
+            distance = from.x == hit.Position.x && from.y == hit.Position.y && from.z == hit.Position.z ? 0 : math.distance(from, hit.Position);
+
+            return hasHit;
+
+        }
+
+        public RaycastInput RayArcInput(float3 leftmostRay, float3 origin, ObstacleAvoidance o, int rayNumber, Rotation r)
+        {
+            float angle = rayNumber * math.radians(o.visionAngle / (o.numberOfRays));
+
+            //Debug.Log(string.Format("Angle for ray {0}: {1}", i, angle));
+            angleBetweenRays = quaternion.RotateY(angle);
+            // Debug.Log(string.Format("Ray {0}'s angle = {1}", i - 1, angleBetweenRays));
+            direction = math.mul(angleBetweenRays, leftmostRay);
+            //Debug.Log(string.Format("Ray {0}'s direction = {1}", i, direction));
+            return new RaycastInput()
+            {
+                Start = origin,
+                End = origin + (direction * o.visionLength),
+                Filter = new CollisionFilter()
+                {
+                    BelongsTo = 1 << 0,
+                    CollidesWith = 1 << 1,
+                }
+            };
+        }
+
+        // A function to visualize the ray arc
+        public void RaycastVisualization(int i, RaycastInput input)
+        {
+            switch (i)
+            {
+                case 1:
+                    //Debug.DrawLine(input.Start, input.End, Color.magenta);
+                    Debug.DrawLine(input.Start, input.End);
+                    break;
+
+                case 2:
+                    //Debug.DrawLine(input.Start, input.End, Color.cyan);
+                    Debug.DrawLine(input.Start, input.End);
+                    break;
+
+                case 3:
+                    //Debug.DrawLine(input.Start, input.End, Color.black);
+                    Debug.DrawLine(input.Start, input.End);
+                    break;
+
+                case 4:
+                    //Debug.DrawLine(input.Start, input.End, Color.blue);
+                    Debug.DrawLine(input.Start, input.End);
+                    break;
+
+                case 5:
+                    //Debug.DrawLine(input.Start, input.End, Color.grey);
+                    Debug.DrawLine(input.Start, input.End);
+                    break;
+
+                case 6:
+                    //Debug.DrawLine(input.Start, input.End, Color.red);
+                    Debug.DrawLine(input.Start, input.End);
+                    break;
+
+                default:
+                    Debug.DrawLine(input.Start, input.End);
+                    break;
+            }
+        }
+
+        public void SetUpVariables(Translation t, Rotation r, ObstacleAvoidance o)
+        {
+            origin = t.Value;
+            direction = new float3(0, 0, 1); // this value would change depending on what direction is 'forward' for the agent
             direction = math.mul(r.Value, direction);
 
-            uint collideBitmask = 1 << 1; // To collide with Buildings (layer 1, so bitshift once)
+            distance = -1;
+            minDistance = o.visionLength / 3;
 
-            quaternion leftmostRotation = quaternion.RotateY(math.radians(-o.visionAngle / 2));
-            quaternion angleBetweenRays;// = quaternion.RotateY(math.radians(visionAngle / raysPerAgent));
+            leftmostRotation = quaternion.RotateY(math.radians(-o.visionAngle / 2));
+            angleBetweenRays = new quaternion();
 
-            float3 leftmostRay = math.mul(leftmostRotation, direction);
+            leftmostRay = math.mul(leftmostRotation, direction);
 
-            float3 resultingMovement = float3.zero;
-            bool hitOccurred = false;
+            resultingMovement = float3.zero;
+            hitOccurred = false;
 
+            firstNoHitVector = float3.zero; // Should make this backwards
+            foundFirstNoHitVector = false;
 
-            float3 firstNoHitVector = float3.zero; // Should make this backwards
-            bool foundFirstNoHitVector = false;
+            maxNoHitRayNum = -1;
+            minNoHitRayNum = -1;
 
-            int maxNoHitRayNum = -1;
-            int minNoHitRayNum = -1;
+            multiplier = -1; //if have left tendency, multiply count by -1
+            rayNumber = (o.numberOfRays) / 2;
+            midRayNumber = rayNumber;
+        }
 
-            int multiplier = -1;
-            //if have left tendency, multiply count by -1
-            int rayNumber = (o.numberOfRays - 1) / 2;
-            int midRayNumber = rayNumber;
-            //string resultString = "";
-
-            for (int i = 0; i < o.numberOfRays; i++, multiplier *= -1)
+        public void CastRayArc(ObstacleAvoidance o, Rotation r)
+        {
+            for (int i = 1; i <= o.numberOfRays; i++, multiplier *= -1)
             {
-                float angle = rayNumber * math.radians(o.visionAngle / (o.numberOfRays - 1));
+                var input = RayArcInput(leftmostRay, origin, o, rayNumber, r);
 
-                //Debug.Log(string.Format("Angle for ray {0}: {1}",
-                //   i + 1, angle));
-                angleBetweenRays = quaternion.RotateY(angle);
-                //Debug.Log(string.Format("Ray {0}'s angle = {1}",
-                //    i, angleBetweenRays));
-                direction = math.mul(angleBetweenRays, leftmostRay);
-                //Debug.Log(string.Format("Ray {0}'s direction = {1}",
-                //    i + 1, direction));
-                RaycastInput input = new RaycastInput()
-                {
-                    Start = origin,
-                    End = (origin + direction * o.visionLength),
-                    Filter = new CollisionFilter()
-                    {
-                        BelongsTo = ~0u,
-                        CollidesWith = collideBitmask,//~0u, // all 1s, so all layers, collide with everything
-                        GroupIndex = 0
-                    }
-                };
+                RaycastVisualization(i, input);
 
                 Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
-                //Debug.Log(string.Format("Firing ray number {0}",
-                //    i + 1));
                 bool haveHit = collisionWorld.CastRay(input, out hit);
                 if (haveHit)
                 {
-                    //Debug.Log("Ray number " + (rayNumber + 1) + " hit something");
-                    //Debug.Log("Ray number " + (i+1) + " hit something. How far along: " + hit.Fraction);
+                    Debug.DrawRay(hit.Position, math.forward(), Color.green);
 
                     hitOccurred = true;
-
                 }
                 else // If a hit has occurred
                 {
@@ -126,31 +200,76 @@ public partial class PedestrianMovementSystem : SystemBase
                     }
                 }
 
-                //Debug.Log("Max ray:" + maxNoHitRayNum + ", Min ray: " + minNoHitRayNum);
-                // Calculate the next ray number
                 rayNumber += multiplier * i;
-                //resultString += rayNumber + " ";
             }
-            //Debug.Log(resultString);
+        }
 
+        public void Execute(ref Pedestrian p, in Translation t, in Rotation r, in ObstacleAvoidance o)
+        {
+            SetUpVariables(t, r, o);
+
+            CastRayArc(o, r);
 
             if (hitOccurred) // if there was at least one hit
             {
-                //Debug.Log("Some hit occurred!");
-                //if (math.distance(resultingMovement, float3.zero) > 0.1f)// if the resulting movement is over some threshold
-                //{
-                //    Debug.Log("AND WE CHANGED THE OBSTACLE AVOIDANCE");
-                //    movementValues.obstacleAvoidanceMovement = resultingMovement;
-                //}
+                if (minNoHitRayNum == -1 && maxNoHitRayNum == -1)
+                {
+                    Debug.Log("all rays hit");
 
-                p.obstacle = new float3(resultingMovement.x, 0, resultingMovement.z);//firstNoHitVector;
+                    bool left = SingleRay(-90, t, r, o);
+                    bool right = SingleRay(90, t, r, o);
+                    Debug.Log(distance);
+
+                    SingleRay(0, t, r, o);
+                    Debug.Log(distance);
+
+                    if (distance <= minDistance)
+                    {
+                        if (!right)
+                        {
+                            SetUpVariables(t, r, o);
+
+                            leftmostRay = math.mul(quaternion.RotateY(90), leftmostRay);
+
+                            CastRayArc(o, r);
+
+                            p.obstacle = new float3(resultingMovement.x, 0, resultingMovement.z);//firstNoHitVector;
+                        }
+                        else if (!left)
+                        {
+                            SetUpVariables(t, r, o);
+
+                            leftmostRay = math.mul(quaternion.RotateY(-90), leftmostRay);
+
+                            CastRayArc(o, r);
+
+                            p.obstacle = new float3(resultingMovement.x, 0, resultingMovement.z);//firstNoHitVector;
+                        }
+                        else
+                        {
+                            SetUpVariables(t, r, o);
+
+                            leftmostRay = math.mul(quaternion.RotateY(180), leftmostRay);
+
+                            CastRayArc(o, r);
+
+                            p.obstacle = new float3(resultingMovement.x, 0, resultingMovement.z);//firstNoHitVector;
+                        }
+                    }
+                }
+                else
+                {
+                    p.obstacle = new float3(resultingMovement.x, 0, resultingMovement.z);//firstNoHitVector;
+                }
             }
             else
             {
                 p.obstacle = float3.zero;
             }
+
+            
         }
-    }*/
+    }
 
     protected override void OnUpdate()
     {
@@ -171,36 +290,6 @@ public partial class PedestrianMovementSystem : SystemBase
                 pedestrians[entityInQueryIndex] = t.Value;
                 pedestrianRot[entityInQueryIndex] = r.Value;
             }).Schedule();
-
-        // Do the collision avoidance
-        /*Entities.WithReadOnly(collisionWorld).ForEach((int entityInQueryIndex, ref Agent a, in Translation t, in Rotation r) =>
-        {
-            float3 from = t.Value, to = t.Value + math.forward(a.heading) * a.maxDist;
-
-            RaycastInput input = new RaycastInput()
-            {
-                Start = from,
-                End = to,
-                Filter = new CollisionFilter
-                {
-                    BelongsTo = 1 << 0,
-                    CollidesWith = 1 << 1,
-                }
-            };
-
-            RaycastHit hit = new RaycastHit();
-            bool haveHit = collisionWorld.CastRay(input, out hit);
-
-            if (haveHit)
-            {
-                float3 target = math.normalize(math.reflect(hit.Position - from, math.normalize(hit.SurfaceNormal)));
-                v.obstacle = math.isnan(target.x) ? from - to : target;
-            }
-            else
-            {
-                v.obstacle = math.INFINITY;
-            }
-        }).ScheduleParallel();*/
 
         // Calculate the vectors for moving agents
         Entities
@@ -258,171 +347,10 @@ public partial class PedestrianMovementSystem : SystemBase
         //officers.Dispose(Dependency);
 
         // Calculate obstacle avoidance
-        /*JobHandle obstacle = new ObstacleAvoidanceJob
+        JobHandle obstacle = new ObjectAvoidanceJob
         {
-            physicsWorld = physWorld,
             collisionWorld = physWorld.PhysicsWorld.CollisionWorld
-        }.Schedule();*/
-
-        Entities
-            .ForEach((Entity entity, int entityInQueryIndex, ref Pedestrian p, in Translation t, in Rotation r, in ObstacleAvoidance o) =>
-            {
-                float3 origin = t.Value;
-                float3 direction = new float3(0, 0, 1); // this value would change depending on what direction is 'forward' for the agent
-                direction = math.mul(r.Value, direction);
-
-                //Debug.DrawRay(origin + math.forward(r.Value), direction, Color.red);
-
-                //quaternion leftmostRotation = quaternion.RotateY(math.radians(-o.visionAngle / 2));
-                quaternion leftmostRotation = quaternion.RotateY(math.radians(-o.visionAngle / 2));
-                quaternion angleBetweenRays;// = quaternion.RotateY(math.radians(visionAngle / raysPerAgent));
-
-                float3 leftmostRay = math.mul(leftmostRotation, direction);
-
-                float3 resultingMovement = float3.zero;
-                bool hitOccurred = false;
-
-                float3 firstNoHitVector = float3.zero; // Should make this backwards
-                bool foundFirstNoHitVector = false;
-
-                int maxNoHitRayNum = -1;
-                int minNoHitRayNum = -1;
-
-                int multiplier = -1;
-                //if have left tendency, multiply count by -1
-                int rayNumber = (o.numberOfRays - 1) / 2;
-                int midRayNumber = rayNumber;
-                //string resultString = "";
-
-                for (int i = 0; i < o.numberOfRays; i++, multiplier *= -1)
-                {
-                    float angle = rayNumber * math.radians(o.visionAngle / (o.numberOfRays - 1));
-
-                    //Debug.Log(string.Format("Angle for ray {0}: {1}", i + 1, angle));
-                    angleBetweenRays = quaternion.RotateY(angle);
-                   // Debug.Log(string.Format("Ray {0}'s angle = {1}", i, angleBetweenRays));
-                    direction = math.mul(angleBetweenRays, leftmostRay);
-                    //Debug.Log(string.Format("Ray {0}'s direction = {1}", i + 1, direction));
-                    RaycastInput input = new RaycastInput()
-                    {
-                        Start = origin + (math.forward(r.Value)/2),
-                        End = origin + (math.forward(r.Value) / 2) + (direction * o.visionLength),
-                        Filter = new CollisionFilter()
-                        {
-                            BelongsTo = 1 << 0,
-                            CollidesWith = 1 << 1,
-                        }
-                    };
-
-                    //Debug.DrawRay(input.Start, leftmostRay, Color.yellow);
-                    Debug.DrawLine(input.Start, input.End);
-
-                    Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
-                    //Debug.Log(string.Format("Firing ray number {0}",
-                    //    i + 1));
-                    bool haveHit = collisionWorld.CastRay(input, out hit);
-                    if (haveHit)
-                    {
-                        Debug.Log("yay we hit something");
-                        Debug.Log("Hit data: " + hit.ToString());
-
-                        Debug.DrawRay(hit.Position, math.forward(), Color.green);
-
-                        hitOccurred = true;
-                    }
-                    else // If a hit has occurred
-                    {
-                        if (!foundFirstNoHitVector)
-                        {
-                            firstNoHitVector = input.End - input.Start;
-                            foundFirstNoHitVector = true;
-                            resultingMovement = o.movementPerRay * math.normalize(input.End - input.Start);
-                            minNoHitRayNum = rayNumber;
-                            maxNoHitRayNum = rayNumber;
-                        }
-                        else
-                        {
-                            if (rayNumber > midRayNumber) // the ray is to the right
-                            {
-                                if (rayNumber - maxNoHitRayNum == 1) // if this ray is next to the max no hit ray
-                                {
-                                    maxNoHitRayNum = rayNumber;// this ray is the new max no hit ray
-                                    resultingMovement += o.movementPerRay * math.normalize(input.End - input.Start);
-                                }
-
-                            }
-                            else // the ray is to the left
-                            {
-                                if (minNoHitRayNum - rayNumber == 1) // if this ray is next to the min no hit ray
-                                {
-                                    minNoHitRayNum = rayNumber;// this ray is the new max no hit ray
-                                    resultingMovement += o.movementPerRay * math.normalize(input.End - input.Start);
-                                }
-                            }
-                        }
-                    }
-
-                    //Debug.Log("Max ray:" + maxNoHitRayNum + ", Min ray: " + minNoHitRayNum);
-                    // Calculate the next ray number
-                    rayNumber += multiplier * i;
-                    //resultString += rayNumber + " ";
-                }
-                //Debug.Log(resultString);
-
-
-                if (hitOccurred) // if there was at least one hit
-                {
-                    //Debug.Log("Some hit occurred!");
-                    //if (math.distance(resultingMovement, float3.zero) > 0.1f)// if the resulting movement is over some threshold
-                    //{
-                    //    Debug.Log("AND WE CHANGED THE OBSTACLE AVOIDANCE");
-                    //    movementValues.obstacleAvoidanceMovement = resultingMovement;
-                    //}
-
-                    p.obstacle = new float3(resultingMovement.x, 0, resultingMovement.z);//firstNoHitVector;
-
-                    //Debug.Log("Something hit!");
-                    //Debug.Log("Movement: " + resultingMovement);
-
-                    if (minNoHitRayNum == -1 && maxNoHitRayNum == -1)
-                    {
-                        Debug.Log("all rays hit");
-                        //p.obstacle = math.mul(quaternion.RotateY(180), math.forward(r.Value));
-
-                        /*float3 from = t.Value, to = t.Value + math.forward(r.Value) * o.visionLength;
-
-                        RaycastInput input = new RaycastInput()
-                        {
-                            Start = from,
-                            End = to,
-                            Filter = new CollisionFilter
-                            {
-                                BelongsTo = 1 << 0,
-                                CollidesWith = 1 << 1,
-                            }
-                        };
-
-                        Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
-                        bool haveHit = collisionWorld.CastRay(input, out hit);
-
-                        if (haveHit)
-                        {
-                            float3 target = math.normalize(math.reflect(hit.Position - from, math.normalize(hit.SurfaceNormal)));
-                            p.obstacle = math.isnan(target.x) ? from - to : target;
-                        }
-                        else
-                        {
-                            p.obstacle = float3.zero;
-                        }*/
-                    }
-                }
-                else
-                {
-                    p.obstacle = float3.zero;
-                }
-            }).WithoutBurst().Run();
-
-        
+        }.Schedule();
 
         // Calculate final values and move the agents
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
@@ -433,6 +361,11 @@ public partial class PedestrianMovementSystem : SystemBase
             .ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Pedestrian p, in Goal g) =>
             {
                 float3 target = p.target, attraction = p.attraction, repulsion = p.repulsion, obstacle = p.obstacle;
+
+                Debug.DrawRay(t.Value, p.target, Color.blue);
+                Debug.DrawRay(t.Value, p.attraction, Color.green);
+                Debug.DrawRay(t.Value, p.repulsion, Color.red);
+                Debug.DrawRay(t.Value, p.obstacle, Color.yellow);
 
                 if (p.attractors != 0)
                 {
@@ -454,6 +387,8 @@ public partial class PedestrianMovementSystem : SystemBase
                 (attraction * p.attractionFac) +
                 (repulsion * p.repulsionFac) + (obstacle * p.obstacleFac)) / 4;
 
+                Debug.DrawRay(t.Value, final, Color.cyan);
+
                 bool isZero = final.x == 0 && final.y == 0 && final.z == 0;
 
                 final = isZero ? final : math.normalize(final);
@@ -474,7 +409,7 @@ public partial class PedestrianMovementSystem : SystemBase
                 }
 
                 p.heading = rot.Value;
-            }).ScheduleParallel();
+            }).WithoutBurst().Run();
 
         end.AddJobHandleForProducer(Dependency);
     }
