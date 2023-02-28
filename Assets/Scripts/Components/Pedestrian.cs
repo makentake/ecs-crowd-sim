@@ -17,8 +17,16 @@ public struct Pedestrian : IComponentData
         repulsionFac,
         obstacleFac,
         baseTolerance,
-        tolerance;
+        tolerance,
+        lightRange,
+        lightAttractors,
+        lightFac;
     public quaternion heading;
-    public float3 target, attraction, repulsion, obstacle;
+    public float3 target, 
+        attraction, 
+        repulsion, 
+        obstacle, 
+        lightAttraction;
     public int attractors, repellors;
+    public bool isYoung, isClimbing;
 }

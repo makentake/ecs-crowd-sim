@@ -124,6 +124,9 @@ MonoBehaviour:
   obstacleFac: 16
   baseTolerance: 5
   tolerance: 5
+  lightRange: 20
+  lightAttractors: 0
+  lightFac: 20
   heading:
     value:
       x: 0
@@ -146,8 +149,14 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
+  lightAttraction:
+    x: 0
+    y: 0
+    z: 0
   attractors: 0
   repellors: 0
+  isYoung: 0
+  isClimbing: 0
 --- !u!114 &5151694595475758096
 MonoBehaviour:
   m_ObjectHideFlags: 0

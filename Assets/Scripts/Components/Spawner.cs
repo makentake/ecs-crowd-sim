@@ -13,6 +13,6 @@ public struct Spawner : IComponentData
     public Entity agent, antifa;
     public float3 spawnRadius;
     public int crowdSize, antifaSize;
-    public int spawned;
+    public int spawned, toSpawn;
     public bool done;
 }

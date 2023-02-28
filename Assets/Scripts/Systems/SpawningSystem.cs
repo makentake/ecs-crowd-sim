@@ -95,6 +95,17 @@ public partial class SpawningSystem : SystemBase
                     Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
                     ecb.SetComponent(entityInQueryIndex, newAgent, pos);
                     ecb.SetComponent(entityInQueryIndex, newAgent, g);
+
+                    if (s.random.NextFloat() <= 0.2)
+                    {
+                        WaitTag tag = new WaitTag
+                        {
+                            maxTime = 10,
+                            currentTime = 0
+                        };
+
+                        ecb.AddComponent(entityInQueryIndex, newAgent, tag);
+                    }
                 }
 
                 // Create instigators
@@ -106,12 +117,23 @@ public partial class SpawningSystem : SystemBase
                     Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.antifa);
                     ecb.SetComponent(entityInQueryIndex, newAgent, pos);
                     ecb.SetComponent(entityInQueryIndex, newAgent, g);
+
+                    if (s.random.NextFloat() <= 0.2)
+                    {
+                        WaitTag tag = new WaitTag
+                        {
+                            maxTime = 10,
+                            currentTime = 0
+                        };
+
+                        ecb.AddComponent(entityInQueryIndex, newAgent, tag);
+                    }
                 }
 
                 s.spawned += s.crowdSize + s.antifaSize;
 
                 // Stop spawning if the target number of agents has been reached
-                if (s.spawned >= 100)
+                if (s.spawned >= s.toSpawn)
                 {
                     s.done = true;
                 }
