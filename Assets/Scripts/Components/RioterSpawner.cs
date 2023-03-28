@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Random = Unity.Mathematics.Random;
 
 [GenerateAuthoringComponent]
-public struct Spawner : IComponentData
+public struct RioterSpawner : IComponentData
 {
     public Random random;
     public Entity goal, exit;

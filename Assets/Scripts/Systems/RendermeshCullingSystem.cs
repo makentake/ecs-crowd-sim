@@ -7,10 +7,13 @@ using Unity.Rendering;
 public partial class RendermeshCullingSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem end;
+    private EntityQuery needsConversion;
 
+    // If there are any render meshes to start with, cull them
     protected override void OnStartRunning()
     {
         end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        needsConversion = GetEntityQuery(typeof(AwaitingConversionTag));
 
         var ecb = end.CreateCommandBuffer();
 
@@ -24,12 +27,27 @@ public partial class RendermeshCullingSystem : SystemBase
             }).WithoutBurst().Run();
 
         end.AddJobHandleForProducer(Dependency);
-
-        Enabled = false;
     }
 
+    // Run the update loop once if another system requests a render mesh cull
     protected override void OnUpdate()
     {
-        
+        if (needsConversion.CalculateEntityCount() != 0)
+        {
+            var ecb = end.CreateCommandBuffer();
+
+            Entities
+                .WithAll<AwaitingConversionTag>()
+                .ForEach((Entity e) =>
+                {
+                    var rM = EntityManager.GetSharedComponentData<RenderMesh>(e);
+                    rM.mesh = new Mesh();
+                    ecb.SetSharedComponent(e, rM);
+
+                    ecb.RemoveComponent<AwaitingConversionTag>(e);
+                }).WithoutBurst().Run();
+
+            end.AddJobHandleForProducer(Dependency);
+        }
     }
 }

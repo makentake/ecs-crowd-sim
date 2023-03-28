@@ -28,5 +28,5 @@ public struct Pedestrian : IComponentData
         obstacle, 
         lightAttraction;
     public int attractors, repellors;
-    public bool isYoung, isClimbing;
+    public bool isClimbing;
 }

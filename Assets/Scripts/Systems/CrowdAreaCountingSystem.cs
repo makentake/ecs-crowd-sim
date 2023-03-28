@@ -16,10 +16,6 @@ public partial class CrowdAreaCountingSystem : SystemBase {
     protected override void OnStartRunning(){
         lastCountTime = (float)Time.ElapsedTime;
     }
-
-    protected override void OnDestroy(){
-        count.Dispose();
-    }
     
     private partial struct CountJob : IJobEntity {
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<Translation> targetArray;
@@ -28,12 +24,13 @@ public partial class CrowdAreaCountingSystem : SystemBase {
         public void Execute(ref CrowdAreaCounter counter){
             
             for(int i = 0; i<targetArray.Length; i++){
-                Translation trans = targetArray[i];
-                //if(trans.Value.x >= counter.minX && trans.Value.x <= counter.maxX
-                    //&& trans.Value.z >= counter.minZ && trans.Value.z <= counter.maxZ
-                //){ //check if translation is within the area
+                Translation t = targetArray[i];
+
+                //check if translation is within the area
+                if (t.Value.x >= counter.minX && t.Value.x <= counter.maxX && t.Value.z >= counter.minZ && t.Value.z <= counter.maxZ)
+                { 
                     count[0]++;
-                //}
+                }
             }
         }
     }
@@ -42,16 +39,14 @@ public partial class CrowdAreaCountingSystem : SystemBase {
         public float time;
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<int> count;
 
-        public void Execute([ReadOnly]ref CrowdAreaCounter counter){
-            if((time - counter.lastCount) > counter.frequency){ // if the time since the last count is greater than the count frequency
-                //Debug.Log("COUNT: " + crowdNumber + " AT " + time);// count
-                
-                counter.lastCount = time;
-                StreamWriter sw = new StreamWriter("crowdflowdata.txt",true);
-                string toadd = time + "," + count[0];
-                sw.WriteLine(toadd);
-                sw.Close();
-            }
+        public void Execute(ref CrowdAreaCounter counter){
+            counter.currentCount = count[0];
+
+            counter.lastCount = time;
+            StreamWriter sw = new StreamWriter("crowdflowdata.txt", true);
+            string toadd = time + "," + count[0];
+            sw.WriteLine(toadd);
+            sw.Close();
         }
     }
 
@@ -65,7 +60,7 @@ public partial class CrowdAreaCountingSystem : SystemBase {
             int[] countArray = { 0 };
             count = new NativeArray<int>(countArray, Allocator.TempJob);
 
-            EntityQuery query = GetEntityQuery(ComponentType.ReadOnly<Rioter>(), ComponentType.ReadOnly<Translation>());
+            EntityQuery query = GetEntityQuery(ComponentType.ReadOnly<CrowdMemberTag>(), ComponentType.ReadOnly<Translation>());
             NativeArray<Translation> crowdTranslationArray = query.ToComponentDataArray<Translation>(Allocator.TempJob);
 
             JobHandle countJobHandle = new CountJob

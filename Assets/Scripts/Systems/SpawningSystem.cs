@@ -17,9 +17,14 @@ public partial class SpawningSystem : SystemBase
         uint osTime = (uint)System.DateTime.Now.Ticks;
 
         // Initialize all the random components
-        Entities.ForEach((int entityInQueryIndex, ref Spawner s) =>
+        Entities.ForEach((int entityInQueryIndex, ref RioterSpawner s) =>
         {
-            s.random.InitState(osTime + (uint)entityInQueryIndex + 0b1);
+            s.random.InitState((osTime + (uint)entityInQueryIndex) | 0b1);
+        }).ScheduleParallel();
+
+        Entities.ForEach((int entityInQueryIndex, ref PedestrianSpawner s) =>
+        {
+            s.random.InitState((osTime + (uint)entityInQueryIndex) | 0b1);
         }).ScheduleParallel();
     }
 
@@ -28,7 +33,7 @@ public partial class SpawningSystem : SystemBase
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
         // Spawn agents
-        Entities.WithAll<RioterSpawnerTag>().ForEach((int entityInQueryIndex, ref Spawner s, ref Goal g, in Translation translation) =>
+        Entities.ForEach((int entityInQueryIndex, ref RioterSpawner s, ref Goal g, in Translation translation) =>
         {
             if (!s.done)
             {
@@ -66,7 +71,7 @@ public partial class SpawningSystem : SystemBase
                 s.spawned += s.crowdSize + s.antifaSize;
 
                 // Stop spawning if the target number of agents has been reached
-                if (s.spawned >= 100)
+                if (s.spawned >= s.toSpawn)
                 {
                     s.done = true;
                 }
@@ -74,7 +79,7 @@ public partial class SpawningSystem : SystemBase
         }).ScheduleParallel();
 
         // Spawn agents
-        Entities.WithAll<PedestrianSpawnerTag>().ForEach((int entityInQueryIndex, ref Spawner s, ref Goal g, in Translation translation) =>
+        Entities.ForEach((int entityInQueryIndex, ref PedestrianSpawner s, ref Goal g, in Translation translation) =>
         {
             if (!s.done)
             {
@@ -96,41 +101,26 @@ public partial class SpawningSystem : SystemBase
                     ecb.SetComponent(entityInQueryIndex, newAgent, pos);
                     ecb.SetComponent(entityInQueryIndex, newAgent, g);
 
-                    if (s.random.NextFloat() <= 0.2)
+                    if (s.random.NextFloat() <= 0.5)
                     {
                         WaitTag tag = new WaitTag
                         {
-                            maxTime = 10,
+                            maxTime = 60,
                             currentTime = 0
                         };
 
                         ecb.AddComponent(entityInQueryIndex, newAgent, tag);
                     }
-                }
 
-                // Create instigators
-                for (int i = 0; i < s.antifaSize; i++)
-                {
-                    float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
-                    Translation pos = new Translation { Value = spawnPos };
-
-                    Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.antifa);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, pos);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, g);
-
-                    if (s.random.NextFloat() <= 0.2)
+                    if (s.random.NextFloat() <= 0.1)
                     {
-                        WaitTag tag = new WaitTag
-                        {
-                            maxTime = 10,
-                            currentTime = 0
-                        };
+                        var tag = new YoungTag();
 
                         ecb.AddComponent(entityInQueryIndex, newAgent, tag);
                     }
                 }
 
-                s.spawned += s.crowdSize + s.antifaSize;
+                s.spawned += s.crowdSize;
 
                 // Stop spawning if the target number of agents has been reached
                 if (s.spawned >= s.toSpawn)

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4529475064709143851}
   - component: {fileID: 3099667639110138097}
   m_Layer: 0
-  m_Name: Spawner
+  m_Name: RioterSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,6 +58,7 @@ MonoBehaviour:
   crowdSize: 4
   antifaSize: 1
   spawned: 0
+  toSpawn: 0
   done: 0
 --- !u!114 &4529475064709143851
 MonoBehaviour:

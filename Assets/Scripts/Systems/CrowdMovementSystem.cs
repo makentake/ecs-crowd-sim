@@ -5,6 +5,8 @@ using Unity.Transforms;
 using Unity.Collections;
 using Unity.Physics;
 
+// !!!SHOULD BE SIMPLIFIED, LOOK AT PedestrianMovementSystem FOR REFERENCE!!!
+
 // System for moving a riotous crowd
 public partial class CrowdMovementSystem : SystemBase
 {

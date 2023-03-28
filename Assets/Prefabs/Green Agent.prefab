@@ -20,6 +20,7 @@ GameObject:
   - component: {fileID: -804283469759666845}
   - component: {fileID: 8938410557664752303}
   - component: {fileID: 8300104176194413906}
+  - component: {fileID: 6603250601767208211}
   m_Layer: 3
   m_Name: Green Agent
   m_TagString: Untagged
@@ -123,6 +124,8 @@ MonoBehaviour:
   attractionFac: 1
   attractionRot: 90
   repulsionFac: 8
+  baseTolerance: 5
+  tolerance: 5
   heading:
     value:
       x: 0
@@ -147,8 +150,6 @@ MonoBehaviour:
     z: 0
   attractors: 0
   repellors: 0
-  baseTolerance: 5
-  tolerance: 5
 --- !u!114 &2730558903390199017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,5 +420,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c5b2a4f1b12ef2418ad8aa3ab301589, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6603250601767208211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4062349944913877694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f38bd3aa98fb84f90dadabe7e81b7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

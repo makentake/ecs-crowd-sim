@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -436,6 +436,7 @@ MonoBehaviour:
   crowdSize: 0
   antifaSize: 0
   spawned: 0
+  toSpawn: 0
   done: 0
 --- !u!4 &74847319
 Transform:
@@ -10819,7 +10820,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649964271}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.9, y: 0, z: -14.2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 37.766724, y: 23.56, z: 147.75}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10839,10 +10840,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   frequency: 0
   lastCount: 0
-  minX: 0
-  maxX: 0
-  minZ: 0
-  maxZ: 0
+  minX: -125
+  maxX: 50
+  minZ: -200
+  maxZ: 100
 --- !u!1001 &1655228401
 PrefabInstance:
   m_ObjectHideFlags: 0

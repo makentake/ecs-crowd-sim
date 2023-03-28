@@ -5,6 +5,8 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Rendering;
 
+// !!!SHOULD BE SIMPLIFIED, LOOK AT PedestrianMovementSystem FOR REFERENCE!!!
+
 [UpdateBefore(typeof(PreMovementEntityCommandBuffer))]
 public partial class EmotionSystem : SystemBase
 {
