@@ -156,7 +156,6 @@ MonoBehaviour:
     z: 0
   attractors: 0
   repellors: 0
-  isYoung: 0
   isClimbing: 0
 --- !u!114 &5151694595475758096
 MonoBehaviour:
@@ -192,7 +191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 613fa5902aaf6f344ba2ccf846338233, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numberOfRays: 18
+  numberOfRays: 9
   visionAngle: 180
   movementPerRay: 10
   visionLength: 10
