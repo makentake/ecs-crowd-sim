@@ -89,7 +89,7 @@ MonoBehaviour:
     x: 100
     y: 0
     z: 200
-  crowdSize: 5
+  crowdSize: 200
   spawned: 0
   toSpawn: 200
   done: 0

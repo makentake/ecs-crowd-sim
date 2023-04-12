@@ -612,7 +612,7 @@ public partial class PedestrianMovementSystem : SystemBase
 
                 p.heading = rot.Value;
 
-                if (dist < p.tolerance*4)
+                if (dist < p.tolerance*3)
                 {
                     ecb.AddComponent<FleeingTag>(entityInQueryIndex, e);
                 }

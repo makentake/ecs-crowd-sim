@@ -101,7 +101,7 @@ public partial class SpawningSystem : SystemBase
                     ecb.SetComponent(entityInQueryIndex, newAgent, pos);
                     ecb.SetComponent(entityInQueryIndex, newAgent, g);
 
-                    if (s.random.NextFloat() <= 0.3)
+                    if (s.random.NextFloat() <= 0.25)
                     {
                         WaitTag tag = new WaitTag
                         {
@@ -112,7 +112,7 @@ public partial class SpawningSystem : SystemBase
                         ecb.AddComponent(entityInQueryIndex, newAgent, tag);
                     }
 
-                    if (s.random.NextFloat() <= 0.2)
+                    if (s.random.NextFloat() <= 0.25)
                     {
                         var tag = new YoungTag();
 

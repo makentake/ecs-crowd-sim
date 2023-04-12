@@ -1,0 +1,5 @@
+Images
+<experiment#>_<light?>_<barricadeType?>.png
+
+Text
+<experiment#>_<light?>_<barricadeType?>.txt
