@@ -462,6 +462,11 @@ public partial class PedestrianMovementSystem : SystemBase
                 Debug.DrawRay(t.Value, p.obstacle, Color.yellow);*/
                 //Debug.DrawRay(t.Value, p.lightAttraction, Color.black);
 
+                /*float repulsionMagnitude = math.distance(math.float3(0, 0, 0),
+                    repulsion.x == 0 && repulsion.y == 0 && repulsion.z == 0 ? math.float3(0.25f, 0.25f, 0.25f) : repulsion);
+
+                float speedModifier = repulsionMagnitude <= 1 ? 1 : repulsionMagnitude;*/
+
                 if (p.attractors != 0)
                 {
                     attraction /= p.attractors;
@@ -488,6 +493,10 @@ public partial class PedestrianMovementSystem : SystemBase
                 (attraction * p.attractionFac) +
                 (repulsion * p.repulsionFac) + (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 5;
 
+                /*float3 final = ((target * p.targetFac) +
+                (attraction * p.attractionFac) +
+                (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 4;*/
+
                 //Debug.DrawRay(t.Value, final, Color.cyan);
 
                 bool isZero = final.x == 0 && final.y == 0 && final.z == 0;
@@ -513,11 +522,11 @@ public partial class PedestrianMovementSystem : SystemBase
 
                     if (p.isClimbing)
                     {
-                        velocity.Linear = math.forward(rot.Value) * p.speed * 0.5f;
+                        velocity.Linear = (math.forward(rot.Value) * p.speed * 0.5f) - (repulsion * 0.90f);
                     }
                     else
                     {
-                        velocity.Linear = math.forward(rot.Value) * p.speed;
+                        velocity.Linear = (math.forward(rot.Value) * p.speed) - (repulsion * 0.90f);
                     }
                 }
                 else
@@ -547,6 +556,11 @@ public partial class PedestrianMovementSystem : SystemBase
                 Debug.DrawRay(t.Value, p.obstacle, Color.yellow);*/
                 //Debug.DrawRay(t.Value, p.lightAttraction, Color.black);
 
+                /*float repulsionMagnitude = math.distance(math.float3(0, 0, 0),
+                    repulsion.x == 0 && repulsion.y == 0 && repulsion.z == 0 ? math.float3(0.25f, 0.25f, 0.25f) : repulsion);
+
+                float speedModifier = repulsionMagnitude <= 1 ? 1 : repulsionMagnitude;*/
+
                 if (p.attractors != 0)
                 {
                     attraction /= p.attractors;
@@ -573,6 +587,10 @@ public partial class PedestrianMovementSystem : SystemBase
                 (attraction * p.attractionFac) +
                 (repulsion * p.repulsionFac) + (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 5;
 
+                /*float3 final = ((target * p.targetFac) +
+                (attraction * p.attractionFac) +
+                (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 4;*/
+
                 //Debug.DrawRay(t.Value, final, Color.cyan);
 
                 bool isZero = final.x == 0 && final.y == 0 && final.z == 0;
@@ -596,14 +614,31 @@ public partial class PedestrianMovementSystem : SystemBase
                 {
                     rot.Value = math.slerp(rot.Value, quaternion.LookRotation(final, math.up()), dt * p.rotSpeed);
 
-                    if (p.isClimbing)
+                    float encirclementTolerance = 0.1f;
+
+                    if (repulsion.x <= encirclementTolerance && repulsion.y <= encirclementTolerance && repulsion.z <= encirclementTolerance && p.repellors != 0)
                     {
-                        velocity.Linear = math.forward(rot.Value) * p.speed *0.5f;
+                        if (p.isClimbing)
+                        {
+                            velocity.Linear = math.forward(rot.Value) * p.speed * 0.2f * 0.5f;
+                        }
+                        else
+                        {
+                            velocity.Linear = math.forward(rot.Value) * p.speed * 0.2f;
+                        }
                     }
                     else
                     {
-                        velocity.Linear = math.forward(rot.Value) * p.speed;
-                    }                
+                        if (p.isClimbing)
+                        {
+                            velocity.Linear = (math.forward(rot.Value) * p.speed * 0.5f) - (repulsion * 0.80f);
+                        }
+                        else
+                        {
+                            velocity.Linear = (math.forward(rot.Value) * p.speed) - (repulsion * 0.80f);
+                        }
+                    }
+                                   
                 }
                 else
                 {

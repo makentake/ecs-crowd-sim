@@ -16,7 +16,7 @@ public class Timer : MonoBehaviour
         }
         else
         {
-            Debug.Break();
+            //Debug.Break();
         }
     }
 }

@@ -3,6 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using Random = Unity.Mathematics.Random;
+using Unity.Collections;
 
 [UpdateAfter(typeof(CrowdMovementSystem))]
 public partial class SpawningSystem : SystemBase
@@ -32,67 +33,138 @@ public partial class SpawningSystem : SystemBase
     {
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
-        // Spawn agents
-        Entities.ForEach((int entityInQueryIndex, ref RioterSpawner s, ref Goal g, in Translation translation) =>
+        bool spawnTest = true;
+
+        if (!spawnTest)
         {
-            if (!s.done)
+            // Spawn agents
+            Entities.ForEach((int entityInQueryIndex, ref RioterSpawner s, ref Goal g, in Translation translation) =>
             {
+                if (!s.done)
+                {
+                    // Calculate the goal position
+                    float3 minValue = translation.Value;
+                    float3 maxValue = s.spawnRadius + minValue;
+                    Translation goalPos = GetComponentDataFromEntity<Translation>(true)[s.goal];
+                    goalPos.Value += math.float3(0, 0, s.random.NextFloat(-30, 30));
+
+                    g.goal = goalPos;
+                    g.exit = GetComponentDataFromEntity<Translation>(true)[s.exit];
+
+                    // Create crowd members
+                    for (int i = 0; i < s.crowdSize; i++)
+                    {
+                        float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
+                        Translation pos = new Translation { Value = spawnPos };
+
+                        Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, pos);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, g);
+                    }
+
+                    // Create instigators
+                    for (int i = 0; i < s.antifaSize; i++)
+                    {
+                        float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
+                        Translation pos = new Translation { Value = spawnPos };
+
+                        Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.antifa);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, pos);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, g);
+                    }
+
+                    s.spawned += s.crowdSize + s.antifaSize;
+
+                    // Stop spawning if the target number of agents has been reached
+                    if (s.spawned >= s.toSpawn)
+                    {
+                        s.done = true;
+                    }
+                }
+            }).ScheduleParallel();
+
+            // Spawn agents
+            Entities.ForEach((int entityInQueryIndex, ref PedestrianSpawner s, ref Goal g, in Translation translation) =>
+            {
+                if (!s.done)
+                {
+                    // Calculate the goal position
+                    float3 minValue = translation.Value;
+                    float3 maxValue = s.spawnRadius + minValue;
+                    Translation goalPos = GetComponentDataFromEntity<Translation>(true)[s.goal];
+
+                    g.goal = goalPos;
+                    g.exit = GetComponentDataFromEntity<Translation>(true)[s.exit];
+
+                    // Create crowd members
+                    for (int i = 0; i < s.crowdSize; i++)
+                    {
+                        float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
+                        Translation pos = new Translation { Value = spawnPos };
+
+                        Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, pos);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, g);
+
+                        if (s.random.NextFloat() <= 0.25)
+                        {
+                            WaitTag tag = new WaitTag
+                            {
+                                maxTime = 60,
+                                currentTime = 0
+                            };
+
+                            ecb.AddComponent(entityInQueryIndex, newAgent, tag);
+                        }
+
+                        if (s.random.NextFloat() <= 0.25)
+                        {
+                            var tag = new YoungTag();
+
+                            ecb.AddComponent(entityInQueryIndex, newAgent, tag);
+                        }
+                    }
+
+                    s.spawned += s.crowdSize;
+
+                    // Stop spawning if the target number of agents has been reached
+                    if (s.spawned >= s.toSpawn)
+                    {
+                        s.done = true;
+                    }
+                }
+            }).ScheduleParallel();
+        }
+        else
+        {
+            EntityQuery pedestrian = GetEntityQuery(ComponentType.ReadOnly<Goal>(), ComponentType.ReadOnly<Pedestrian>(), ComponentType.ReadOnly<Translation>());
+            NativeArray<Goal> pedestrianArray = pedestrian.ToComponentDataArray<Goal>(Allocator.TempJob);
+
+            // Spawn agents
+            Entities.WithReadOnly(pedestrianArray).ForEach((int entityInQueryIndex, ref PedestrianSpawner s, ref Goal g, in Translation translation) =>
+            {
+                s.spawned = 0;
+
                 // Calculate the goal position
                 float3 minValue = translation.Value;
                 float3 maxValue = s.spawnRadius + minValue;
                 Translation goalPos = GetComponentDataFromEntity<Translation>(true)[s.goal];
-                goalPos.Value += math.float3(0, 0, s.random.NextFloat(-30, 30));
 
                 g.goal = goalPos;
                 g.exit = GetComponentDataFromEntity<Translation>(true)[s.exit];
 
-                // Create crowd members
-                for (int i = 0; i < s.crowdSize; i++)
+                foreach (Goal agent in pedestrianArray)
                 {
-                    float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
-                    Translation pos = new Translation { Value = spawnPos };
-
-                    Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, pos);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, g);
+                    if (agent.exit.Value.x == g.exit.Value.x && agent.exit.Value.y == g.exit.Value.y && agent.exit.Value.z == g.exit.Value.z)
+                    {
+                        s.spawned++;
+                    }
                 }
 
-                // Create instigators
-                for (int i = 0; i < s.antifaSize; i++)
-                {
-                    float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
-                    Translation pos = new Translation { Value = spawnPos };
-
-                    Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.antifa);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, pos);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, g);
-                }
-
-                s.spawned += s.crowdSize + s.antifaSize;
-
-                // Stop spawning if the target number of agents has been reached
-                if (s.spawned >= s.toSpawn)
-                {
-                    s.done = true;
-                }
-            }
-        }).ScheduleParallel();
-
-        // Spawn agents
-        Entities.ForEach((int entityInQueryIndex, ref PedestrianSpawner s, ref Goal g, in Translation translation) =>
-        {
-            if (!s.done)
-            {
-                // Calculate the goal position
-                float3 minValue = translation.Value;
-                float3 maxValue = s.spawnRadius + minValue;
-                Translation goalPos = GetComponentDataFromEntity<Translation>(true)[s.goal];
-
-                g.goal = goalPos;
-                g.exit = GetComponentDataFromEntity<Translation>(true)[s.exit];
+                int spawnsNeeded = s.toSpawn - s.spawned;
 
                 // Create crowd members
-                for (int i = 0; i < s.crowdSize; i++)
+                for (int i = 0; i < spawnsNeeded; i++)
                 {
                     float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
                     Translation pos = new Translation { Value = spawnPos };
@@ -119,16 +191,10 @@ public partial class SpawningSystem : SystemBase
                         ecb.AddComponent(entityInQueryIndex, newAgent, tag);
                     }
                 }
+            }).ScheduleParallel();
 
-                s.spawned += s.crowdSize;
-
-                // Stop spawning if the target number of agents has been reached
-                if (s.spawned >= s.toSpawn)
-                {
-                    s.done = true;
-                }
-            }
-        }).ScheduleParallel();
+            pedestrianArray.Dispose(Dependency);
+        }
 
         end.AddJobHandleForProducer(Dependency);
     }
