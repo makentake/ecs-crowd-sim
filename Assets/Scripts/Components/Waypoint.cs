@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
+using Unity.Collections;
 using Unity.Transforms;
 
-public struct InteractingTag : IComponentData 
+[GenerateAuthoringComponent]
+public struct Waypoint : IComponentData
 {
-    public float startingAnger;
-    public Translation position;
+    public int key;
 }

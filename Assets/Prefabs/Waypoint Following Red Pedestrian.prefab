@@ -13,13 +13,13 @@ GameObject:
   - component: {fileID: 6555772023942994501}
   - component: {fileID: 3901837043085557549}
   - component: {fileID: 6555772023942994500}
-  - component: {fileID: 5151694595475758096}
-  - component: {fileID: 6555772023942994496}
   - component: {fileID: 6227565146194031862}
   - component: {fileID: 6160827492677553763}
   - component: {fileID: -5288161288321476341}
+  - component: {fileID: 5865377915215750928}
+  - component: {fileID: -9184999722149501312}
   m_Layer: 3
-  m_Name: Red Pedestrian
+  m_Name: Waypoint Following Red Pedestrian
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,12 +131,6 @@ MonoBehaviour:
   speed: 0
   minDist: 0
   isClimbing: 0
-  heading:
-    value:
-      x: 0
-      y: 0
-      z: 0
-      w: 0
   lightAttractors: 0
   attractors: 0
   repellors: 0
@@ -160,44 +154,6 @@ MonoBehaviour:
     x: 0
     y: 0
     z: 0
---- !u!114 &5151694595475758096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6555772023942994503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76f8d04c47c63be45bad7deea139c6f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goal:
-    Value:
-      x: 25
-      y: 1.5
-      z: 0
-  exit:
-    Value:
-      x: 25
-      y: 1.5
-      z: 0
---- !u!114 &6555772023942994496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6555772023942994503}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 613fa5902aaf6f344ba2ccf846338233, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  numberOfRays: 9
-  visionAngle: 180
-  movementPerRay: 10
-  visionLength: 10
 --- !u!114 &6227565146194031862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,5 +358,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26f38bd3aa98fb84f90dadabe7e81b7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5865377915215750928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555772023942994503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b9a197561a3e942811ad304dca6be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  goalKey: 0
+--- !u!114 &-9184999722149501312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6555772023942994503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d6a64c4d6aa42b478c66b4ab2062308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

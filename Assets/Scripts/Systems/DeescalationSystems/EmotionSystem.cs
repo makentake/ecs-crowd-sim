@@ -30,7 +30,7 @@ public partial class EmotionSystem : SystemBase
     protected override void OnUpdate()
     {
         policeQuery = GetEntityQuery(typeof(Police));
-        antifaQuery = GetEntityQuery(typeof(AntifaTag));
+        antifaQuery = GetEntityQuery(typeof(Antifa));
         agentQuery = GetEntityQuery(typeof(Rioter), typeof(CivilianTag));
 
         var dt = Time.DeltaTime;
@@ -45,7 +45,7 @@ public partial class EmotionSystem : SystemBase
         NativeArray<float3> rTranslation = new NativeArray<float3>(agentQuery.CalculateEntityCount(), Allocator.TempJob);
 
         // Antifa-related NativeArrays
-        NativeArray<AntifaTag> antifa = new NativeArray<AntifaTag>(antifaQuery.CalculateEntityCount(), Allocator.TempJob);
+        NativeArray<Antifa> antifa = new NativeArray<Antifa>(antifaQuery.CalculateEntityCount(), Allocator.TempJob);
         NativeArray<float3> aTranslation = new NativeArray<float3>(antifaQuery.CalculateEntityCount(), Allocator.TempJob);
 
         // Get police-related data
@@ -68,7 +68,7 @@ public partial class EmotionSystem : SystemBase
 
         // Get Antifa-related data
         Entities
-            .ForEach((int entityInQueryIndex, in AntifaTag a, in Translation t) =>
+            .ForEach((int entityInQueryIndex, in Antifa a, in Translation t) =>
             {
                 antifa[entityInQueryIndex] = a;
                 aTranslation[entityInQueryIndex] = t.Value;
@@ -113,14 +113,14 @@ public partial class EmotionSystem : SystemBase
             //.WithReadOnly(pTranslation)
             //.WithReadOnly(rEntities)
             .WithAll<CivilianTag>()
-            .WithNone<InteractingTag>() //problem
+            .WithNone<Interacting>() //problem
             .ForEach((Entity e, int entityInQueryIndex, in Rioter r, in Translation t) =>
             {
                 for (int i = 0; i < police.Length; i++)
                 {
                     if (police[i].interactionTarget == e && r.aggression >= 10)
                     {
-                        InteractingTag newInteraction = new InteractingTag
+                        Interacting newInteraction = new Interacting
                         {
                             startingAnger = r.aggression,
                             position = t
@@ -172,7 +172,7 @@ public partial class EmotionSystem : SystemBase
         Entities
             .WithReadOnly(police)
             .WithAll<CivilianTag>()
-            .ForEach((Entity e, int entityInQueryIndex, ref Rioter r, ref Agent a, in Translation t, in InteractingTag i) =>
+            .ForEach((Entity e, int entityInQueryIndex, ref Rioter r, ref Agent a, in Translation t, in Interacting i) =>
             {
                 bool found = false;
 
@@ -188,7 +188,7 @@ public partial class EmotionSystem : SystemBase
 
                         if (r.aggression < 10)
                         {
-                            ecb.RemoveComponent<InteractingTag>(entityInQueryIndex, e);
+                            ecb.RemoveComponent<Interacting>(entityInQueryIndex, e);
                         }
 
                         found = true;
@@ -197,7 +197,7 @@ public partial class EmotionSystem : SystemBase
 
                 if (!found)
                 {
-                    ecb.RemoveComponent<InteractingTag>(entityInQueryIndex, e);
+                    ecb.RemoveComponent<Interacting>(entityInQueryIndex, e);
                 }
             }).ScheduleParallel();
 

@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
+using Unity.Transforms;
 
-[GenerateAuthoringComponent]
-public class Interacting : IComponentData
+public struct Interacting : IComponentData 
 {
-    
+    public float startingAnger;
+    public Translation position;
 }

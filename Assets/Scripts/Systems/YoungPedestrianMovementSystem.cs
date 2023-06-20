@@ -26,6 +26,7 @@ public partial class PedestrianMovementSystem : SystemBase
         bool SingleRay(int angle, Translation t, Rotation r, ObstacleAvoidance o)
         {
             RaycastInput input;
+            bool hasHit;
 
             float3 from = t.Value, to = t.Value + (math.mul(quaternion.RotateY(angle), math.forward(r.Value)) * o.visionLength);
 
@@ -41,7 +42,7 @@ public partial class PedestrianMovementSystem : SystemBase
             };
 
             Unity.Physics.RaycastHit hit;
-            bool hasHit = collisionWorld.CastRay(input, out hit);
+            hasHit = collisionWorld.CastRay(input, out hit);
 
             distance = from.x == hit.Position.x && from.y == hit.Position.y && from.z == hit.Position.z ? 0 : math.distance(from, hit.Position);
 
@@ -50,6 +51,7 @@ public partial class PedestrianMovementSystem : SystemBase
 
         bool hasWallBelow(Translation t)
         {
+            bool hasHit;
             float3 from = t.Value, to = t.Value + new float3(0, -5, 0);
 
             RaycastInput input = new RaycastInput()
@@ -64,7 +66,7 @@ public partial class PedestrianMovementSystem : SystemBase
             };
 
             Unity.Physics.RaycastHit hit;
-            bool hasHit = collisionWorld.CastRay(input, out hit);
+            hasHit = collisionWorld.CastRay(input, out hit);
 
             return hasHit;
         }
@@ -162,11 +164,11 @@ public partial class PedestrianMovementSystem : SystemBase
             for (int i = 1; i <= o.numberOfRays; i++, multiplier *= -1)
             {
                 var input = RayArcInput(leftmostRay, origin, o, rayNumber, r);
+                Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
+                bool haveHit = collisionWorld.CastRay(input, out hit);
 
                 //RaycastVisualization(i, input);
 
-                Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
-                bool haveHit = collisionWorld.CastRay(input, out hit);
                 if (haveHit)
                 {
                     //Debug.DrawRay(hit.Position, math.forward(), Color.green);
@@ -284,10 +286,6 @@ public partial class PedestrianMovementSystem : SystemBase
                 }
             };
 
-            //Unity.Physics.RaycastHit hit;
-            //bool hasHit = collisionWorld.CastRay(input, out hit);
-
-            //return hasHit;
             if (collisionWorld.CastRay(input))
             {
                 p.isClimbing = true;

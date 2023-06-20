@@ -20,7 +20,7 @@ public partial class CrowdTaggingSystem : SystemBase
         var ecb = pre.CreateCommandBuffer().AsParallelWriter();
 
         Entities
-            .WithNone<InteractingTag>()
+            .WithNone<Interacting>()
             .ForEach((Entity e, int entityInQueryIndex, ref Agent a, in Rioter r, in Translation t, in Goal g) =>
             {
                 if (r.aggression > r.threshhold)

@@ -7,26 +7,40 @@ using Unity.Mathematics;
 [GenerateAuthoringComponent]
 public struct Pedestrian : IComponentData
 {
-    public float minDist,
-        maxDist,
-        speed,
-        rotSpeed,
-        targetFac,
+    // Factors
+    public float targetFac,
         attractionFac,
-        attractionRot,
         repulsionFac,
         obstacleFac,
-        baseTolerance,
+        lightFac;
+
+    // Movement
+    public float baseSpeed,
+        rotSpeed;
+
+    // Distances/tolerances
+    public float baseMinDist,
+        maxDist,
         tolerance,
         lightRange,
-        lightAttractors,
-        lightFac;
-    public quaternion heading;
-    public float3 target, 
-        attraction, 
-        repulsion, 
-        obstacle, 
-        lightAttraction;
-    public int attractors, repellors;
+        attractionRot,
+        attractionSpeed,
+        averageHeadingDuration;
+
+    // Internal values
+    // Local data
+    public int densityModifier;
+    public float speed, minDist;
     public bool isClimbing;
+
+    // Attractor numbers
+    public int lightAttractors;
+    public int attractors, repellors;
+
+    // Vectors
+    public float3 target,
+        attraction,
+        repulsion,
+        obstacle,
+        lightAttraction;
 }

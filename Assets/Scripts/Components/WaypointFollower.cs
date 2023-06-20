@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
-public struct WaitTag : IComponentData
+[GenerateAuthoringComponent]
+public struct WaypointFollower : IComponentData
 {
-    public float maxTime, currentTime;
+    public int goalKey;
 }

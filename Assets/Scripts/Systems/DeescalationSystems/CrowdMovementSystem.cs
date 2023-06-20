@@ -235,7 +235,7 @@ public partial class CrowdMovementSystem : SystemBase
 
         // Operate on moving and rioting entities
         Entities
-            .WithNone<FleeingTag, InteractingTag>()
+            .WithNone<FleeingTag, Interacting>()
             .WithNone<Police>().ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Agent a, in Goal g) =>
             {
                 float3 target = a.target, attraction = a.attraction, repulsion = a.repulsion;
@@ -282,8 +282,8 @@ public partial class CrowdMovementSystem : SystemBase
 
         // Operate on interacting entities
         Entities
-            .WithAll<InteractingTag>()
-            .ForEach((int entityInQueryIndex, ref PhysicsVelocity v, ref Agent a, ref Translation t, ref Rotation r, in InteractingTag i, in Goal g) =>
+            .WithAll<Interacting>()
+            .ForEach((int entityInQueryIndex, ref PhysicsVelocity v, ref Agent a, ref Translation t, ref Rotation r, in Interacting i, in Goal g) =>
             {
                 float3 target = i.position.Value - t.Value,
                 repulsion = a.repulsion;
@@ -316,7 +316,7 @@ public partial class CrowdMovementSystem : SystemBase
         // Operate on fleeing entities
         Entities
             .WithAll<FleeingTag>()
-            .WithNone<InteractingTag>()
+            .WithNone<Interacting>()
             .WithNone<Police>().ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Agent a, in Goal g) =>
             {
                 float3 target = a.target, attraction = a.attraction, repulsion = a.repulsion;

@@ -4,7 +4,9 @@ using UnityEngine;
 using Unity.Entities;
 
 [GenerateAuthoringComponent]
-public struct AntifaTag : IComponentData
+public struct VoxelSpawner : IComponentData
 {
-    public float instigation, radius;
+    public float x, y;
+    public float voxelSpacing;
+    public Entity waypoint;
 }

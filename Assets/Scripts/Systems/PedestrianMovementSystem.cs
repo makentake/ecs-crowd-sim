@@ -5,22 +5,20 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Physics;
 using Unity.Jobs;
-using Unity.Burst;
-using Unity.Entities.UniversalDelegates;
 
 // System for moving a peaceful crowd
 [UpdateAfter(typeof(CrowdMovementSystem))]
 public partial class PedestrianMovementSystem : SystemBase
 {
     private EndFixedStepSimulationEntityCommandBufferSystem end;
-    private EntityQuery pedestrianQuery, lightQuery;
-    private Unity.Physics.Systems.BuildPhysicsWorld physWorld;
+    private EntityQuery pedestrianQuery, lightQuery, waypointQuery;
+    private Unity.Physics.Systems.BuildPhysicsWorld physicsWorld;
 
     // Set up the physics world for raycasting and the entity command buffer system
     protected override void OnStartRunning()
     {
         end = World.GetOrCreateSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
-        physWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
+        physicsWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
     }
 
     private partial struct ObjectAvoidanceJob : IJobEntity
@@ -37,6 +35,7 @@ public partial class PedestrianMovementSystem : SystemBase
         bool SingleRay(int angle, Translation t, Rotation r, ObstacleAvoidance o)
         {
             RaycastInput input;
+            bool hasHit;
 
             float3 from = t.Value, to = t.Value + (math.mul(quaternion.RotateY(angle), math.forward(r.Value)) * o.visionLength);
 
@@ -52,30 +51,9 @@ public partial class PedestrianMovementSystem : SystemBase
             };
 
             Unity.Physics.RaycastHit hit;
-            bool hasHit = collisionWorld.CastRay(input, out hit);
+            hasHit = collisionWorld.CastRay(input, out hit);
 
             distance = from.x == hit.Position.x && from.y == hit.Position.y && from.z == hit.Position.z ? 0 : math.distance(from, hit.Position);
-
-            return hasHit;
-        }
-
-        bool hasWallBelow(Translation t)
-        {
-            float3 from = t.Value, to = t.Value + new float3(0, -5, 0);
-
-            RaycastInput input = new RaycastInput()
-            {
-                Start = from,
-                End = to,
-                Filter = new CollisionFilter
-                {
-                    BelongsTo = 1 << 0,
-                    CollidesWith = 1 << 2,
-                }
-            };
-
-            Unity.Physics.RaycastHit hit;
-            bool hasHit = collisionWorld.CastRay(input, out hit);
 
             return hasHit;
         }
@@ -173,11 +151,11 @@ public partial class PedestrianMovementSystem : SystemBase
             for (int i = 1; i <= o.numberOfRays; i++, multiplier *= -1)
             {
                 var input = RayArcInput(leftmostRay, origin, o, rayNumber, r);
+                Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
+                bool haveHit = collisionWorld.CastRay(input, out hit);
 
                 //RaycastVisualization(i, input);
 
-                Unity.Physics.RaycastHit hit = new Unity.Physics.RaycastHit();
-                bool haveHit = collisionWorld.CastRay(input, out hit);
                 if (haveHit)
                 {
                     //Debug.DrawRay(hit.Position, math.forward(), Color.green);
@@ -284,123 +262,250 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [WithNone(typeof(FleeingTag))]
+    private partial struct LocalAgentCalculationJob : IJobEntity
+    {
+        [ReadOnly] public NativeArray<Translation> pedestrianArray;
+        [ReadOnly] public NativeArray<Rotation> pedestrianRotArray;
+        [ReadOnly] public NativeArray<float> pedestrianSpeedArray;
+
+        private void CoreVectorCalculationJob(ref Pedestrian p, in Translation t, in Rotation r, in Goal g, NativeList<Translation> lP, NativeList<Translation> hLP, NativeList<Rotation> lPR, NativeList<float> lPS, NativeList<float> lD, NativeList<float> hLD)
+        {
+            p.attraction = new float3(0, 0, 0);
+            p.repulsion = new float3(0, 0, 0);
+
+            p.attractors = 0;
+            p.repellors = 0;
+
+            p.target = g.goal.Value - t.Value;
+
+            for (int i = 0; i < hLP.Length; i++) 
+            {
+                p.repulsion += (t.Value - hLP[i].Value) / hLD[i];
+                p.repellors++;
+            }
+            
+            for (int i = 0; i < lP.Length; i++)
+            {
+                float angle = math.atan2(r.Value.value.y, lPR[i].Value.value.y);
+
+                if (angle <= math.radians(p.attractionRot) && angle >= math.radians(-p.attractionRot) && math.abs(p.speed - lPS[i]) <= p.attractionSpeed)
+                {
+                    p.attraction += (lP[i].Value - t.Value) / lD[i];
+                    p.attractors++;
+                }
+            }
+        }
+
+        private void DensityCalculationJob(ref Pedestrian p, NativeList<Translation> lP)
+        {
+            float percentFull = lP.Length / (math.PI * math.pow(p.maxDist, 2));
+            float modifier = percentFull <= 0.99f ? percentFull : 0.99f;
+
+            p.speed = p.baseSpeed - (p.baseSpeed * modifier);
+
+            p.minDist = p.baseMinDist - (p.baseMinDist * modifier);
+            p.minDist = p.minDist < 1.1f ? 1.1f : p.minDist;
+        }
+
+        public void Execute(ref Pedestrian p, in Translation t, in Rotation r, in Goal g)
+        {
+            var localPedestrians = new NativeList<Translation>(Allocator.Temp);
+            var localPedestrianRots = new NativeList<Rotation>(Allocator.Temp);
+            var localPedestrianSpeeds = new NativeList<float>(Allocator.Temp);
+            var localDistances = new NativeList<float>(Allocator.Temp);
+
+            var highlyLocalPedestrians = new NativeList<Translation>(Allocator.Temp);
+            var highlyLocalDistances = new NativeList<float>(Allocator.Temp);
+
+            for (int i = 0; i < pedestrianArray.Length; i++)
+            {
+                float3 target = pedestrianArray[i].Value;
+                float dist = math.distance(t.Value, target);
+
+                if (dist <= p.maxDist)
+                {
+                    if (dist <= p.minDist)
+                    {   
+                        if (dist > 0.001f)
+                        {
+                            highlyLocalPedestrians.Add(pedestrianArray[i]);
+                            highlyLocalDistances.Add(dist);
+                        }
+                    }
+                    else
+                    {
+                        localPedestrians.Add(pedestrianArray[i]);
+                        localPedestrianRots.Add(pedestrianRotArray[i]);
+                        localPedestrianSpeeds.Add(pedestrianSpeedArray[i]);
+                        localDistances.Add(dist);
+                    }
+                }
+            }
+
+            CoreVectorCalculationJob(ref p, t, r, g, localPedestrians, highlyLocalPedestrians, localPedestrianRots, localPedestrianSpeeds, localDistances, highlyLocalDistances);
+            DensityCalculationJob(ref p, localPedestrians);
+        }
+    }
+
+    [WithNone(typeof(FleeingTag))]
+    private partial struct FinalVectorCalculationJob : IJobEntity
+    {
+        public float deltaTime;
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Pedestrian p, in Goal g)
+        {
+            float3 target = p.target, attraction = p.attraction, repulsion = p.repulsion, obstacle = p.obstacle, lightAttraction = p.lightAttraction;
+            float dist = math.distance(t.Value, g.goal.Value);
+            bool isZero;
+
+            /*Debug.DrawRay(t.Value, p.target, Color.blue);
+            Debug.DrawRay(t.Value, p.attraction, Color.green);
+            Debug.DrawRay(t.Value, p.repulsion, Color.red);
+            Debug.DrawRay(t.Value, p.obstacle, Color.yellow);*/
+            //Debug.DrawRay(t.Value, p.lightAttraction, Color.black);
+
+            if (p.attractors != 0)
+            {
+                attraction /= p.attractors;
+                attraction = math.normalize(attraction);
+            }
+
+            if (p.repellors != 0)
+            {
+                repulsion /= p.repellors;
+                repulsion = math.normalize(repulsion);
+            }
+
+            if (p.lightAttractors != 0)
+            {
+                lightAttraction /= p.lightAttractors;
+                lightAttraction = math.normalize(lightAttraction);
+            }
+
+            target = target.x == 0 && target.y == 0 && target.z == 0 ? target : math.normalize(target);
+
+            obstacle = obstacle.x == 0 && obstacle.y == 0 && obstacle.z == 0 ? obstacle : math.normalize(obstacle);
+
+            float3 final = ((target * p.targetFac) +
+            (attraction * p.attractionFac) +
+            (repulsion * p.repulsionFac) + (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 5;
+
+            //Debug.DrawRay(t.Value, final, Color.cyan);
+
+            isZero = final.x == 0 && final.y == 0 && final.z == 0;
+
+            final = isZero ? final : math.normalize(final);
+
+            rot.Value.value.x = 0;
+            rot.Value.value.z = 0;
+            velocity.Angular = 0;
+
+            if (!isZero)
+            {
+                rot.Value = math.slerp(rot.Value, quaternion.LookRotation(final, math.up()), deltaTime * p.rotSpeed);
+
+                if (p.isClimbing)
+                {
+                    velocity.Linear = math.forward(rot.Value) * p.speed * 0.5f;
+                }
+                else
+                {
+                    velocity.Linear = math.forward(rot.Value) * p.speed;
+                }
+            }
+            else
+            {
+                velocity.Linear = math.float3(0, 0, 0);
+            }
+
+            if (p.isClimbing)
+            {
+                t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
+            }
+            else
+            {
+                t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
+            }
+
+            if (dist < p.tolerance*3)
+            {
+                ecbpw.AddComponent<FleeingTag>(entityInQueryIndex, e);
+            }
+        }
+    }
+
     protected override void OnUpdate()
     {
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
         var dt = Time.DeltaTime;
-        var collisionWorld = physWorld.PhysicsWorld.CollisionWorld;
+        var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
+
         pedestrianQuery = GetEntityQuery(ComponentType.ReadOnly<Pedestrian>(), 
             ComponentType.ReadOnly<Translation>(),
             ComponentType.ReadOnly<Rotation>());
         lightQuery = GetEntityQuery(ComponentType.ReadOnly<LightTag>(),
             ComponentType.ReadOnly<Translation>());
+        waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
 
-        var pedestrians = pedestrianQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
-        var pedestrianRot = pedestrianQuery.ToComponentDataArray<Rotation>(Allocator.TempJob);
+        var pedestrians = new NativeArray<Translation>(pedestrianQuery.CalculateEntityCount(), Allocator.TempJob);
+        var pedestrianRot = new NativeArray<Rotation>(pedestrianQuery.CalculateEntityCount(), Allocator.TempJob);
+        var pedestrianSpeed = new NativeArray<float>(pedestrianQuery.CalculateEntityCount(), Allocator.TempJob);
         var lightTranslation = lightQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
+        var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
+        var waypointsParallelWriter = waypoints.AsParallelWriter();
 
-        // Calculate the vectors for moving agents
+        // These two depend heavily on being synced up, so do that manually
         Entities
-            .WithReadOnly(pedestrians)
-            .WithReadOnly(pedestrianRot)
-            .WithNone<Police, FleeingTag>()
-            .ForEach((int entityInQueryIndex, ref Pedestrian p, in Translation t, in Rotation r, in Goal g) =>
+            .ForEach((int entityInQueryIndex, in Pedestrian p, in Translation t, in Rotation r) =>
             {
-                p.attraction = new float3(0, 0, 0);
-                p.repulsion = new float3(0, 0, 0);
-
-                p.attractors = 0;
-                p.repellors = 0;
-
-                
-                p.target = g.goal.Value - t.Value;
-
-                for (int i = 0; i < pedestrians.Length; i++)
-                {
-                    float3 target = pedestrians[i].Value;
-                    float dist = math.distance(t.Value, target);
-                    float angle = math.atan2(r.Value.value.y, pedestrianRot[i].Value.value.y);
-
-                    if (dist >= 0.01)
-                    {
-                        // Calculate repulsion
-                        if (dist < p.minDist)
-                        {
-                            p.repulsion += (t.Value - target) / dist;
-                            p.repellors++;
-                        }
-
-                        else if (angle < math.radians(p.attractionRot) && angle != 0)
-                        {
-                            if (dist <= p.maxDist)
-                            {
-                                p.attraction += (target - t.Value) / angle;
-                                p.attractors++;
-                            }
-                        }
-                    }
-                }
-                
-            }).ScheduleParallel();
-
-        // Calculate the vectors for leaving agents
-        Entities
-            .WithReadOnly(pedestrians)
-            .WithReadOnly(pedestrianRot)
-            .WithNone<Police>()
-            .WithAll<FleeingTag>()
-            .ForEach((int entityInQueryIndex, ref Pedestrian p, in Translation t, in Rotation r, in Goal g) =>
-            {
-                p.attraction = new float3(0, 0, 0);
-                p.repulsion = new float3(0, 0, 0);
-
-                p.attractors = 0;
-                p.repellors = 0;
-
-                p.target = g.exit.Value - t.Value;
-
-                for (int i = 0; i < pedestrians.Length; i++)
-                {
-                    float3 target = pedestrians[i].Value;
-                    float dist = math.distance(t.Value, target);
-                    float angle = math.atan2(r.Value.value.y, pedestrianRot[i].Value.value.y);
-
-                    if (dist >= 0.01)
-                    {
-                        // Calculate repulsion
-                        if (dist < p.minDist)
-                        {
-                            p.repulsion += (t.Value - target) / dist;
-                            p.repellors++;
-                        }
-
-                        else if (angle < math.radians(p.attractionRot) && angle != 0)
-                        {
-                            if (dist <= p.maxDist)
-                            {
-                                p.attraction += (target - t.Value) / angle;
-                                p.attractors++;
-                            }
-                        }
-                    }
-                }
-
+                pedestrians[entityInQueryIndex] = t;
+                pedestrianRot[entityInQueryIndex] = r;
+                pedestrianSpeed[entityInQueryIndex] = p.speed;
             }).ScheduleParallel();
 
         Entities
+            .ForEach((in Waypoint w, in Translation t) =>
+            {
+                waypointsParallelWriter.TryAdd(w.key, t);
+            }).ScheduleParallel();
+
+        JobHandle core = new LocalAgentCalculationJob
+        {
+            pedestrianArray = pedestrians,
+            pedestrianRotArray = pedestrianRot,
+            pedestrianSpeedArray = pedestrianSpeed
+        }.ScheduleParallel();
+
+        JobHandle fleeingCore = new FleeingLocalAgentCalculationJob
+        {
+            pedestrianArray = pedestrians,
+            pedestrianRotArray = pedestrianRot,
+            pedestrianSpeedArray = pedestrianSpeed
+        }.ScheduleParallel();
+
+        JobHandle waypointCore = new WaypointLocalAgentCalculationJob
+        {
+            pedestrianArray = pedestrians,
+            pedestrianRotArray = pedestrianRot,
+            pedestrianSpeedArray = pedestrianSpeed,
+            waypointArray = waypoints
+        }.ScheduleParallel();
+
+        Entities
+            .WithNone<WaypointFollower>()
             .WithReadOnly(lightTranslation)
             .WithReadOnly(collisionWorld)
-            .ForEach((Entity e, int entityInQueryIndex, ref Pedestrian p, ref WaitTag w, in Translation t) =>
+            .ForEach((Entity e, int entityInQueryIndex, ref Pedestrian p, ref Wait w, in Translation t) =>
             {
                 p.lightAttraction = new float3(0, 0, 0);
                 p.lightAttractors = 0;
 
-                
-
                 if (w.currentTime >= w.maxTime)
                 {
-                    ecb.RemoveComponent<WaitTag>(entityInQueryIndex, e);
+                    ecb.RemoveComponent<Wait>(entityInQueryIndex, e);
                 }
                 else
                 {
@@ -408,6 +513,8 @@ public partial class PedestrianMovementSystem : SystemBase
                     foreach (Translation light in lightTranslation)
                     {
                         RaycastInput input;
+                        bool hasHit;
+                        var distance = math.distance(t.Value, light.Value);
 
                         float3 from = t.Value, to = light.Value;
 
@@ -422,9 +529,7 @@ public partial class PedestrianMovementSystem : SystemBase
                             }
                         };
 
-                        bool hasHit = collisionWorld.CastRay(input);
-
-                        var distance = math.distance(t.Value, light.Value);
+                        hasHit = collisionWorld.CastRay(input);
 
                         if (distance <= p.lightRange && !hasHit)
                         {
@@ -439,224 +544,49 @@ public partial class PedestrianMovementSystem : SystemBase
         // Calculate obstacle avoidance
         JobHandle obstacle = new ObjectAvoidanceJob
         {
-            collisionWorld = physWorld.PhysicsWorld.CollisionWorld
+            collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld
         }.ScheduleParallel();
 
         // this job is in another partial class
         JobHandle youngObstacle = new YoungObjectAvoidanceJob
         {
-            collisionWorld = physWorld.PhysicsWorld.CollisionWorld
+            collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld
+        }.ScheduleParallel();
+
+        JobHandle waypointObstacle = new WaypointObstacleAvoidanceJob
+        {
+            collisionWorld = collisionWorld,
+            waypointArray = waypoints,
+            ecbpw = ecb
         }.ScheduleParallel();
 
         // Calculate final values for leaving agents and move them
-        Entities
-            .WithAll<FleeingTag>()
-            .ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Pedestrian p, in Goal g) =>
-            {
-                float3 target = p.target, attraction = p.attraction, repulsion = p.repulsion, obstacle = p.obstacle, lightAttraction = p.lightAttraction;
-                float dist = math.distance(t.Value, g.exit.Value);
-
-                /*Debug.DrawRay(t.Value, p.target, Color.blue);
-                Debug.DrawRay(t.Value, p.attraction, Color.green);
-                Debug.DrawRay(t.Value, p.repulsion, Color.red);
-                Debug.DrawRay(t.Value, p.obstacle, Color.yellow);*/
-                //Debug.DrawRay(t.Value, p.lightAttraction, Color.black);
-
-                /*float repulsionMagnitude = math.distance(math.float3(0, 0, 0),
-                    repulsion.x == 0 && repulsion.y == 0 && repulsion.z == 0 ? math.float3(0.25f, 0.25f, 0.25f) : repulsion);
-
-                float speedModifier = repulsionMagnitude <= 1 ? 1 : repulsionMagnitude;*/
-
-                if (p.attractors != 0)
-                {
-                    attraction /= p.attractors;
-                    attraction = math.normalize(attraction);
-                }
-
-                if (p.repellors != 0)
-                {
-                    repulsion /= p.repellors;
-                    repulsion = math.normalize(repulsion);
-                }
-
-                if (p.lightAttractors != 0)
-                {
-                    lightAttraction /= p.lightAttractors;
-                    lightAttraction = math.normalize(lightAttraction);
-                }
-
-                target = target.x == 0 && target.y == 0 && target.z == 0 ? target : math.normalize(target);
-
-                obstacle = obstacle.x == 0 && obstacle.y == 0 && obstacle.z == 0 ? obstacle : math.normalize(obstacle);
-
-                float3 final = ((target * p.targetFac) +
-                (attraction * p.attractionFac) +
-                (repulsion * p.repulsionFac) + (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 5;
-
-                /*float3 final = ((target * p.targetFac) +
-                (attraction * p.attractionFac) +
-                (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 4;*/
-
-                //Debug.DrawRay(t.Value, final, Color.cyan);
-
-                bool isZero = final.x == 0 && final.y == 0 && final.z == 0;
-
-                final = isZero ? final : math.normalize(final);
-
-                if (p.isClimbing)
-                {
-                    t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
-                }
-                else
-                {
-                    t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
-                }
-
-                rot.Value.value.x = 0;
-                rot.Value.value.z = 0;
-                velocity.Angular = 0;
-
-                if (!isZero)
-                {
-                    rot.Value = math.slerp(rot.Value, quaternion.LookRotation(final, math.up()), dt * p.rotSpeed);
-
-                    if (p.isClimbing)
-                    {
-                        velocity.Linear = (math.forward(rot.Value) * p.speed * 0.5f) - (repulsion * 0.90f);
-                    }
-                    else
-                    {
-                        velocity.Linear = (math.forward(rot.Value) * p.speed) - (repulsion * 0.90f);
-                    }
-                }
-                else
-                {
-                    velocity.Linear = math.float3(0, 0, 0);
-                }
-
-                p.heading = rot.Value;
-
-                if (dist < p.tolerance)
-                {
-                    ecb.DestroyEntity(entityInQueryIndex, e);
-                }
-            }).ScheduleParallel();
+        JobHandle fleeingFinal = new FleeingFinalVectorCalculationJob
+        {
+            deltaTime = dt,
+            ecbpw = ecb
+        }.ScheduleParallel();
 
         // Calculate final values for normal agents and move them
-        Entities
-            .WithNone<FleeingTag>()
-            .ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Pedestrian p, in Goal g) =>
-            {
-                float3 target = p.target, attraction = p.attraction, repulsion = p.repulsion, obstacle = p.obstacle, lightAttraction = p.lightAttraction;
-                float dist = math.distance(t.Value, g.goal.Value);
+        JobHandle final = new FinalVectorCalculationJob
+        {
+            deltaTime = dt,
+            ecbpw = ecb
+        }.ScheduleParallel();
 
-                /*Debug.DrawRay(t.Value, p.target, Color.blue);
-                Debug.DrawRay(t.Value, p.attraction, Color.green);
-                Debug.DrawRay(t.Value, p.repulsion, Color.red);
-                Debug.DrawRay(t.Value, p.obstacle, Color.yellow);*/
-                //Debug.DrawRay(t.Value, p.lightAttraction, Color.black);
-
-                /*float repulsionMagnitude = math.distance(math.float3(0, 0, 0),
-                    repulsion.x == 0 && repulsion.y == 0 && repulsion.z == 0 ? math.float3(0.25f, 0.25f, 0.25f) : repulsion);
-
-                float speedModifier = repulsionMagnitude <= 1 ? 1 : repulsionMagnitude;*/
-
-                if (p.attractors != 0)
-                {
-                    attraction /= p.attractors;
-                    attraction = math.normalize(attraction);
-                }
-
-                if (p.repellors != 0)
-                {
-                    repulsion /= p.repellors;
-                    repulsion = math.normalize(repulsion);
-                }
-
-                if (p.lightAttractors != 0)
-                {
-                    lightAttraction /= p.lightAttractors;
-                    lightAttraction = math.normalize(lightAttraction);
-                }
-
-                target = target.x == 0 && target.y == 0 && target.z == 0 ? target : math.normalize(target);
-
-                obstacle = obstacle.x == 0 && obstacle.y == 0 && obstacle.z == 0 ? obstacle : math.normalize(obstacle);
-
-                float3 final = ((target * p.targetFac) +
-                (attraction * p.attractionFac) +
-                (repulsion * p.repulsionFac) + (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 5;
-
-                /*float3 final = ((target * p.targetFac) +
-                (attraction * p.attractionFac) +
-                (obstacle * p.obstacleFac) + (lightAttraction * p.lightFac)) / 4;*/
-
-                //Debug.DrawRay(t.Value, final, Color.cyan);
-
-                bool isZero = final.x == 0 && final.y == 0 && final.z == 0;
-
-                final = isZero ? final : math.normalize(final);
-
-                if (p.isClimbing)
-                {
-                    t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
-                }
-                else
-                {
-                    t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
-                }
-                
-                rot.Value.value.x = 0;
-                rot.Value.value.z = 0;
-                velocity.Angular = 0;
-
-                if (!isZero)
-                {
-                    rot.Value = math.slerp(rot.Value, quaternion.LookRotation(final, math.up()), dt * p.rotSpeed);
-
-                    float encirclementTolerance = 0.1f;
-
-                    if (repulsion.x <= encirclementTolerance && repulsion.y <= encirclementTolerance && repulsion.z <= encirclementTolerance && p.repellors != 0)
-                    {
-                        if (p.isClimbing)
-                        {
-                            velocity.Linear = math.forward(rot.Value) * p.speed * 0.2f * 0.5f;
-                        }
-                        else
-                        {
-                            velocity.Linear = math.forward(rot.Value) * p.speed * 0.2f;
-                        }
-                    }
-                    else
-                    {
-                        if (p.isClimbing)
-                        {
-                            velocity.Linear = (math.forward(rot.Value) * p.speed * 0.5f) - (repulsion * 0.80f);
-                        }
-                        else
-                        {
-                            velocity.Linear = (math.forward(rot.Value) * p.speed) - (repulsion * 0.80f);
-                        }
-                    }
-                                   
-                }
-                else
-                {
-                    velocity.Linear = math.float3(0, 0, 0);
-                }
-
-                p.heading = rot.Value;
-
-                if (dist < p.tolerance*3)
-                {
-                    ecb.AddComponent<FleeingTag>(entityInQueryIndex, e);
-                }
-            }).ScheduleParallel();
+        JobHandle waypointFinal = new WaypointFinalVectorCalculationJob
+        {
+            deltaTime = dt,
+            ecbpw = ecb,
+            waypointArray = waypoints
+        }.ScheduleParallel();
 
         end.AddJobHandleForProducer(Dependency);
 
         pedestrians.Dispose(Dependency);
         pedestrianRot.Dispose(Dependency);
+        pedestrianSpeed.Dispose(Dependency);
         lightTranslation.Dispose(Dependency);
+        waypoints.Dispose(Dependency);
     }
 }
