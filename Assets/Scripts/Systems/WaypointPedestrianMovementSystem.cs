@@ -9,6 +9,24 @@ using Unity.Jobs;
 [UpdateAfter(typeof(CrowdMovementSystem))]
 public partial class PedestrianMovementSystem : SystemBase
 {
+    private static bool WaypointVisibilityCheck(int k, NativeParallelHashMap<int, Translation> waypointArray, CollisionWorld collisionWorld, Translation t)
+    {
+        var input = new RaycastInput
+        {
+            Start = t.Value,
+            End = waypointArray[k].Value,
+            Filter = new CollisionFilter
+            {
+                BelongsTo = 1 << 0,
+                CollidesWith = 1 << 1
+            }
+        };
+
+        Debug.DrawLine(input.Start, input.End, Color.black);
+
+        return collisionWorld.CastRay(input);
+    }
+
     [WithAll(typeof(WaypointFollower))]
     private partial struct WaypointObstacleAvoidanceJob : IJobEntity
     {
@@ -16,26 +34,11 @@ public partial class PedestrianMovementSystem : SystemBase
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
-        private bool WaypointVisibilityCheck(Translation t, int k)
-        {
-            var input = new RaycastInput
-            {
-                Start = t.Value,
-                End = waypointArray[k].Value,
-                Filter = new CollisionFilter
-                {
-                    BelongsTo = 1 << 0,
-                    CollidesWith = 1 << 1
-                }
-            };
-
-            return collisionWorld.CastRay(input);
-        }
-
         public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, in Translation t, in DynamicBuffer<WaypointList> w)
         {
-            if (WaypointVisibilityCheck(t, w[0].key))
+            if (WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
             {
+                Debug.Log("recalculating");
                 ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
             }
         }
@@ -69,7 +72,7 @@ public partial class PedestrianMovementSystem : SystemBase
             {
                 float angle = math.atan2(r.Value.value.y, lPR[i].Value.value.y);
 
-                if (angle <= math.radians(p.attractionRot) && angle >= math.radians(-p.attractionRot) && math.abs(p.speed - lPS[i]) <= p.attractionSpeed)
+                if (angle <= math.radians(p.attractionRot) && angle >= math.radians(-p.attractionRot) && math.abs(p.speed - lPS[i]) <= p.attractionSpeedTolerance)
                 {
                     p.attraction += (lP[i].Value - t.Value) / lD[i];
                     p.attractors++;
@@ -130,10 +133,11 @@ public partial class PedestrianMovementSystem : SystemBase
 
     private partial struct WaypointFinalVectorCalculationJob : IJobEntity
     {
+        [ReadOnly] public CollisionWorld collisionWorld;
+        [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
+
         public float deltaTime;
         public EntityCommandBuffer.ParallelWriter ecbpw;
-
-        [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
 
         public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref PhysicsVelocity v, ref Translation t, ref Rotation r, ref Pedestrian p, ref DynamicBuffer<WaypointList> w)
         {
@@ -210,7 +214,7 @@ public partial class PedestrianMovementSystem : SystemBase
                 t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
             }
 
-            if (dist < p.tolerance)
+            if (dist < p.tolerance && !WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
             {
                 w.RemoveAt(0);
 

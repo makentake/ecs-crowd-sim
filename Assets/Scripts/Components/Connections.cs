@@ -4,7 +4,7 @@ using UnityEngine;
 using Unity.Entities;
 
 [GenerateAuthoringComponent]
-[InternalBufferCapacity(6)]
+[InternalBufferCapacity(8)]
 public struct Connections : IBufferElementData
 {
     public int key;

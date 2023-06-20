@@ -125,18 +125,12 @@ MonoBehaviour:
   tolerance: 5
   lightRange: 200
   attractionRot: 45
-  attractionSpeed: 0.5
+  attractionSpeedTolerance: 0.5
   averageHeadingDuration: 0
   densityModifier: 0
   speed: 0
   minDist: 0
   isClimbing: 0
-  heading:
-    value:
-      x: 0
-      y: 0
-      z: 0
-      w: 0
   lightAttractors: 0
   attractors: 0
   repellors: 0

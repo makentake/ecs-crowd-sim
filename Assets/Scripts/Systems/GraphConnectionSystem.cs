@@ -43,60 +43,34 @@ public partial class GraphConnectionSystem : SystemBase
             {
                 var connections = ecb.AddBuffer<Connections>(entityInQueryIndex, e);
 
-                connections.Length = waypoints.Count();
-
                 for (int i = 0; i < waypoints.Count(); i++)
                 {
-                    if (w.key != i)
+                    float3 from = t.Value;
+                    float3 to = waypoints[i].Value;
+                    bool haveHit;
+
+                    if (math.distance(from, to) <= math.sqrt(math.pow(voxelData.voxelSpacing, 2) + math.pow(voxelData.voxelSpacing, 2)))
                     {
-                        float3 from = t.Value;
-                        float3 to = waypoints[i].Value;
-                        bool haveHit;
-
-                        if (math.distance(from, to) <= math.sqrt(math.pow(voxelData.voxelSpacing, 2) + math.pow(voxelData.voxelSpacing, 2)))
+                        var input = new RaycastInput
                         {
-                            var input = new RaycastInput
+                            Start = from,
+                            End = to,
+                            Filter = new CollisionFilter
                             {
-                                Start = from,
-                                End = to,
-                                Filter = new CollisionFilter
-                                {
-                                    BelongsTo = 1 << 0,
-                                    CollidesWith = 1 << 1
-                                }
-                            };
-
-                            haveHit = collisionWorld.CastRay(input);
-
-                            if (haveHit)
-                            {
-                                connections[i] = new Connections
-                                {
-                                    key = -1
-                                };
+                                BelongsTo = 1 << 0,
+                                CollidesWith = 1 << 1
                             }
-                            else
-                            {
-                                connections[i] = new Connections
-                                {
-                                    key = i
-                                };
-                            }
-                        }
-                        else
-                        {
-                            connections[i] = new Connections
-                            {
-                                key = -1
-                            };
-                        }
-                    }
-                    else
-                    {
-                        connections[i] = new Connections
-                        {
-                            key = -1
                         };
+
+                        haveHit = collisionWorld.CastRay(input);
+
+                        if (!haveHit && w.key != i)
+                        {
+                            connections.Add(new Connections
+                            {
+                                key = i
+                            });
+                        }
                     }
                 }
             }).ScheduleParallel();
@@ -107,7 +81,7 @@ public partial class GraphConnectionSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        /*waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
+        waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
         var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
         var parallelWriter = waypoints.AsParallelWriter();
 
@@ -121,13 +95,10 @@ public partial class GraphConnectionSystem : SystemBase
         {
             for (int i = 0; i < b.Length; i++)
             {
-                if (b[i].key != -1)
-                {
-                    Debug.DrawLine(t.Value, waypoints[b[i].key].Value, Color.green);
-                }
+                Debug.DrawLine(t.Value, waypoints[b[i].key].Value, Color.green);
             }
         }).WithoutBurst().Run();
 
-        waypoints.Dispose(Dependency);*/
+        waypoints.Dispose(Dependency);
     }
 }

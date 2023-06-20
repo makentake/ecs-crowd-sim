@@ -24,7 +24,7 @@ public struct Pedestrian : IComponentData
         tolerance,
         lightRange,
         attractionRot,
-        attractionSpeed,
+        attractionSpeedTolerance,
         averageHeadingDuration;
 
     // Internal values

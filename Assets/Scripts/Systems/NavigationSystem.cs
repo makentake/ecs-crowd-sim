@@ -166,30 +166,27 @@ public partial class NavigationSystem : SystemBase
                     int neighbour = connection.key;
                     float tentativeG;
                     float2 newValues;
+                    
+                    tentativeG = aStarValues[current][0] + math.distance(waypointArray[current].Value, waypointArray[neighbour].Value);
 
-                    if (neighbour != -1)
+                    if (tentativeG < aStarValues[neighbour][0])
                     {
-                        tentativeG = aStarValues[current][0] + math.distance(waypointArray[current].Value, waypointArray[neighbour].Value);
+                        newValues = math.float2(tentativeG, tentativeG + math.distance(waypointArray[neighbour].Value, waypointArray[goal].Value));
 
-                        if (tentativeG < aStarValues[neighbour][0])
+                        aStarValues[neighbour] = newValues;
+
+                        if (parents.ContainsKey(neighbour))
                         {
-                            newValues = math.float2(tentativeG, tentativeG + math.distance(waypointArray[neighbour].Value, waypointArray[goal].Value));
+                            parents[neighbour] = current;
+                        }
+                        else
+                        {
+                            parents.Add(neighbour, current);
+                        }
 
-                            aStarValues[neighbour] = newValues;
-
-                            if (parents.ContainsKey(neighbour))
-                            {
-                                parents[neighbour] = current;
-                            }
-                            else
-                            {
-                                parents.Add(neighbour, current);
-                            }
-
-                            if (!frontier.Contains(neighbour))
-                            {
-                                frontier.Add(neighbour);
-                            }
+                        if (!frontier.Contains(neighbour))
+                        {
+                            frontier.Add(neighbour);
                         }
                     }
                 }

@@ -289,7 +289,7 @@ public partial class PedestrianMovementSystem : SystemBase
             {
                 float angle = math.atan2(r.Value.value.y, lPR[i].Value.value.y);
 
-                if (angle <= math.radians(p.attractionRot) && angle >= math.radians(-p.attractionRot) && math.abs(p.speed - lPS[i]) <= p.attractionSpeed)
+                if (angle <= math.radians(p.attractionRot) && angle >= math.radians(-p.attractionRot) && math.abs(p.speed - lPS[i]) <= p.attractionSpeedTolerance)
                 {
                     p.attraction += (lP[i].Value - t.Value) / lD[i];
                     p.attractors++;
@@ -576,9 +576,10 @@ public partial class PedestrianMovementSystem : SystemBase
 
         JobHandle waypointFinal = new WaypointFinalVectorCalculationJob
         {
+            collisionWorld = collisionWorld,
+            waypointArray = waypoints,
             deltaTime = dt,
-            ecbpw = ecb,
-            waypointArray = waypoints
+            ecbpw = ecb
         }.ScheduleParallel();
 
         end.AddJobHandleForProducer(Dependency);

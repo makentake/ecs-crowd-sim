@@ -122,10 +122,10 @@ MonoBehaviour:
   rotSpeed: 9
   baseMinDist: 3
   maxDist: 5
-  tolerance: 5
+  tolerance: 10
   lightRange: 200
   attractionRot: 45
-  attractionSpeed: 0.5
+  attractionSpeedTolerance: 0.5
   averageHeadingDuration: 0
   densityModifier: 0
   speed: 0
