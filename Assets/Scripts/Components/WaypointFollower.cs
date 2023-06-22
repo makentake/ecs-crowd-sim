@@ -6,5 +6,6 @@ using Unity.Entities;
 [GenerateAuthoringComponent]
 public struct WaypointFollower : IComponentData
 {
-    public int goalKey;
+    public int weight;
+    public int goalKey, startKey;
 }

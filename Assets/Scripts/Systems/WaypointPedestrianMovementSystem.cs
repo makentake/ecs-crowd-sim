@@ -5,26 +5,19 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Physics;
 using Unity.Jobs;
+using System.Collections.Generic;
+using RaycastHit = Unity.Physics.RaycastHit;
 
 [UpdateAfter(typeof(CrowdMovementSystem))]
 public partial class PedestrianMovementSystem : SystemBase
 {
     private static bool WaypointVisibilityCheck(int k, NativeParallelHashMap<int, Translation> waypointArray, CollisionWorld collisionWorld, Translation t)
     {
-        var input = new RaycastInput
+        return collisionWorld.SphereCast(t.Value, 0.5f, math.normalizesafe(waypointArray[k].Value - t.Value), math.distance(t.Value, waypointArray[k].Value), new CollisionFilter
         {
-            Start = t.Value,
-            End = waypointArray[k].Value,
-            Filter = new CollisionFilter
-            {
-                BelongsTo = 1 << 0,
-                CollidesWith = 1 << 1
-            }
-        };
-
-        Debug.DrawLine(input.Start, input.End, Color.black);
-
-        return collisionWorld.CastRay(input);
+            BelongsTo = 1 << 0,
+            CollidesWith = 1 << 1
+        });
     }
 
     [WithAll(typeof(WaypointFollower))]
@@ -34,11 +27,41 @@ public partial class PedestrianMovementSystem : SystemBase
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, in Translation t, in DynamicBuffer<WaypointList> w)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Pedestrian p, in Translation t, in Rotation r, in DynamicBuffer<WaypointList> w)
         {
+            var numberOfRays = 6;
+            var angle = 360 / numberOfRays;
+            var obstacleHits = 0;
+
+            p.obstacle = math.float3(0, 0, 0);
+
+            for (int i = 0; i < numberOfRays; i++)
+            {
+                var input = new RaycastInput
+                {
+                    Start = t.Value,
+                    End = t.Value + (math.forward(quaternion.RotateY(math.radians(angle * i))) * p.wallTolerance),
+                    Filter = new CollisionFilter
+                    {
+                        BelongsTo = 1 << 0,
+                        CollidesWith = 1 << 1
+                    }
+                };
+
+                if (collisionWorld.CastRay(input))
+                {
+                    p.obstacle += t.Value - input.End;
+                    obstacleHits++;
+                }
+            }
+
+            if (obstacleHits > 0)
+            {
+                p.obstacle /= obstacleHits;
+            }
+
             if (WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
             {
-                Debug.Log("recalculating");
                 ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
             }
         }
@@ -145,10 +168,10 @@ public partial class PedestrianMovementSystem : SystemBase
             float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
             bool isZero;
 
-            /*Debug.DrawRay(t.Value, p.target, Color.blue);
-            Debug.DrawRay(t.Value, p.attraction, Color.green);
-            Debug.DrawRay(t.Value, p.repulsion, Color.red);
-            Debug.DrawRay(t.Value, p.obstacle, Color.yellow);*/
+            //Debug.DrawRay(t.Value, p.target, Color.blue);
+            //Debug.DrawRay(t.Value, p.attraction, Color.green);
+            //Debug.DrawRay(t.Value, p.repulsion, Color.red);
+            //Debug.DrawRay(t.Value, p.obstacle, Color.yellow);
             //Debug.DrawRay(t.Value, p.lightAttraction, Color.black);
 
             if (p.attractors != 0)
@@ -216,11 +239,14 @@ public partial class PedestrianMovementSystem : SystemBase
 
             if (dist < p.tolerance && !WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
             {
-                w.RemoveAt(0);
-
-                if (w.Length == 0)
+                if (w.Length > 1 ? !WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t) && !WaypointVisibilityCheck(w[1].key, waypointArray, collisionWorld, t) : !WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
                 {
-                    ecbpw.DestroyEntity(entityInQueryIndex, e);
+                    w.RemoveAt(0);
+
+                    if (w.Length == 0)
+                    {
+                        ecbpw.DestroyEntity(entityInQueryIndex, e);
+                    }
                 }
             }
         }

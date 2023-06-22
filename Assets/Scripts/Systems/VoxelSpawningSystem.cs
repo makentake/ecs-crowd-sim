@@ -22,9 +22,12 @@ public partial class VoxelSpawningSystem : SystemBase
 
         Entities.ForEach((int entityInQueryIndex, in VoxelSpawner s, in Translation t) =>
         {
-            for (int i = 0; i < s.x; i++)
+            var xCount = (int) math.floor(s.x / s.voxelSpacing);
+            var yCount = (int) math.floor(s.y / s.voxelSpacing);
+
+            for (int i = 0; i < xCount; i++)
             {
-                for (int j = 0; j < s.y; j++)
+                for (int j = 0; j < yCount; j++)
                 {
                     var newSpace = ecb.Instantiate(entityInQueryIndex, s.waypoint);
 

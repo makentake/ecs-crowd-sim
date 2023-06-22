@@ -21,6 +21,7 @@ public struct Pedestrian : IComponentData
     // Distances/tolerances
     public float baseMinDist,
         maxDist,
+        wallTolerance,
         tolerance,
         lightRange,
         attractionRot,

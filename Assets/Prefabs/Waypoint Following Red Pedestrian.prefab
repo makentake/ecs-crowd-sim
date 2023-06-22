@@ -116,13 +116,14 @@ MonoBehaviour:
   targetFac: 4
   attractionFac: 1
   repulsionFac: 4
-  obstacleFac: 8
+  obstacleFac: 4
   lightFac: 32
   baseSpeed: 4
   rotSpeed: 9
   baseMinDist: 3
   maxDist: 5
-  tolerance: 10
+  wallTolerance: 2
+  tolerance: 15
   lightRange: 200
   attractionRot: 45
   attractionSpeedTolerance: 0.5
@@ -372,7 +373,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b9a197561a3e942811ad304dca6be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weight: 2
   goalKey: 0
+  startKey: 0
 --- !u!114 &-9184999722149501312
 MonoBehaviour:
   m_ObjectHideFlags: 0

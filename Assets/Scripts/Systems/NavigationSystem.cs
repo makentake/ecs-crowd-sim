@@ -23,6 +23,35 @@ public partial class NavigationSystem : SystemBase
         physicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
 
+    private static int StartFinder(NativeParallelHashMap<int, Translation> waypointArray, CollisionWorld collisionWorld, Translation t)
+    {
+        int minDistKey = 0;
+        float minDist = math.INFINITY;
+
+        for (int i = 0; i < waypointArray.Count(); i++)
+        {
+            var dist = math.distance(t.Value, waypointArray[i].Value);
+            var input = new RaycastInput
+            {
+                Start = t.Value,
+                End = waypointArray[i].Value,
+                Filter = new CollisionFilter
+                {
+                    BelongsTo = 1 << 0,
+                    CollidesWith = 3 << 1
+                }
+            };
+
+            if (dist <= minDist && !collisionWorld.CastRay(input))
+            {
+                minDistKey = i;
+                minDist = dist;
+            }
+        }
+
+        return minDistKey;
+    }
+
     [WithAll(typeof(AwaitingNavigationTag))]
     private partial struct AStarNavigationJob : IJobEntity
     {
@@ -128,7 +157,7 @@ public partial class NavigationSystem : SystemBase
 
         // Pseudocode kindly provided by ChatGPT, implemented by me
         // ChatGPT lied to me. This is now been modified according to actual A* pseudocode
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, in WaypointFollower f, in Translation t)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, in Translation t)
         {
             // Each float2 will contain the following information about the waypoint: g, f. The key is the index
             var aStarValues = new NativeParallelHashMap<int, float2>(waypointCount, Allocator.Temp);
@@ -139,13 +168,16 @@ public partial class NavigationSystem : SystemBase
             int current;
             var goal = f.goalKey;
 
+            // Update the agent's recorded start value
+            f.startKey = start;
+
             // Initialize the A* values HashMap
             foreach (int key in waypointArray.GetKeyArray(Allocator.Temp))
             {
                 aStarValues.TryAdd(key, math.float2(math.INFINITY, math.INFINITY));
             }
 
-            aStarValues[start] = math.float2(0, math.distance(waypointArray[start].Value, waypointArray[goal].Value));
+            aStarValues[start] = math.float2(0, f.weight * math.distance(waypointArray[start].Value, waypointArray[goal].Value));
             
             // Add the starting node to the frontier
             frontier.Add(start);
@@ -171,7 +203,7 @@ public partial class NavigationSystem : SystemBase
 
                     if (tentativeG < aStarValues[neighbour][0])
                     {
-                        newValues = math.float2(tentativeG, tentativeG + math.distance(waypointArray[neighbour].Value, waypointArray[goal].Value));
+                        newValues = math.float2(tentativeG, tentativeG + (f.weight*math.distance(waypointArray[neighbour].Value, waypointArray[goal].Value)));
 
                         aStarValues[neighbour] = newValues;
 

@@ -4,6 +4,7 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Rendering;
 
+
 public partial class RendermeshCullingSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem end;
