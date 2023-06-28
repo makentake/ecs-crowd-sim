@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8630563747061068426}
   - component: {fileID: 7069027270654220119}
-  - component: {fileID: 8630563747061068416}
   - component: {fileID: 8630563747061068417}
+  - component: {fileID: 904537498}
   m_Layer: 0
   m_Name: WaypointPedestrianSpawner
   m_TagString: Untagged
@@ -46,19 +46,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConversionMode: 0
---- !u!114 &8630563747061068416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8630563747061068430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3967999676639854a8d951b18da1af0d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  goal: {fileID: 0}
 --- !u!114 &8630563747061068417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,12 +60,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 6555772023942994503, guid: a347ce48250d0e0418ae266b20010baa, type: 3}
   spawnRadius:
-    x: 10
+    x: 20
     y: 0
-    z: 10
+    z: 75
   crowdSize: 0
-  toSpawn: 400
+  toSpawn: 150
   random:
     state: 0
   spawned: 0
   done: 0
+--- !u!114 &904537498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8630563747061068430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4d93a502d8c2cc41a2c80a2d796a7d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodes:
+  - {fileID: 0}
+  - {fileID: 0}

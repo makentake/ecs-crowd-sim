@@ -202,7 +202,7 @@ public partial class SpawningSystem : SystemBase
                 }
             }).ScheduleParallel();
 
-            Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in WaypointAssigner a, in Translation translation) =>
+            Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in DynamicBuffer<GoalEntityList> path, in Translation translation) =>
             {
                 s.spawned = 0;
                 int spawnsNeeded;
@@ -210,7 +210,7 @@ public partial class SpawningSystem : SystemBase
                 // Calculate the goal position
                 float3 minValue = translation.Value;
                 float3 maxValue = s.spawnRadius + minValue;
-                int goalKey = GetComponentDataFromEntity<Waypoint>(true)[a.goal].key;
+                int goalKey = GetComponentDataFromEntity<Waypoint>(true)[path[path.Length-1].waypoint].key;
 
                 foreach (WaypointFollower agent in waypointFollowerArray)
                 {
@@ -228,11 +228,7 @@ public partial class SpawningSystem : SystemBase
                     float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
                     Translation pos = new Translation { Value = spawnPos };
                     WaypointFollower follower = new WaypointFollower { goalKey = goalKey };
-                    var brain = new AIBrainComponent
-                    {
-                        isYoung = false,
-                        willOccupy = false
-                    };
+                    DynamicBuffer<GoalKeyList> givenWaypoints;
 
                     Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
                     ecb.SetComponent(entityInQueryIndex, newAgent, pos);
@@ -240,9 +236,6 @@ public partial class SpawningSystem : SystemBase
 
                     if (s.random.NextFloat() <= 0.25)
                     {
-                        brain.willOccupy = true;
-                        brain.occupationType = OccupationType.lightRendezvous;
-
                         Wait light = new Wait
                         {
                             maxTime = 60,
@@ -254,10 +247,20 @@ public partial class SpawningSystem : SystemBase
 
                     if (s.random.NextFloat() <= 0.25)
                     {
-                        brain.isYoung = true;
+                        var tag = new YoungTag();
+
+                        ecb.AddComponent(entityInQueryIndex, newAgent, tag);
                     }
 
-                    ecb.AddComponent(entityInQueryIndex, newAgent, brain);
+                    givenWaypoints = ecb.AddBuffer<GoalKeyList>(entityInQueryIndex, newAgent);
+
+                    for (int j = 0; j < path.Length; j++)
+                    {
+                        givenWaypoints.Add(new GoalKeyList
+                        {
+                            key = GetComponentDataFromEntity<Waypoint>(true)[path[j].waypoint].key
+                        });
+                    }
                 }
             }).ScheduleParallel();
 

@@ -8,6 +8,7 @@ using Unity.Jobs;
 
 // System for moving a peaceful crowd
 [UpdateAfter(typeof(CrowdMovementSystem))]
+[UpdateBefore(typeof(TransformSystemGroup))]
 public partial class PedestrianMovementSystem : SystemBase
 {
     private EndFixedStepSimulationEntityCommandBufferSystem end;

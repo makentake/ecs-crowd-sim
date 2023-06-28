@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
-public struct AIBrainComponent : IComponentData
+public struct AIBrain : IComponentData
 {
     public bool isYoung;
     public bool willOccupy;
@@ -12,7 +12,7 @@ public struct AIBrainComponent : IComponentData
 
 public enum OccupationType
 {
-    lightRendezvous,
+    rendezvous,
     idling,
     rioting
 }

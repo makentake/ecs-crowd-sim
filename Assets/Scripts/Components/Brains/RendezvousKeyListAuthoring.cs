@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
-public struct Wait : IComponentData
+[InternalBufferCapacity(1)]
+public struct RendezvousPointList : IBufferElementData
 {
-    public float maxTime, currentTime;
+    public int key;
 }

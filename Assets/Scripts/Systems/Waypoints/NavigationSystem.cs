@@ -9,6 +9,7 @@ using Unity.Jobs;
 using Unity.Physics;
 using Unity.Physics.Systems;
 
+[UpdateBefore(typeof(PedestrianMovementSystem))]
 [UpdateAfter(typeof(GraphConnectionSystem))]
 public partial class NavigationSystem : SystemBase
 {
@@ -21,35 +22,6 @@ public partial class NavigationSystem : SystemBase
         end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
         physicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
-    }
-
-    private static int StartFinder(NativeParallelHashMap<int, Translation> waypointArray, CollisionWorld collisionWorld, Translation t)
-    {
-        int minDistKey = 0;
-        float minDist = math.INFINITY;
-
-        for (int i = 0; i < waypointArray.Count(); i++)
-        {
-            var dist = math.distance(t.Value, waypointArray[i].Value);
-            var input = new RaycastInput
-            {
-                Start = t.Value,
-                End = waypointArray[i].Value,
-                Filter = new CollisionFilter
-                {
-                    BelongsTo = 1 << 0,
-                    CollidesWith = 3 << 1
-                }
-            };
-
-            if (dist <= minDist && !collisionWorld.CastRay(input))
-            {
-                minDistKey = i;
-                minDist = dist;
-            }
-        }
-
-        return minDistKey;
     }
 
     [WithAll(typeof(AwaitingNavigationTag))]
@@ -157,7 +129,7 @@ public partial class NavigationSystem : SystemBase
 
         // Pseudocode kindly provided by ChatGPT, implemented by me
         // ChatGPT lied to me. This is now been modified according to actual A* pseudocode
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, in Translation t)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, in Translation t, in DynamicBuffer<GoalKeyList> g)
         {
             // Each float2 will contain the following information about the waypoint: g, f. The key is the index
             var aStarValues = new NativeParallelHashMap<int, float2>(waypointCount, Allocator.Temp);
@@ -166,10 +138,7 @@ public partial class NavigationSystem : SystemBase
 
             var start = StartFinder(t);
             int current;
-            var goal = f.goalKey;
-
-            // Update the agent's recorded start value
-            f.startKey = start;
+            var goal = g[0].key;
 
             // Initialize the A* values HashMap
             foreach (int key in waypointArray.GetKeyArray(Allocator.Temp))
@@ -178,7 +147,7 @@ public partial class NavigationSystem : SystemBase
             }
 
             aStarValues[start] = math.float2(0, f.weight * math.distance(waypointArray[start].Value, waypointArray[goal].Value));
-            
+
             // Add the starting node to the frontier
             frontier.Add(start);
 
@@ -189,6 +158,7 @@ public partial class NavigationSystem : SystemBase
                 if (current == goal)
                 {
                     ConstructPath(e, entityInQueryIndex, parents, current, start);
+                    break;
                 }
 
                 RemoveGivenKey(ref frontier, current);
@@ -198,6 +168,8 @@ public partial class NavigationSystem : SystemBase
                     int neighbour = connection.key;
                     float tentativeG;
                     float2 newValues;
+
+                    //Debug.Log("Running");
                     
                     tentativeG = aStarValues[current][0] + math.distance(waypointArray[current].Value, waypointArray[neighbour].Value);
 
@@ -225,6 +197,14 @@ public partial class NavigationSystem : SystemBase
             }
 
             ecbpw.RemoveComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+        }
+    }
+
+    private partial struct AStarApproachTargetJob
+    {
+        public void Execute()
+        {
+
         }
     }
 

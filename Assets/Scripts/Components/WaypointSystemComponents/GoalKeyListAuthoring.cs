@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
-[GenerateAuthoringComponent]
-public class MeshComponent : IComponentData
+[InternalBufferCapacity(2)]
+public struct GoalKeyList : IBufferElementData
 {
-    public MeshRenderer mesh;
+    public int key;
 }

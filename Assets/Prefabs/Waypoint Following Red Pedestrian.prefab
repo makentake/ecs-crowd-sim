@@ -373,7 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7b9a197561a3e942811ad304dca6be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weight: 2
+  weight: 1
   goalKey: 0
   startKey: 0
 --- !u!114 &-9184999722149501312
