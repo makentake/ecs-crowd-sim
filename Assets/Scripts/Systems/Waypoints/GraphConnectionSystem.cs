@@ -143,13 +143,13 @@ public partial class GraphConnectionSystem : SystemBase
             finished = true;
         }
 
-        Entities.ForEach((in Translation t, in DynamicBuffer<Connections> b) =>
+        /*Entities.ForEach((in Translation t, in DynamicBuffer<Connections> b) =>
         {
             for (int i = 0; i < b.Length; i++)
             {
                 Debug.DrawLine(t.Value, waypoints[b[i].key].Value, Color.green);
             }
-        }).WithoutBurst().Run();
+        }).WithoutBurst().Run();*/
 
         waypoints.Dispose(Dependency);
         end.AddJobHandleForProducer(Dependency);

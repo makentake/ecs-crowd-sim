@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
+using Unity.Mathematics;
 
 [InternalBufferCapacity(1)]
-public struct RendezvousPointList : IBufferElementData
+public struct RendezvousPosList : IBufferElementData
 {
-    public int key;
+    public float3 pos;
 }

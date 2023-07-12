@@ -155,58 +155,48 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
-    /*Entities
-            .WithNone<WaypointFollower>()
-            .WithReadOnly(lightTranslation)
-            .WithReadOnly(collisionWorld)
-            .ForEach((Entity e, int entityInQueryIndex, ref Pedestrian p, ref Wait w, in Translation t) =>
-            {
-                p.lightAttraction = new float3(0, 0, 0);
-                p.lightAttractors = 0;
-
-                if (w.currentTime >= w.maxTime)
-                {
-                    ecb.RemoveComponent<Wait>(entityInQueryIndex, e);
-                }
-                else
-                {
-                    // Calculate light attraction
-                    foreach (Translation light in lightTranslation)
-                    {
-                        RaycastInput input;
-                        bool hasHit;
-                        var distance = math.distance(t.Value, light.Value);
-
-                        float3 from = t.Value, to = light.Value;
-
-                        input = new RaycastInput()
-                        {
-                            Start = from,
-                            End = to,
-                            Filter = new CollisionFilter
-                            {
-                                BelongsTo = 1 << 0,
-                                CollidesWith = 1 << 1,
-                            }
-                        };
-
-                        hasHit = collisionWorld.CastRay(input);
-
-                        if (distance <= p.lightRange && !hasHit)
-                        {
-                            w.currentTime += dt;
-                            p.lightAttraction += light.Value - t.Value;
-                            p.lightAttractors++;
-                        }
-                    }
-                }
-            }).ScheduleParallel();*/
-
-    private partial struct WaypointLightAttractionJob
+    private partial struct WaypointLightAttractionJob : IJobEntity
     {
-        
+        [ReadOnly] public CollisionWorld collisionWorld;
+        [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
+
+        public float deltaTime;
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        public void Execute(ref Pedestrian p, ref Wait w, ref DynamicBuffer<GoalKeyList> g, in Translation t)
+        {
+            //Debug.Log("running light attraction");
+            p.lightAttraction = new float3(0, 0, 0);
+            p.lightAttractors = 0;
+
+            // Calculate light attraction
+            var light = waypointArray[g[0].key];
+            var distance = math.distance(t.Value, light.Value);
+            /*RaycastInput input;
+             bool hasHit;
 
 
+             float3 from = t.Value, to = light.Value;
+
+             input = new RaycastInput()
+             {
+                 Start = from,
+                 End = to,
+                 Filter = new CollisionFilter
+                 {
+                     BelongsTo = 1 << 0,
+                     CollidesWith = 1 << 1,
+                 }
+             };
+
+             hasHit = collisionWorld.CastRay(input);*/
+
+            //if (distance <= p.maxDist && !hasHit)
+            if (distance <= p.tolerance)
+            {
+                w.elapsedTime += deltaTime;
+            }
+        }
     }
 
     private partial struct WaypointFinalVectorCalculationJob : IJobEntity
@@ -217,10 +207,9 @@ public partial class PedestrianMovementSystem : SystemBase
         public float deltaTime;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref PhysicsVelocity v, ref Translation t, ref Rotation r, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
+        public void Execute(ref PhysicsVelocity v, ref Translation t, ref Rotation r, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
         {
             float3 target = p.target, attraction = p.attraction, repulsion = p.repulsion, obstacle = p.obstacle, lightAttraction = p.lightAttraction;
-            float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
             bool isZero;
 
             //Debug.DrawRay(t.Value, p.target, Color.blue);
@@ -291,6 +280,21 @@ public partial class PedestrianMovementSystem : SystemBase
             {
                 t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
             }
+        }
+    }
+
+    [WithNone(typeof(Wait))]
+    private partial struct WaypointGoalAdvancementJob : IJobEntity
+    {
+        [ReadOnly] public CollisionWorld collisionWorld;
+        [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
+
+        public float deltaTime;
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
+        {
+            float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
 
             if (dist < p.tolerance)
             {
@@ -300,21 +304,67 @@ public partial class PedestrianMovementSystem : SystemBase
                 }
                 else if (w.Length == 1 && !WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
                 {
-                    if (g.Length > 1)
+                    if (w[0].key == g[0].key)
                     {
-                        g.RemoveAt(0);
+                        if (g.Length > 1)
+                        {
+                            //Debug.Log("Removing in main loop");
+                            g.RemoveAt(0);
 
-                        ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
-                    }
-                    else if (math.distance(t.Value, waypointArray[g[0].key].Value) < p.tolerance)
-                    {
-                        ecbpw.DestroyEntity(entityInQueryIndex, e);
+                            ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                        }
+                        else if (math.distance(t.Value, waypointArray[g[0].key].Value) < p.tolerance)
+                        {
+                            ecbpw.DestroyEntity(entityInQueryIndex, e);
+                        }
+                        else
+                        {
+                            ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                        }
                     }
                     else
                     {
                         ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
                     }
                 }
+            }
+        }
+    }
+
+    [WithAll(typeof(Wait))]
+    private partial struct WaypointRendezvousGoalAdvancementJob : IJobEntity
+    {
+        [ReadOnly] public CollisionWorld collisionWorld;
+        [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
+
+        public float deltaTime;
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g, in Wait wait)
+        {
+            //Debug.Log("Waiting bro");
+
+            float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
+
+            if (dist < p.tolerance)
+            {
+                if (w.Length > 1 && !WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t) && !WaypointVisibilityCheck(w[1].key, waypointArray, collisionWorld, t))
+                {
+                    w.RemoveAt(0);
+                }
+                else if (w.Length == 1 && w[0].key != g[0].key)
+                {
+                    ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                }
+            }
+            
+            if (wait.elapsedTime >= wait.maxTime)
+            {
+                //Debug.Log("Removing in wait loop");
+                g.RemoveAt(0);
+
+                ecbpw.RemoveComponent<Wait>(entityInQueryIndex, e);
+                ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
             }
         }
     }

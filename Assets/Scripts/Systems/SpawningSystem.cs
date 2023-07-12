@@ -117,7 +117,7 @@ public partial class SpawningSystem : SystemBase
                             Wait tag = new Wait
                             {
                                 maxTime = 60,
-                                currentTime = 0
+                                elapsedTime = 0
                             };
 
                             ecb.AddComponent(entityInQueryIndex, newAgent, tag);
@@ -187,7 +187,7 @@ public partial class SpawningSystem : SystemBase
                         Wait tag = new Wait
                         {
                             maxTime = 60,
-                            currentTime = 0
+                            elapsedTime = 0
                         };
 
                         ecb.AddComponent(entityInQueryIndex, newAgent, tag);
@@ -202,15 +202,15 @@ public partial class SpawningSystem : SystemBase
                 }
             }).ScheduleParallel();
 
-            Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in DynamicBuffer<GoalEntityList> path, in Translation translation) =>
+            Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in DynamicBuffer<GoalEntityList> p, in DynamicBuffer<RendezvousEntityList> r, in Translation t) =>
             {
                 s.spawned = 0;
                 int spawnsNeeded;
 
                 // Calculate the goal position
-                float3 minValue = translation.Value;
+                float3 minValue = t.Value;
                 float3 maxValue = s.spawnRadius + minValue;
-                int goalKey = GetComponentDataFromEntity<Waypoint>(true)[path[path.Length-1].waypoint].key;
+                int goalKey = GetComponentDataFromEntity<Waypoint>(true)[p[p.Length-1].waypoint].key;
 
                 foreach (WaypointFollower agent in waypointFollowerArray)
                 {
@@ -222,43 +222,61 @@ public partial class SpawningSystem : SystemBase
 
                 spawnsNeeded = s.toSpawn - s.spawned;
 
+                /*if (spawnsNeeded == 0)
+                {
+                    s.done = true;
+                }
+
+                if (s.done)
+                {
+                    spawnsNeeded = 0;
+                }*/
+
                 // Create crowd members
                 for (int i = 0; i < spawnsNeeded; i++)
                 {
+                    //  !!! DO NOT FORGET TO UPDATE THESE WHEN YOU ADD MORE CRAP TO COMPONENTS, OTHERWISE YOUR HEAD WILL HURT !!!
                     float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
                     Translation pos = new Translation { Value = spawnPos };
-                    WaypointFollower follower = new WaypointFollower { goalKey = goalKey };
+                    WaypointFollower follower = new WaypointFollower 
+                    { 
+                        weight = 2,
+                        goalKey = goalKey,
+                        lastSavedMinimum = math.INFINITY
+                    };
                     DynamicBuffer<GoalKeyList> givenWaypoints;
+                    DynamicBuffer<RendezvousPosList> givenRendezvousPoints;
 
                     Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
                     ecb.SetComponent(entityInQueryIndex, newAgent, pos);
                     ecb.SetComponent(entityInQueryIndex, newAgent, follower);
 
-                    if (s.random.NextFloat() <= 0.25)
+                    if (s.random.NextFloat() <= 0.1)
                     {
-                        Wait light = new Wait
-                        {
-                            maxTime = 60,
-                            currentTime = 0
-                        };
+                        ecb.AddComponent(entityInQueryIndex, newAgent, new WillRendezvousTag());
+                        givenRendezvousPoints = ecb.AddBuffer<RendezvousPosList>(entityInQueryIndex, newAgent);
 
-                        ecb.AddComponent(entityInQueryIndex, newAgent, light);
+                        for (int j = 0; j < r.Length; j++)
+                        {
+                            givenRendezvousPoints.Add(new RendezvousPosList
+                            {
+                                pos = GetComponentDataFromEntity<Translation>(true)[r[j].point].Value
+                            });
+                        }
                     }
 
                     if (s.random.NextFloat() <= 0.25)
                     {
-                        var tag = new YoungTag();
-
-                        ecb.AddComponent(entityInQueryIndex, newAgent, tag);
+                        ecb.AddComponent(entityInQueryIndex, newAgent, new YoungTag());
                     }
 
                     givenWaypoints = ecb.AddBuffer<GoalKeyList>(entityInQueryIndex, newAgent);
 
-                    for (int j = 0; j < path.Length; j++)
+                    for (int j = 0; j < p.Length; j++)
                     {
                         givenWaypoints.Add(new GoalKeyList
                         {
-                            key = GetComponentDataFromEntity<Waypoint>(true)[path[j].waypoint].key
+                            key = GetComponentDataFromEntity<Waypoint>(true)[p[j].waypoint].key
                         });
                     }
                 }

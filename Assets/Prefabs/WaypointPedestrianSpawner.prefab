@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7069027270654220119}
   - component: {fileID: 8630563747061068417}
   - component: {fileID: 904537498}
+  - component: {fileID: 8030754558133580284}
   m_Layer: 0
   m_Name: WaypointPedestrianSpawner
   m_TagString: Untagged
@@ -83,4 +84,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodes:
   - {fileID: 0}
-  - {fileID: 0}
+--- !u!114 &8030754558133580284
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8630563747061068430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89ca81b78cf04e842b589d3d01fdaa69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointGameObjects: []

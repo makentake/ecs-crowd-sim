@@ -504,7 +504,7 @@ public partial class PedestrianMovementSystem : SystemBase
                 p.lightAttraction = new float3(0, 0, 0);
                 p.lightAttractors = 0;
 
-                if (w.currentTime >= w.maxTime)
+                if (w.elapsedTime >= w.maxTime)
                 {
                     ecb.RemoveComponent<Wait>(entityInQueryIndex, e);
                 }
@@ -534,13 +534,21 @@ public partial class PedestrianMovementSystem : SystemBase
 
                         if (distance <= p.lightRange && !hasHit)
                         {
-                            w.currentTime += dt;
+                            w.elapsedTime += dt;
                             p.lightAttraction += light.Value - t.Value;
                             p.lightAttractors++;
                         }
                     }
                 }
             }).ScheduleParallel();
+
+        JobHandle waypointLightAttractionJob = new WaypointLightAttractionJob
+        {
+            collisionWorld = collisionWorld,
+            waypointArray = waypoints,
+            deltaTime = dt,
+            ecbpw = ecb
+        }.ScheduleParallel();
         
         // Calculate obstacle avoidance
         JobHandle obstacle = new ObjectAvoidanceJob
@@ -576,6 +584,22 @@ public partial class PedestrianMovementSystem : SystemBase
         }.ScheduleParallel();
 
         JobHandle waypointFinal = new WaypointFinalVectorCalculationJob
+        {
+            collisionWorld = collisionWorld,
+            waypointArray = waypoints,
+            deltaTime = dt,
+            ecbpw = ecb
+        }.ScheduleParallel();
+
+        JobHandle goalAdvancement = new WaypointGoalAdvancementJob
+        {
+            collisionWorld = collisionWorld,
+            waypointArray = waypoints,
+            deltaTime = dt,
+            ecbpw = ecb
+        }.ScheduleParallel();
+
+        JobHandle rendezvousGoalAdvancement = new WaypointRendezvousGoalAdvancementJob
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,

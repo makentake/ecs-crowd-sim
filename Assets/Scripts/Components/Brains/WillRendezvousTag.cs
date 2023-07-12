@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
-public struct Wait : IComponentData
+public struct WillRendezvousTag : IComponentData
 {
-    public float maxTime, elapsedTime;
+    
 }

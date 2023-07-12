@@ -619,13 +619,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 904537498, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
+      propertyPath: nodes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 904537498, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
+      propertyPath: nodes.Array.data[0]
+      value: 
+      objectReference: {fileID: 653885754}
     - target: {fileID: 8630563747061068416, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: goal
       value: 
       objectReference: {fileID: 653885754}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
-      value: 200
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068426, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: m_RootOrder
