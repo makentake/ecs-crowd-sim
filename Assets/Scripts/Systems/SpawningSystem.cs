@@ -251,7 +251,7 @@ public partial class SpawningSystem : SystemBase
                     ecb.SetComponent(entityInQueryIndex, newAgent, pos);
                     ecb.SetComponent(entityInQueryIndex, newAgent, follower);
 
-                    if (s.random.NextFloat() <= 0.1)
+                    if (s.random.NextFloat() <= 0)
                     {
                         ecb.AddComponent(entityInQueryIndex, newAgent, new WillRendezvousTag());
                         givenRendezvousPoints = ecb.AddBuffer<RendezvousPosList>(entityInQueryIndex, newAgent);

@@ -10,6 +10,7 @@ using Unity.Physics;
 using Unity.Physics.Systems;
 using System.Linq;
 using Unity.Entities.UniversalDelegates;
+using Unity.Burst;
 
 [UpdateAfter(typeof(PedestrianMovementSystem))]
 [UpdateAfter(typeof(GraphConnectionSystem))]
@@ -26,6 +27,7 @@ public partial class NavigationSystem : SystemBase
         physicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
 
+    [BurstCompile]
     [WithAll(typeof(AwaitingNavigationTag))]
     private partial struct AStarNavigationJob : IJobEntity
     {
@@ -203,6 +205,7 @@ public partial class NavigationSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     [WithAll(typeof(AwaitingNavigationTag))]
     private partial struct AStarClosestPointToRendezvous : IJobEntity
     {
@@ -471,7 +474,7 @@ public partial class NavigationSystem : SystemBase
 
                     ecbpw.AddComponent(entityInQueryIndex, e, new Wait
                     {
-                        maxTime = 60,
+                        maxTime = 15,
                         elapsedTime = 0
                     });
 
@@ -497,6 +500,9 @@ public partial class NavigationSystem : SystemBase
         var waypointEntities = new NativeParallelHashMap<int, Entity>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
         var waypointsParallelWriter = waypoints.AsParallelWriter();
         var waypointEntitiesParallelWriter = waypointEntities.AsParallelWriter();
+
+        // Stuff that's currently inside jobs
+
 
         // debug stuff
         /*var aStarValues = new NativeParallelHashMap<int, float2>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);

@@ -7,6 +7,7 @@ using Unity.Physics;
 using Unity.Jobs;
 using System.Collections.Generic;
 using RaycastHit = Unity.Physics.RaycastHit;
+using Unity.Burst;
 
 [UpdateAfter(typeof(CrowdMovementSystem))]
 [UpdateBefore(typeof(TransformSystemGroup))]
@@ -21,6 +22,7 @@ public partial class PedestrianMovementSystem : SystemBase
         });
     }
 
+    [BurstCompile]
     [WithAll(typeof(WaypointFollower))]
     private partial struct WaypointObstacleAvoidanceJob : IJobEntity
     {
@@ -68,6 +70,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     private partial struct WaypointLocalAgentCalculationJob : IJobEntity
     {
         [ReadOnly] public NativeArray<Translation> pedestrianArray;
@@ -155,6 +158,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     private partial struct WaypointLightAttractionJob : IJobEntity
     {
         [ReadOnly] public CollisionWorld collisionWorld;
@@ -199,6 +203,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     private partial struct WaypointFinalVectorCalculationJob : IJobEntity
     {
         [ReadOnly] public CollisionWorld collisionWorld;
@@ -207,7 +212,7 @@ public partial class PedestrianMovementSystem : SystemBase
         public float deltaTime;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
-        public void Execute(ref PhysicsVelocity v, ref Translation t, ref Rotation r, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
+        public void Execute(ref PhysicsVelocity v, ref Translation t, ref Rotation r, ref Pedestrian p)
         {
             float3 target = p.target, attraction = p.attraction, repulsion = p.repulsion, obstacle = p.obstacle, lightAttraction = p.lightAttraction;
             bool isZero;
@@ -283,6 +288,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     [WithNone(typeof(Wait))]
     private partial struct WaypointGoalAdvancementJob : IJobEntity
     {
@@ -295,6 +301,8 @@ public partial class PedestrianMovementSystem : SystemBase
         public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
         {
             float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
+
+            //for (int i = 0; )
 
             if (dist < p.tolerance)
             {
@@ -331,6 +339,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     [WithAll(typeof(Wait))]
     private partial struct WaypointRendezvousGoalAdvancementJob : IJobEntity
     {

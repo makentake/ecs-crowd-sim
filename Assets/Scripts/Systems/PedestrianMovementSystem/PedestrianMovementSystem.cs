@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Physics;
 using Unity.Jobs;
+using Unity.Burst;
 
 // System for moving a peaceful crowd
 [UpdateAfter(typeof(CrowdMovementSystem))]
@@ -22,6 +23,7 @@ public partial class PedestrianMovementSystem : SystemBase
         physicsWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
     }
 
+    [BurstCompile]
     private partial struct ObjectAvoidanceJob : IJobEntity
     {
         [ReadOnly] public Unity.Physics.CollisionWorld collisionWorld;
@@ -263,6 +265,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     [WithNone(typeof(FleeingTag))]
     private partial struct LocalAgentCalculationJob : IJobEntity
     {
@@ -349,6 +352,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     [WithNone(typeof(FleeingTag))]
     private partial struct FinalVectorCalculationJob : IJobEntity
     {

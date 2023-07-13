@@ -12,6 +12,7 @@ using Unity.Entities.UniversalDelegates;
 [UpdateAfter(typeof(CrowdMovementSystem))]
 public partial class PedestrianMovementSystem : SystemBase
 {
+    [BurstCompile]
     private partial struct YoungObjectAvoidanceJob : IJobEntity
     {
         [ReadOnly] public Unity.Physics.CollisionWorld collisionWorld;

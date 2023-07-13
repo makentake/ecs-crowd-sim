@@ -4,10 +4,12 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.Transforms;
 using Unity.Physics;
+using Unity.Burst;
 
 [UpdateAfter(typeof(CrowdMovementSystem))]
 public partial class PedestrianMovementSystem : SystemBase
 {
+    [BurstCompile]
     [WithAll(typeof(FleeingTag))]
     private partial struct FleeingLocalAgentCalculationJob : IJobEntity
     {
@@ -94,6 +96,7 @@ public partial class PedestrianMovementSystem : SystemBase
         }
     }
 
+    [BurstCompile]
     [WithAll(typeof(FleeingTag))]
     private partial struct FleeingFinalVectorCalculationJob : IJobEntity
     {
