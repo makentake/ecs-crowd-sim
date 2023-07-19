@@ -474,7 +474,7 @@ public partial class NavigationSystem : SystemBase
 
                     ecbpw.AddComponent(entityInQueryIndex, e, new Wait
                     {
-                        maxTime = 15,
+                        maxTime = 60,
                         elapsedTime = 0
                     });
 

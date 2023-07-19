@@ -91,6 +91,10 @@ public partial class PedestrianMovementSystem : SystemBase
 
             for (int i = 0; i < hLP.Length; i++)
             {
+                /*var originalVector = t.Value - hLP[i].Value;
+                var originalDist = math.distance(t.Value, hLP[i].Value);
+
+                p.repulsion += (math.normalizesafe(math.forward(quaternion.LookRotation(math.normalizesafe(originalVector), math.up())) + math.forward(quaternion.RotateY(210))) * originalDist) / hLD[i];*/
                 p.repulsion += (t.Value - hLP[i].Value) / hLD[i];
                 p.repellors++;
             }
@@ -302,7 +306,16 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
 
-            //for (int i = 0; )
+            /*Debug.Log("Start of waypoint list");
+
+            for (int i = 0; i < w.Length; i++)
+            {
+                var key = w[i].key;
+
+                Debug.Log($"Waypoint key: {key}, waypoint position: {waypointArray[key].Value}");
+            }
+
+            Debug.Log("End of waypoint list");*/
 
             if (dist < p.tolerance)
             {

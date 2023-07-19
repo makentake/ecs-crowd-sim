@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -9184999722149501312}
   - component: {fileID: -2961738587076147499}
   m_Layer: 3
-  m_Name: Waypoint Following Red Pedestrian
+  m_Name: Waypoint Following Red Pedestrian 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6555772023942994503}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -5495902117074765545, guid: c769fe3a09dec78488bf0071ec6096ea, type: 3}
 --- !u!23 &6555772023942994501
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -66,7 +66,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e6e0f0aee66dbd142bb32ee182de5509, type: 2}
+  - {fileID: 2100000, guid: 83d3eda9060eea24189028fb7b1aca14, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

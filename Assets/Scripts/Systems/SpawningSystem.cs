@@ -10,6 +10,8 @@ using Unity.Collections;
 public partial class SpawningSystem : SystemBase
 {
     private EndFixedStepSimulationEntityCommandBufferSystem end;
+    private bool ready;
+    private bool finished;
 
     protected override void OnStartRunning()
     {
@@ -38,8 +40,14 @@ public partial class SpawningSystem : SystemBase
     protected override void OnUpdate()
     {
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
+        var needsConversion = GetEntityQuery(typeof(AwaitingConversionTag));
 
         bool spawnTest = true;
+
+        if (needsConversion.CalculateEntityCount() > 0)
+        {
+            ready = true;
+        }
 
         if (!spawnTest)
         {
@@ -148,6 +156,7 @@ public partial class SpawningSystem : SystemBase
 
             var waypointFollower = GetEntityQuery(ComponentType.ReadOnly<WaypointFollower>(), ComponentType.ReadOnly<Pedestrian>(), ComponentType.ReadOnly<Translation>());
             var waypointFollowerArray = waypointFollower.ToComponentDataArray<WaypointFollower>(Allocator.TempJob);
+            Entity presentConverter;
 
             // Spawn agents
             Entities.WithReadOnly(pedestrianArray).ForEach((int entityInQueryIndex, ref PedestrianSpawner s, ref Goal g, in Translation translation) =>
@@ -202,85 +211,88 @@ public partial class SpawningSystem : SystemBase
                 }
             }).ScheduleParallel();
 
-            Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in DynamicBuffer<GoalEntityList> p, in DynamicBuffer<RendezvousEntityList> r, in Translation t) =>
+            if ((ready && needsConversion.CalculateEntityCount() == 0) || !TryGetSingletonEntity<ConverterPresentTag>(out presentConverter))
             {
-                s.spawned = 0;
-                int spawnsNeeded;
-
-                // Calculate the goal position
-                float3 minValue = t.Value;
-                float3 maxValue = s.spawnRadius + minValue;
-                int goalKey = GetComponentDataFromEntity<Waypoint>(true)[p[p.Length-1].waypoint].key;
-
-                foreach (WaypointFollower agent in waypointFollowerArray)
+                Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in DynamicBuffer<GoalEntityList> p, in DynamicBuffer<RendezvousEntityList> r, in Translation t) =>
                 {
-                    if (agent.goalKey == goalKey)
+                    s.spawned = 0;
+                    int spawnsNeeded;
+
+                    // Calculate the goal position
+                    float3 minValue = t.Value;
+                    float3 maxValue = s.spawnRadius + minValue;
+                    int goalKey = GetComponentDataFromEntity<Waypoint>(true)[p[p.Length - 1].waypoint].key;
+
+                    foreach (WaypointFollower agent in waypointFollowerArray)
                     {
-                        s.spawned++;
-                    }
-                }
-
-                spawnsNeeded = s.toSpawn - s.spawned;
-
-                /*if (spawnsNeeded == 0)
-                {
-                    s.done = true;
-                }
-
-                if (s.done)
-                {
-                    spawnsNeeded = 0;
-                }*/
-
-                // Create crowd members
-                for (int i = 0; i < spawnsNeeded; i++)
-                {
-                    //  !!! DO NOT FORGET TO UPDATE THESE WHEN YOU ADD MORE CRAP TO COMPONENTS, OTHERWISE YOUR HEAD WILL HURT !!!
-                    float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
-                    Translation pos = new Translation { Value = spawnPos };
-                    WaypointFollower follower = new WaypointFollower 
-                    { 
-                        weight = 2,
-                        goalKey = goalKey,
-                        lastSavedMinimum = math.INFINITY
-                    };
-                    DynamicBuffer<GoalKeyList> givenWaypoints;
-                    DynamicBuffer<RendezvousPosList> givenRendezvousPoints;
-
-                    Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, pos);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, follower);
-
-                    if (s.random.NextFloat() <= 0)
-                    {
-                        ecb.AddComponent(entityInQueryIndex, newAgent, new WillRendezvousTag());
-                        givenRendezvousPoints = ecb.AddBuffer<RendezvousPosList>(entityInQueryIndex, newAgent);
-
-                        for (int j = 0; j < r.Length; j++)
+                        if (agent.goalKey == goalKey)
                         {
-                            givenRendezvousPoints.Add(new RendezvousPosList
-                            {
-                                pos = GetComponentDataFromEntity<Translation>(true)[r[j].point].Value
-                            });
+                            s.spawned++;
                         }
                     }
 
-                    if (s.random.NextFloat() <= 0.25)
+                    spawnsNeeded = s.toSpawn - s.spawned;
+
+                    /*if (spawnsNeeded == 0)
                     {
-                        ecb.AddComponent(entityInQueryIndex, newAgent, new YoungTag());
+                        s.done = true;
                     }
 
-                    givenWaypoints = ecb.AddBuffer<GoalKeyList>(entityInQueryIndex, newAgent);
-
-                    for (int j = 0; j < p.Length; j++)
+                    if (s.done)
                     {
-                        givenWaypoints.Add(new GoalKeyList
+                        spawnsNeeded = 0;
+                    }*/
+
+                    // Create crowd members
+                    for (int i = 0; i < spawnsNeeded; i++)
+                    {
+                        //  !!! DO NOT FORGET TO UPDATE THESE WHEN YOU ADD MORE CRAP TO COMPONENTS, OTHERWISE YOUR HEAD WILL HURT !!!
+                        float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
+                        Translation pos = new Translation { Value = spawnPos };
+                        WaypointFollower follower = new WaypointFollower
                         {
-                            key = GetComponentDataFromEntity<Waypoint>(true)[p[j].waypoint].key
-                        });
+                            weight = 2,
+                            goalKey = goalKey,
+                            lastSavedMinimum = math.INFINITY
+                        };
+                        DynamicBuffer<GoalKeyList> givenWaypoints;
+                        DynamicBuffer<RendezvousPosList> givenRendezvousPoints;
+
+                        Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, pos);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, follower);
+
+                        if (s.random.NextFloat() <= 0.1)
+                        {
+                            ecb.AddComponent(entityInQueryIndex, newAgent, new WillRendezvousTag());
+                            givenRendezvousPoints = ecb.AddBuffer<RendezvousPosList>(entityInQueryIndex, newAgent);
+
+                            for (int j = 0; j < r.Length; j++)
+                            {
+                                givenRendezvousPoints.Add(new RendezvousPosList
+                                {
+                                    pos = GetComponentDataFromEntity<Translation>(true)[r[j].point].Value
+                                });
+                            }
+                        }
+
+                        if (s.random.NextFloat() <= 0.25)
+                        {
+                            ecb.AddComponent(entityInQueryIndex, newAgent, new YoungTag());
+                        }
+
+                        givenWaypoints = ecb.AddBuffer<GoalKeyList>(entityInQueryIndex, newAgent);
+
+                        for (int j = 0; j < p.Length; j++)
+                        {
+                            givenWaypoints.Add(new GoalKeyList
+                            {
+                                key = GetComponentDataFromEntity<Waypoint>(true)[p[j].waypoint].key
+                            });
+                        }
                     }
-                }
-            }).ScheduleParallel();
+                }).ScheduleParallel();
+            }
 
             pedestrianArray.Dispose(Dependency);
             waypointFollowerArray.Dispose(Dependency);
