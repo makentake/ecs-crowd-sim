@@ -79,6 +79,9 @@ public partial class PedestrianMovementSystem : SystemBase
 
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
 
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+        public float deltaTime;
+
         private void CoreVectorCalculationJob(ref Pedestrian p, in Translation t, in Rotation r, in DynamicBuffer<WaypointList> w, NativeList<Translation> lP, NativeList<Translation> hLP, NativeList<Rotation> lPR, NativeList<float> lPS, NativeList<float> lD, NativeList<float> hLD)
         {
             p.attraction = new float3(0, 0, 0);
@@ -111,18 +114,42 @@ public partial class PedestrianMovementSystem : SystemBase
             }
         }
 
-        private void DensityCalculationJob(ref Pedestrian p, NativeList<Translation> lP)
+        private void DensityCalculationJob(Entity e, int entityInQueryIndex, ref DensityAvoidanceBrain b,
+            ref Pedestrian p, in Translation t, NativeList<Translation> lP)
         {
             float percentFull = lP.Length / (math.PI * math.pow(p.maxDist, 2));
             float modifier = percentFull <= 0.99f ? percentFull : 0.99f;
 
             p.speed = p.baseSpeed - (p.baseSpeed * modifier);
 
+            if (math.distance(math.float3(0f,0f,0f), p.repulsion) < 1)
+            {
+                if (modifier >= 0.50f)
+                {
+                    p.speed *= 2;
+                }
+            }
+
             p.minDist = p.baseMinDist - (p.baseMinDist * modifier);
-            p.minDist = p.minDist < 1.1f ? 1.1f : p.minDist;
+            p.minDist = p.minDist < 2f ? 2f : p.minDist;
+
+            if (b.elapsedTime >= b.maxTime)
+            {
+                if (modifier >= b.maxDensityTolerance || modifier <= b.minDensityTolerance)
+                {
+                    ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                }
+
+                b.elapsedTime = 0;
+            }
+            else
+            {
+                b.elapsedTime += deltaTime;
+            }
         }
 
-        public void Execute(ref Pedestrian p, in Translation t, in Rotation r, in DynamicBuffer<WaypointList> w)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref DensityAvoidanceBrain b,
+            ref Pedestrian p, in Translation t, in Rotation r, in DynamicBuffer<WaypointList> w)
         {
             var localPedestrians = new NativeList<Translation>(Allocator.Temp);
             var localPedestrianRots = new NativeList<Rotation>(Allocator.Temp);
@@ -158,7 +185,8 @@ public partial class PedestrianMovementSystem : SystemBase
             }
 
             CoreVectorCalculationJob(ref p, t, r, w, localPedestrians, highlyLocalPedestrians, localPedestrianRots, localPedestrianSpeeds, localDistances, highlyLocalDistances);
-            DensityCalculationJob(ref p, localPedestrians);
+            DensityCalculationJob(e, entityInQueryIndex, ref b,
+                ref p, t, localPedestrians);
         }
     }
 

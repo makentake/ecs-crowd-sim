@@ -7,6 +7,6 @@ using Unity.Entities;
 public struct WaypointFollower : IComponentData
 {
     public int weight; 
-    public int goalKey;
+    public int goalKey, startKey;
     public float lastSavedMinimum;
 }

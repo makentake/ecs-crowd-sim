@@ -387,4 +387,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weight: 0
   goalKey: 0
+  startKey: 0
   lastSavedMinimum: 0

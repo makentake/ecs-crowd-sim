@@ -66,6 +66,12 @@ MonoBehaviour:
     z: 75
   crowdSize: 0
   toSpawn: 150
+  navigationWeight: 2
+  maxRecalculationTime: 5
+  minDensity: 0.3
+  maxDensity: 0.7
+  percentYoung: 0.25
+  percentWaiting: 0
   random:
     state: 0
   spawned: 0

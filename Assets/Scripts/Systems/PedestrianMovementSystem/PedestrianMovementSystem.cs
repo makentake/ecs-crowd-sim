@@ -453,7 +453,7 @@ public partial class PedestrianMovementSystem : SystemBase
             ComponentType.ReadOnly<Rotation>());
         lightQuery = GetEntityQuery(ComponentType.ReadOnly<LightTag>(),
             ComponentType.ReadOnly<Translation>());
-        waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
+        waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<WaypointDensity>(), ComponentType.ReadOnly<Translation>());
 
         var pedestrians = new NativeArray<Translation>(pedestrianQuery.CalculateEntityCount(), Allocator.TempJob);
         var pedestrianRot = new NativeArray<Rotation>(pedestrianQuery.CalculateEntityCount(), Allocator.TempJob);
@@ -496,7 +496,8 @@ public partial class PedestrianMovementSystem : SystemBase
             pedestrianArray = pedestrians,
             pedestrianRotArray = pedestrianRot,
             pedestrianSpeedArray = pedestrianSpeed,
-            waypointArray = waypoints
+            waypointArray = waypoints//,
+            //ecbpw = ecb
         }.ScheduleParallel();
 
         Entities

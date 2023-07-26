@@ -251,7 +251,7 @@ public partial class SpawningSystem : SystemBase
                         Translation pos = new Translation { Value = spawnPos };
                         WaypointFollower follower = new WaypointFollower
                         {
-                            weight = 2,
+                            weight = s.navigationWeight,
                             goalKey = goalKey,
                             lastSavedMinimum = math.INFINITY
                         };
@@ -261,8 +261,15 @@ public partial class SpawningSystem : SystemBase
                         Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
                         ecb.SetComponent(entityInQueryIndex, newAgent, pos);
                         ecb.SetComponent(entityInQueryIndex, newAgent, follower);
+                        ecb.AddComponent(entityInQueryIndex, newAgent, new DensityAvoidanceBrain
+                        {
+                            maxTime = s.maxRecalculationTime,
+                            elapsedTime = s.random.NextFloat(s.maxRecalculationTime),
+                            minDensityTolerance = s.minDensity,
+                            maxDensityTolerance = s.maxDensity
+                        });
 
-                        if (s.random.NextFloat() <= 0.1)
+                        if (s.random.NextFloat() <= s.percentWaiting)
                         {
                             ecb.AddComponent(entityInQueryIndex, newAgent, new WillRendezvousTag());
                             givenRendezvousPoints = ecb.AddBuffer<RendezvousPosList>(entityInQueryIndex, newAgent);
@@ -276,7 +283,7 @@ public partial class SpawningSystem : SystemBase
                             }
                         }
 
-                        if (s.random.NextFloat() <= 0.25)
+                        if (s.random.NextFloat() <= s.percentYoung)
                         {
                             ecb.AddComponent(entityInQueryIndex, newAgent, new YoungTag());
                         }

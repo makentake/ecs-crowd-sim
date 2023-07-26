@@ -11,8 +11,13 @@ public struct WaypointPedestrianSpawner : IComponentData
     // Visible variables
     public Entity agent;
     public float3 spawnRadius;
-    public int crowdSize;
     public int toSpawn;
+
+    // Navigation
+    public int navigationWeight;
+    public float maxRecalculationTime, minDensity, maxDensity;
+
+    public float percentYoung, percentWaiting;
 
     // Internal variables
     public Random random;

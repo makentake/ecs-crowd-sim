@@ -11,6 +11,8 @@ using Unity.Physics.Systems;
 using System.Linq;
 using Unity.Entities.UniversalDelegates;
 using Unity.Burst;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 [UpdateAfter(typeof(PedestrianMovementSystem))]
 [UpdateAfter(typeof(GraphConnectionSystem))]
@@ -40,31 +42,44 @@ public partial class NavigationSystem : SystemBase
 
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
-        private int StartFinder(Translation t)
+        // Density stuff
+        [ReadOnly] public NativeParallelHashMap<int, WaypointDensity> waypointDensityArray;
+
+        private int StartFinder(in Pedestrian p, in Translation t)
         {
+            /*Debug.Log("Start of new startfinder thing");
+
+            var watch = Stopwatch.StartNew();*/
             int minDistKey = 0;
             float minDist = math.INFINITY;
 
             for (int i = 0; i < waypointArray.Count(); i++)
             {
                 var dist = math.distance(t.Value, waypointArray[i].Value);
-                var input = new RaycastInput
-                {
-                    Start = t.Value,
-                    End = waypointArray[i].Value,
-                    Filter = new CollisionFilter
-                    {
-                        BelongsTo = 1 << 0,
-                        CollidesWith = 3 << 1
-                    }
-                };
 
-                if (dist <= minDist && !collisionWorld.CastRay(input))
+                if (dist <= p.maxDist && dist <= minDist)
                 {
-                    minDistKey = i;
-                    minDist = dist;
+                    var input = new RaycastInput
+                    {
+                        Start = t.Value,
+                        End = waypointArray[i].Value,
+                        Filter = new CollisionFilter
+                        {
+                            BelongsTo = 1 << 0,
+                            CollidesWith = 3 << 1
+                        }
+                    };
+
+                    if (!collisionWorld.CastRay(input))
+                    {
+                        minDistKey = i;
+                        minDist = dist;
+                    }
                 }
             }
+
+            /*watch.Stop();
+            Debug.Log($"Elapsed startfinder time: {watch.ElapsedMilliseconds}");*/
 
             return minDistKey;
         }
@@ -133,14 +148,14 @@ public partial class NavigationSystem : SystemBase
 
         // Pseudocode kindly provided by ChatGPT, implemented by me
         // ChatGPT lied to me. This is now been modified according to actual A* pseudocode
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, in Translation t, in DynamicBuffer<GoalKeyList> g)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, in Pedestrian p, in Translation t, in DynamicBuffer<GoalKeyList> g)
         {
             // Each float2 will contain the following information about the waypoint: g, f. The key is the index
             var aStarValues = new NativeParallelHashMap<int, float2>(waypointCount, Allocator.Temp);
             var parents = new NativeParallelHashMap<int, int>(waypointCount, Allocator.Temp);
             var frontier = new NativeList<int>(Allocator.Temp);
 
-            var start = StartFinder(t);
+            var start = f.startKey;
             int current;
             var goal = g[0].key;
 
@@ -175,8 +190,10 @@ public partial class NavigationSystem : SystemBase
                     int neighbour = connection.key;
                     float tentativeG;
                     float2 newValues;
-                    
-                    tentativeG = aStarValues[current][0] + math.distance(waypointArray[current].Value, waypointArray[neighbour].Value);
+
+                    tentativeG = aStarValues[current][0] + math.distance(waypointArray[current].Value, waypointArray[neighbour].Value)//;
+                                                                                                                                      //+ (math.pow(waypointDensityArray[neighbour].currentAgents/ waypointDensityArray[neighbour].maxAgents, 2)*2* waypointDensityArray[neighbour].currentAgents);
+                        + waypointDensityArray[neighbour].currentAgents;
 
                     if (tentativeG < aStarValues[neighbour][0])
                     {
@@ -222,31 +239,41 @@ public partial class NavigationSystem : SystemBase
         /*public NativeParallelHashMap<int, float2>.ParallelWriter externalValues;
         [WriteOnly] public int closestKey;*/
 
-        private int StartFinder(Translation t)
+        private int StartFinder(in Pedestrian p, in Translation t)
         {
+            /*Debug.Log("Start of new startfinder thing");
+
+            var watch = Stopwatch.StartNew();*/
             int minDistKey = 0;
             float minDist = math.INFINITY;
 
             for (int i = 0; i < waypointArray.Count(); i++)
             {
                 var dist = math.distance(t.Value, waypointArray[i].Value);
-                var input = new RaycastInput
-                {
-                    Start = t.Value,
-                    End = waypointArray[i].Value,
-                    Filter = new CollisionFilter
-                    {
-                        BelongsTo = 1 << 0,
-                        CollidesWith = 3 << 1
-                    }
-                };
 
-                if (dist <= minDist && !collisionWorld.CastRay(input))
+                if (dist <= p.maxDist && dist <= minDist)
                 {
-                    minDistKey = i;
-                    minDist = dist;
+                    var input = new RaycastInput
+                    {
+                        Start = t.Value,
+                        End = waypointArray[i].Value,
+                        Filter = new CollisionFilter
+                        {
+                            BelongsTo = 1 << 0,
+                            CollidesWith = 3 << 1
+                        }
+                    };
+
+                    if (!collisionWorld.CastRay(input))
+                    {
+                        minDistKey = i;
+                        minDist = dist;
+                    }
                 }
             }
+
+            /*watch.Stop();
+            Debug.Log($"Elapsed startfinder time: {watch.ElapsedMilliseconds}");*/
 
             return minDistKey;
         }
@@ -403,7 +430,7 @@ public partial class NavigationSystem : SystemBase
 
             if (r.Length != 0)
             {
-                var start = StartFinder(t);
+                var start = f.startKey;
                 int current;
                 var goal = r[0].pos;
                 int closest;
@@ -498,11 +525,12 @@ public partial class NavigationSystem : SystemBase
         var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
         var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
         var waypointEntities = new NativeParallelHashMap<int, Entity>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
+        var waypointDensities = new NativeParallelHashMap<int, WaypointDensity>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
+        var waypointDensitiesParallelWriter = waypointDensities.AsParallelWriter();
         var waypointsParallelWriter = waypoints.AsParallelWriter();
         var waypointEntitiesParallelWriter = waypointEntities.AsParallelWriter();
 
         // Stuff that's currently inside jobs
-
 
         // debug stuff
         /*var aStarValues = new NativeParallelHashMap<int, float2>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
@@ -514,10 +542,54 @@ public partial class NavigationSystem : SystemBase
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
         Entities
-            .ForEach((Entity e, in Waypoint w, in Translation t) =>
+            .ForEach((Entity e, in Waypoint w, in WaypointDensity d, in Translation t) =>
             {
                 waypointsParallelWriter.TryAdd(w.key, t);
                 waypointEntitiesParallelWriter.TryAdd(w.key, e);
+                waypointDensitiesParallelWriter.TryAdd(w.key, d);
+            }).ScheduleParallel();
+
+        Entities
+            .WithReadOnly(waypoints)
+            .WithReadOnly(collisionWorld)
+            .WithAll<AwaitingNavigationTag>()
+            .ForEach((ref WaypointFollower f, in Pedestrian p, in Translation t) =>
+            {
+                /*Debug.Log("Start of new startfinder thing");
+
+                var watch = Stopwatch.StartNew();*/
+                int minDistKey = 0;
+                float minDist = math.INFINITY;
+
+                for (int i = 0; i < waypoints.Count(); i++)
+                {
+                    var dist = math.distance(t.Value, waypoints[i].Value);
+
+                    if (dist <= p.maxDist && dist <= minDist)
+                    {
+                        var input = new RaycastInput
+                        {
+                            Start = t.Value,
+                            End = waypoints[i].Value,
+                            Filter = new CollisionFilter
+                            {
+                                BelongsTo = 1 << 0,
+                                CollidesWith = 3 << 1
+                            }
+                        };
+
+                        if (!collisionWorld.CastRay(input))
+                        {
+                            minDistKey = i;
+                            minDist = dist;
+                        }
+                    }
+                }
+
+                /*watch.Stop();
+                Debug.Log($"Elapsed startfinder time: {watch.ElapsedMilliseconds}");*/
+
+                f.startKey = minDistKey;
             }).ScheduleParallel();
 
         JobHandle navigationJob = new AStarNavigationJob
@@ -527,7 +599,8 @@ public partial class NavigationSystem : SystemBase
             waypointBuffers = lookUp,
             waypointCount = waypointQuery.CalculateEntityCount(),
             collisionWorld = collisionWorld,
-            ecbpw = ecb
+            ecbpw = ecb,
+            waypointDensityArray = waypointDensities
         }.ScheduleParallel();
 
         Entities
@@ -571,6 +644,7 @@ public partial class NavigationSystem : SystemBase
 
         waypoints.Dispose(Dependency);
         waypointEntities.Dispose(Dependency);
+        waypointDensities.Dispose(Dependency);
 
         //aStarValues.Dispose(Dependency);
 
