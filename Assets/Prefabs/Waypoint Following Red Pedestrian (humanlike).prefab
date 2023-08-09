@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: -9184999722149501312}
   - component: {fileID: -2961738587076147499}
   m_Layer: 3
-  m_Name: Waypoint Following Red Pedestrian 1
+  m_Name: Waypoint Following Red Pedestrian (humanlike)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

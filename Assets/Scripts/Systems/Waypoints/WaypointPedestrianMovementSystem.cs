@@ -191,7 +191,7 @@ public partial class PedestrianMovementSystem : SystemBase
     }
 
     [BurstCompile]
-    private partial struct WaypointLightAttractionJob : IJobEntity
+    private partial struct WaypointRendezvousProgressionJob : IJobEntity
     {
         [ReadOnly] public CollisionWorld collisionWorld;
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
@@ -206,8 +206,8 @@ public partial class PedestrianMovementSystem : SystemBase
             p.lightAttractors = 0;
 
             // Calculate light attraction
-            var light = waypointArray[g[0].key];
-            var distance = math.distance(t.Value, light.Value);
+            var rendezvousPoint = waypointArray[g[0].key];
+            var distance = math.distance(t.Value, rendezvousPoint.Value);
             /*RaycastInput input;
              bool hasHit;
 
@@ -295,28 +295,14 @@ public partial class PedestrianMovementSystem : SystemBase
             {
                 r.Value = math.slerp(r.Value, quaternion.LookRotation(final, math.up()), deltaTime * p.rotSpeed);
 
-                if (p.isClimbing)
-                {
-                    v.Linear = math.forward(r.Value) * p.speed * 0.5f;
-                }
-                else
-                {
-                    v.Linear = math.forward(r.Value) * p.speed;
-                }
+                v.Linear = math.forward(r.Value) * p.speed;
             }
             else
             {
                 v.Linear = math.float3(0, 0, 0);
             }
 
-            if (p.isClimbing)
-            {
-                t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
-            }
-            else
-            {
-                t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
-            }
+            t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
         }
     }
 

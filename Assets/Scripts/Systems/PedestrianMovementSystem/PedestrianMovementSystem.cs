@@ -547,7 +547,7 @@ public partial class PedestrianMovementSystem : SystemBase
                 }
             }).ScheduleParallel();
 
-        JobHandle waypointLightAttractionJob = new WaypointLightAttractionJob
+        JobHandle waypointRendezvousProgressionJob = new WaypointRendezvousProgressionJob
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
