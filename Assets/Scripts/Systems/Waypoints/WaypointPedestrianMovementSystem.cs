@@ -24,6 +24,7 @@ public partial class PedestrianMovementSystem : SystemBase
 
     [BurstCompile]
     [WithAll(typeof(WaypointFollower))]
+    [WithNone(typeof(YoungTag))]
     private partial struct WaypointObstacleAvoidanceJob : IJobEntity
     {
         [ReadOnly] public CollisionWorld collisionWorld;
@@ -47,7 +48,7 @@ public partial class PedestrianMovementSystem : SystemBase
                     Filter = new CollisionFilter
                     {
                         BelongsTo = 1 << 0,
-                        CollidesWith = 1 << 1
+                        CollidesWith = 3 << 1
                     }
                 };
 
@@ -66,6 +67,100 @@ public partial class PedestrianMovementSystem : SystemBase
             if (WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
             {
                 ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+            }
+        }
+    }
+
+    [BurstCompile]
+    [WithAll(typeof(WaypointFollower))]
+    [WithAll(typeof(YoungTag))]
+    private partial struct YoungWaypointObstacleAvoidanceJob : IJobEntity
+    {
+        [ReadOnly] public CollisionWorld collisionWorld;
+        [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        bool hasWallBelow(Translation t)
+        {
+            bool hasHit;
+            float3 from = t.Value, to = t.Value + new float3(0, -5, 0);
+
+            RaycastInput input = new RaycastInput()
+            {
+                Start = from,
+                End = to,
+                Filter = new CollisionFilter
+                {
+                    BelongsTo = 1 << 0,
+                    CollidesWith = 1 << 2,
+                }
+            };
+
+            Unity.Physics.RaycastHit hit;
+            hasHit = collisionWorld.CastRay(input, out hit);
+
+            return hasHit;
+        }
+
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Pedestrian p, ref Translation t, in Rotation r, in DynamicBuffer<WaypointList> w)
+        {
+            var numberOfRays = 6;
+            var angle = 360 / numberOfRays;
+            var obstacleHits = 0;
+
+            p.obstacle = math.float3(0, 0, 0);
+
+            for (int i = 0; i < numberOfRays; i++)
+            {
+                var obstacleInput = new RaycastInput
+                {
+                    Start = t.Value,
+                    End = t.Value + (math.forward(quaternion.RotateY(math.radians(angle * i))) * p.wallTolerance),
+                    Filter = new CollisionFilter
+                    {
+                        BelongsTo = 1 << 0,
+                        CollidesWith = 1 << 1
+                    }
+                };
+
+                if (collisionWorld.CastRay(obstacleInput))
+                {
+                    p.obstacle += t.Value - obstacleInput.End;
+                    obstacleHits++;
+                }
+            }
+
+            if (obstacleHits > 0)
+            {
+                p.obstacle /= obstacleHits;
+            }
+
+            if (WaypointVisibilityCheck(w[0].key, waypointArray, collisionWorld, t))
+            {
+                ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+            }
+
+            float3 from = t.Value, to = t.Value + math.forward(r.Value);
+
+            RaycastInput input = new RaycastInput()
+            {
+                Start = from,
+                End = to,
+                Filter = new CollisionFilter
+                {
+                    BelongsTo = 1 << 0,
+                    CollidesWith = 1 << 2,
+                }
+            };
+
+            if (collisionWorld.CastRay(input))
+            {
+                p.isClimbing = true;
+                t.Value += math.forward(r.Value) * 0.6f;
+            }
+            else if (!hasWallBelow(t))
+            {
+                p.isClimbing = false;
             }
         }
     }
@@ -295,14 +390,25 @@ public partial class PedestrianMovementSystem : SystemBase
             {
                 r.Value = math.slerp(r.Value, quaternion.LookRotation(final, math.up()), deltaTime * p.rotSpeed);
 
-                v.Linear = math.forward(r.Value) * p.speed;
+                if (p.isClimbing)
+                {
+                    t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
+
+                    v.Linear = math.forward(r.Value) * (p.speed/2);
+                }
+                else
+                {
+                    t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
+
+                    v.Linear = math.forward(r.Value) * p.speed;
+                }
             }
             else
             {
                 v.Linear = math.float3(0, 0, 0);
             }
 
-            t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
+            
         }
     }
 

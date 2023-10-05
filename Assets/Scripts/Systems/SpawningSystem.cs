@@ -233,7 +233,7 @@ public partial class SpawningSystem : SystemBase
 
                     spawnsNeeded = s.toSpawn - s.spawned;
 
-                    /*if (spawnsNeeded == 0)
+                    if (spawnsNeeded == 0)
                     {
                         s.done = true;
                     }
@@ -241,7 +241,7 @@ public partial class SpawningSystem : SystemBase
                     if (s.done)
                     {
                         spawnsNeeded = 0;
-                    }*/
+                    }
 
                     // Create crowd members
                     for (int i = 0; i < spawnsNeeded; i++)

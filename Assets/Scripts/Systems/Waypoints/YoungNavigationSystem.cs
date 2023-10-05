@@ -18,25 +18,14 @@ using Debug = UnityEngine.Debug;
 [UpdateAfter(typeof(GraphConnectionSystem))]
 public partial class NavigationSystem : SystemBase
 {
-    private BuildPhysicsWorld physicsWorld;
-    private EndSimulationEntityCommandBufferSystem end;
-    private EntityQuery waypointQuery;
-
-    protected override void OnStartRunning()
-    {
-        end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-        waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
-        physicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
-    }
-
     [BurstCompile]
     [WithAll(typeof(AwaitingNavigationTag))]
-    [WithNone(typeof(YoungTag))]
-    private partial struct AStarNavigationJob : IJobEntity
+    [WithAll(typeof(YoungTag))]
+    private partial struct YoungAStarNavigationJob : IJobEntity
     {
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
         [ReadOnly] public NativeParallelHashMap<int, Entity> waypointEntityArray;
-        [ReadOnly] public BufferFromEntity<Connections> waypointBuffers;
+        [ReadOnly] public BufferFromEntity<BarricadeConnections> waypointBuffers;
         public int waypointCount;
 
         [ReadOnly] public CollisionWorld collisionWorld;
@@ -147,7 +136,7 @@ public partial class NavigationSystem : SystemBase
 
                 RemoveGivenKey(ref frontier, current);
 
-                foreach (Connections connection in waypointBuffers[waypointEntityArray[current]])
+                foreach (BarricadeConnections connection in waypointBuffers[waypointEntityArray[current]])
                 {
                     int neighbour = connection.key;
                     float tentativeG;
@@ -186,12 +175,12 @@ public partial class NavigationSystem : SystemBase
 
     [BurstCompile]
     [WithAll(typeof(AwaitingNavigationTag))]
-    [WithNone(typeof(YoungTag))]
-    private partial struct AStarClosestPointToRendezvous : IJobEntity
+    [WithAll(typeof(YoungTag))]
+    private partial struct YoungAStarClosestPointToRendezvous : IJobEntity
     {
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
         [ReadOnly] public NativeParallelHashMap<int, Entity> waypointEntityArray;
-        [ReadOnly] public BufferFromEntity<Connections> waypointBuffers;
+        [ReadOnly] public BufferFromEntity<BarricadeConnections> waypointBuffers;
         public int waypointCount;
 
         [ReadOnly] public CollisionWorld collisionWorld;
@@ -376,7 +365,7 @@ public partial class NavigationSystem : SystemBase
 
                     RemoveGivenKey(ref frontier, current);
 
-                    foreach (Connections connection in waypointBuffers[waypointEntityArray[current]])
+                    foreach (BarricadeConnections connection in waypointBuffers[waypointEntityArray[current]])
                     {
                         int neighbour = connection.key;
                         float tentativeG;
@@ -442,160 +431,5 @@ public partial class NavigationSystem : SystemBase
 
             ecbpw.RemoveComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
         }
-    }
-
-    protected override void OnUpdate()
-    {
-        var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
-        var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
-        var waypointEntities = new NativeParallelHashMap<int, Entity>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
-        var waypointDensities = new NativeParallelHashMap<int, WaypointDensity>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
-        var waypointDensitiesParallelWriter = waypointDensities.AsParallelWriter();
-        var waypointsParallelWriter = waypoints.AsParallelWriter();
-        var waypointEntitiesParallelWriter = waypointEntities.AsParallelWriter();
-
-        // Stuff that's currently inside jobs
-
-        // debug stuff
-        /*var aStarValues = new NativeParallelHashMap<int, float2>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
-        var aStarValuesParallelWriter = aStarValues.AsParallelWriter();
-        int closeKey = 0;*/
-
-        BufferFromEntity<Connections> lookUp = GetBufferFromEntity<Connections>();
-        BufferFromEntity<BarricadeConnections> barricadeBufferLookUp = GetBufferFromEntity<BarricadeConnections>();
-
-        var ecb = end.CreateCommandBuffer().AsParallelWriter();
-
-        Entities
-            .ForEach((Entity e, in Waypoint w, in WaypointDensity d, in Translation t) =>
-            {
-                waypointsParallelWriter.TryAdd(w.key, t);
-                waypointEntitiesParallelWriter.TryAdd(w.key, e);
-                waypointDensitiesParallelWriter.TryAdd(w.key, d);
-            }).ScheduleParallel();
-
-        Entities
-            .WithReadOnly(waypoints)
-            .WithReadOnly(collisionWorld)
-            .WithAll<AwaitingNavigationTag>()
-            .ForEach((ref WaypointFollower f, in Pedestrian p, in Translation t) =>
-            {
-                /*Debug.Log("Start of new startfinder thing");
-
-                var watch = Stopwatch.StartNew();*/
-                int minDistKey = 0;
-                float minDist = math.INFINITY;
-
-                for (int i = 0; i < waypoints.Count(); i++)
-                {
-                    var dist = math.distance(t.Value, waypoints[i].Value);
-
-                    if (dist <= p.maxDist && dist <= minDist)
-                    {
-                        var input = new RaycastInput
-                        {
-                            Start = t.Value,
-                            End = waypoints[i].Value,
-                            Filter = new CollisionFilter
-                            {
-                                BelongsTo = 1 << 0,
-                                CollidesWith = 3 << 1
-                            }
-                        };
-
-                        if (!collisionWorld.CastRay(input))
-                        {
-                            minDistKey = i;
-                            minDist = dist;
-                        }
-                    }
-                }
-
-                /*watch.Stop();
-                Debug.Log($"Elapsed startfinder time: {watch.ElapsedMilliseconds}");*/
-
-                f.startKey = minDistKey;
-            }).ScheduleParallel();
-
-        JobHandle navigationJob = new AStarNavigationJob
-        {
-            waypointArray = waypoints,
-            waypointEntityArray = waypointEntities,
-            waypointBuffers = lookUp,
-            waypointCount = waypointQuery.CalculateEntityCount(),
-            collisionWorld = collisionWorld,
-            ecbpw = ecb,
-            waypointDensityArray = waypointDensities
-        }.ScheduleParallel();
-
-        JobHandle youngNavigationJob = new YoungAStarNavigationJob
-        {
-            waypointArray = waypoints,
-            waypointEntityArray = waypointEntities,
-            waypointBuffers = barricadeBufferLookUp,
-            waypointCount = waypointQuery.CalculateEntityCount(),
-            collisionWorld = collisionWorld,
-            ecbpw = ecb,
-            waypointDensityArray = waypointDensities
-        }.ScheduleParallel();
-
-        Entities
-            .WithAll<WaypointFollower>()
-            .WithNone<WillRendezvousTag>()
-            .ForEach((Entity e, int entityInQueryIndex) =>
-            {
-                ecb.RemoveComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
-            }).ScheduleParallel();
-
-        JobHandle closestPointToRendezvous = new AStarClosestPointToRendezvous
-        {
-            waypointArray = waypoints,
-            waypointEntityArray = waypointEntities,
-            waypointBuffers = lookUp,
-            waypointCount = waypointQuery.CalculateEntityCount(),
-            collisionWorld = collisionWorld,
-            ecbpw = ecb//,
-            //externalValues = aStarValuesParallelWriter,
-            //closestKey = closeKey
-        }.ScheduleParallel();
-
-        JobHandle youngClosestPointToRendezvous = new YoungAStarClosestPointToRendezvous
-        {
-            waypointArray = waypoints,
-            waypointEntityArray = waypointEntities,
-            waypointBuffers = barricadeBufferLookUp,
-            waypointCount = waypointQuery.CalculateEntityCount(),
-            collisionWorld = collisionWorld,
-            ecbpw = ecb//,
-            //externalValues = aStarValuesParallelWriter,
-            //closestKey = closeKey
-        }.ScheduleParallel();
-
-        // Debug
-        /*Entities.WithReadOnly(aStarValues).ForEach((in Waypoint w, in Translation t) =>
-        {
-            if (aStarValues.ContainsKey(w.key))
-            {
-                if (w.key == closeKey)
-                {
-                    //Debug.Log($"Closest value: {aStarValues[w.key].y}");
-                    Debug.DrawRay(t.Value, math.up() * aStarValues[w.key].y / 4, Color.white);
-                }
-                else
-                {
-                    Debug.DrawRay(t.Value, math.up() * aStarValues[w.key].y / 4, new Color(aStarValues[w.key].y / 200, 0, 0));
-                }
-                
-                Debug.Break();
-            }
-        }).WithoutBurst().Run();*/
-
-        waypoints.Dispose(Dependency);
-        waypointEntities.Dispose(Dependency);
-        waypointDensities.Dispose(Dependency);
-
-        //aStarValues.Dispose(Dependency);
-
-        end.AddJobHandleForProducer(Dependency);
     }
 }

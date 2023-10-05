@@ -574,6 +574,13 @@ public partial class PedestrianMovementSystem : SystemBase
             ecbpw = ecb
         }.ScheduleParallel();
 
+        JobHandle youngWaypointObstacle = new YoungWaypointObstacleAvoidanceJob
+        {
+            collisionWorld = collisionWorld,
+            waypointArray = waypoints,
+            ecbpw = ecb
+        }.ScheduleParallel();
+
         // Calculate final values for leaving agents and move them
         JobHandle fleeingFinal = new FleeingFinalVectorCalculationJob
         {

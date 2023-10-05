@@ -46,6 +46,9 @@ public partial class WaypointDensityCalculationSystem : SystemBase
 
                 d.currentAgents *= precision;
                 //d.currentAgents *= math.pow(d.currentAgents / d.maxAgents, 2);
+
+                // enable this line to disable the system
+                //d.currentAgents = 0;
             }).ScheduleParallel();
 
         pedestrians.Dispose(Dependency);

@@ -48,6 +48,7 @@ public partial class GraphConnectionSystem : SystemBase
             .ForEach((Entity e, int entityInQueryIndex, in Waypoint w, in Translation t) =>
             {
                 var connections = ecb.AddBuffer<Connections>(entityInQueryIndex, e);
+                var barricadeConnections = ecb.AddBuffer<BarricadeConnections>(entityInQueryIndex, e);
 
                 for (int i = 0; i < waypoints.Count(); i++)
                 {
@@ -61,12 +62,26 @@ public partial class GraphConnectionSystem : SystemBase
                         haveHit = collisionWorld.SphereCast(from, 0.5f, math.normalizesafe(to-from), dist, new CollisionFilter
                         {
                             BelongsTo = 1 << 0,
-                            CollidesWith = 1 << 1
+                            CollidesWith = 3 << 1
                         });
 
                         if (!haveHit && w.key != i)
                         {
                             connections.Add(new Connections
+                            {
+                                key = i
+                            });
+                        }
+
+                        haveHit = collisionWorld.SphereCast(from, 0.5f, math.normalizesafe(to - from), dist, new CollisionFilter
+                        {
+                            BelongsTo = 1 << 0,
+                            CollidesWith = 1 << 1
+                        });
+
+                        if (!haveHit && w.key != i)
+                        {
+                            barricadeConnections.Add(new BarricadeConnections
                             {
                                 key = i
                             });
@@ -108,6 +123,7 @@ public partial class GraphConnectionSystem : SystemBase
             .ForEach((Entity e, int entityInQueryIndex, in Waypoint w, in Translation t) =>
             {
                 var connections = ecb.AddBuffer<Connections>(entityInQueryIndex, e);
+                var barricadeConnections = ecb.AddBuffer<BarricadeConnections>(entityInQueryIndex, e);
 
                 for (int i = 0; i < waypoints.Count(); i++)
                 {
@@ -121,12 +137,26 @@ public partial class GraphConnectionSystem : SystemBase
                         haveHit = collisionWorld.SphereCast(from, 0.5f, math.normalizesafe(to - from), dist, new CollisionFilter
                         {
                             BelongsTo = 1 << 0,
-                            CollidesWith = 1 << 1
+                            CollidesWith = 3 << 1
                         });
 
                         if (!haveHit && w.key != i)
                         {
                             connections.Add(new Connections
+                            {
+                                key = i
+                            });
+                        }
+
+                        haveHit = collisionWorld.SphereCast(from, 0.5f, math.normalizesafe(to - from), dist, new CollisionFilter
+                        {
+                            BelongsTo = 1 << 0,
+                            CollidesWith = 1 << 1
+                        });
+
+                        if (!haveHit && w.key != i)
+                        {
+                            barricadeConnections.Add(new BarricadeConnections
                             {
                                 key = i
                             });
@@ -142,6 +172,14 @@ public partial class GraphConnectionSystem : SystemBase
 
             finished = true;
         }
+
+        Entities.ForEach((in Translation t, in DynamicBuffer<BarricadeConnections> b) =>
+        {
+            for (int i = 0; i < b.Length; i++)
+            {
+                Debug.DrawLine(t.Value, waypoints[b[i].key].Value, Color.red);
+            }
+        }).WithoutBurst().Run();
 
         Entities.ForEach((in Translation t, in DynamicBuffer<Connections> b) =>
         {
