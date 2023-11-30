@@ -1,9 +1,5 @@
-using Mapbox.Geocoding;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Physics.Authoring;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public class CityConversionPrep : MonoBehaviour

@@ -217,14 +217,6 @@ public partial class PedestrianMovementSystem : SystemBase
 
             p.speed = p.baseSpeed - (p.baseSpeed * modifier);
 
-            if (math.distance(math.float3(0f,0f,0f), p.repulsion) < 1)
-            {
-                if (modifier >= 0.50f)
-                {
-                    p.speed *= 2;
-                }
-            }
-
             p.minDist = p.baseMinDist - (p.baseMinDist * modifier);
             p.minDist = p.minDist < 2f ? 2f : p.minDist;
 
