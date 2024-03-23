@@ -64,10 +64,9 @@ MonoBehaviour:
     x: 20
     y: 0
     z: 75
-  crowdSize: 0
   toSpawn: 150
   navigationWeight: 2
-  maxRecalculationTime: 5
+  maxRecalculationTime: 10
   minDensity: 0.3
   maxDensity: 0.7
   percentYoung: 0.25
