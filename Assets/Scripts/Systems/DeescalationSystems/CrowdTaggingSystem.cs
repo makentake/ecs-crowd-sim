@@ -21,7 +21,7 @@ public partial class CrowdTaggingSystem : SystemBase
 
         Entities
             .WithNone<Interacting>()
-            .ForEach((Entity e, int entityInQueryIndex, ref Agent a, in Rioter r, in Translation t, in Goal g) =>
+            .ForEach((Entity e, int entityInQueryIndex, ref CrowdAgent a, in Rioter r, in Translation t, in Goal g) =>
             {
                 if (r.aggression > r.threshhold)
                 {

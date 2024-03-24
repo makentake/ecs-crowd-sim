@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 
 [GenerateAuthoringComponent]
-public struct Agent : IComponentData
+public struct CrowdAgent : IComponentData
 {
     public float minDist,
         maxDist,

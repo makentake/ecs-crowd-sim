@@ -35,7 +35,7 @@ public partial class CrowdMovementSystem : SystemBase
         // Get all the agents
         Entities
             .WithStoreEntityQueryInField(ref agentQuery)
-            .WithAll<Agent>().ForEach((int entityInQueryIndex, in Translation t, in Rotation r) =>
+            .WithAll<CrowdAgent>().ForEach((int entityInQueryIndex, in Translation t, in Rotation r) =>
             {
                 agents[entityInQueryIndex] = t.Value;
                 agentsRot[entityInQueryIndex] = r.Value;
@@ -77,7 +77,7 @@ public partial class CrowdMovementSystem : SystemBase
             .WithReadOnly(agentsRot)
             .WithAll<MovingTag>()
             .WithNone<Police>()
-            .ForEach((int entityInQueryIndex, ref Agent a, in Translation t, in Rotation r, in Goal g) =>
+            .ForEach((int entityInQueryIndex, ref CrowdAgent a, in Translation t, in Rotation r, in Goal g) =>
             {
                 a.attraction = new float3(0, 0, 0);
                 a.repulsion = new float3(0, 0, 0);
@@ -129,7 +129,7 @@ public partial class CrowdMovementSystem : SystemBase
             .WithReadOnly(agentsRot)
             .WithAll<RiotingTag>()
             .WithNone<Police>()
-            .ForEach((int entityInQueryIndex, ref Agent a, in Translation t, in Rotation r, in Goal g) =>
+            .ForEach((int entityInQueryIndex, ref CrowdAgent a, in Translation t, in Rotation r, in Goal g) =>
             {
                 a.attraction = new float3(0, 0, 0);
                 a.repulsion = new float3(0, 0, 0);
@@ -180,7 +180,7 @@ public partial class CrowdMovementSystem : SystemBase
             .WithReadOnly(agentsRot)
             .WithAll<FleeingTag>()
             .WithNone<Police>()
-            .ForEach((int entityInQueryIndex, ref Agent a, in Translation t, in Rotation r, in Goal g) =>
+            .ForEach((int entityInQueryIndex, ref CrowdAgent a, in Translation t, in Rotation r, in Goal g) =>
             {
                 a.attraction = new float3(0, 0, 0);
                 a.repulsion = new float3(0, 0, 0);
@@ -236,7 +236,7 @@ public partial class CrowdMovementSystem : SystemBase
         // Operate on moving and rioting entities
         Entities
             .WithNone<FleeingTag, Interacting>()
-            .WithNone<Police>().ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Agent a, in Goal g) =>
+            .WithNone<Police>().ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref CrowdAgent a, in Goal g) =>
             {
                 float3 target = a.target, attraction = a.attraction, repulsion = a.repulsion;
 
@@ -283,7 +283,7 @@ public partial class CrowdMovementSystem : SystemBase
         // Operate on interacting entities
         Entities
             .WithAll<Interacting>()
-            .ForEach((int entityInQueryIndex, ref PhysicsVelocity v, ref Agent a, ref Translation t, ref Rotation r, in Interacting i, in Goal g) =>
+            .ForEach((int entityInQueryIndex, ref PhysicsVelocity v, ref CrowdAgent a, ref Translation t, ref Rotation r, in Interacting i, in Goal g) =>
             {
                 float3 target = i.position.Value - t.Value,
                 repulsion = a.repulsion;
@@ -317,7 +317,7 @@ public partial class CrowdMovementSystem : SystemBase
         Entities
             .WithAll<FleeingTag>()
             .WithNone<Interacting>()
-            .WithNone<Police>().ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref Agent a, in Goal g) =>
+            .WithNone<Police>().ForEach((Entity e, int entityInQueryIndex, ref PhysicsVelocity velocity, ref Translation t, ref Rotation rot, ref CrowdAgent a, in Goal g) =>
             {
                 float3 target = a.target, attraction = a.attraction, repulsion = a.repulsion;
                 float dist = math.distance(t.Value, g.exit.Value);

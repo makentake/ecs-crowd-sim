@@ -172,7 +172,7 @@ public partial class EmotionSystem : SystemBase
         Entities
             .WithReadOnly(police)
             .WithAll<CivilianTag>()
-            .ForEach((Entity e, int entityInQueryIndex, ref Rioter r, ref Agent a, in Translation t, in Interacting i) =>
+            .ForEach((Entity e, int entityInQueryIndex, ref Rioter r, ref CrowdAgent a, in Translation t, in Interacting i) =>
             {
                 bool found = false;
 
@@ -206,7 +206,7 @@ public partial class EmotionSystem : SystemBase
             .WithReadOnly(rioters)
             .WithReadOnly(rTranslation)
             .WithAll<CivilianTag>()
-            .ForEach((ref Rioter r, in Agent a, in Translation t) =>
+            .ForEach((ref Rioter r, in CrowdAgent a, in Translation t) =>
             {
                 float totalAnger = 0;
                 int influencers = 0;

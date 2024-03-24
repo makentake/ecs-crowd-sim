@@ -27,7 +27,7 @@ public partial class PoliceMovementSystem : SystemBase
 
         Entities
             .WithAll<Police>()
-            .ForEach((int entityInQueryIndex, ref Agent a, in Translation t, in Rotation r, in Goal g) =>
+            .ForEach((int entityInQueryIndex, ref CrowdAgent a, in Translation t, in Rotation r, in Goal g) =>
             {
                 //float3 avoidance = v.obstacle;
                 float3 avoidance = math.INFINITY;
@@ -43,7 +43,7 @@ public partial class PoliceMovementSystem : SystemBase
             }).ScheduleParallel();
 
         Entities
-            .ForEach((int entityInQueryIndex, ref PhysicsVelocity v, ref Agent a, ref Translation t, ref Rotation r, in Police p, in Goal g) =>
+            .ForEach((int entityInQueryIndex, ref PhysicsVelocity v, ref CrowdAgent a, ref Translation t, ref Rotation r, in Police p, in Goal g) =>
             {
                 float3 target = a.target,
                 repulsion = a.repulsion;
