@@ -6,12 +6,17 @@ using Unity.Transforms;
 using Unity.Physics;
 using Unity.Jobs;
 using Unity.Burst;
+using System.Collections.Generic;
+using System.Diagnostics;
+using Debug = UnityEngine.Debug;
 
 // System for moving a peaceful crowd
 [UpdateAfter(typeof(CrowdMovementSystem))]
 [UpdateBefore(typeof(TransformSystemGroup))]
 public partial class PedestrianMovementSystem : SystemBase
 {
+    public NativeList<float> rewards;
+
     private EndFixedStepSimulationEntityCommandBufferSystem end;
     private EntityQuery pedestrianQuery, lightQuery, waypointQuery;
     private Unity.Physics.Systems.BuildPhysicsWorld physicsWorld;
@@ -21,6 +26,13 @@ public partial class PedestrianMovementSystem : SystemBase
     {
         end = World.GetOrCreateSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
         physicsWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
+
+        rewards = new NativeList<float>(100, Allocator.Persistent);
+    }
+
+    protected override void OnDestroy()
+    {
+        rewards.Dispose();
     }
 
     [BurstCompile]
@@ -608,8 +620,11 @@ public partial class PedestrianMovementSystem : SystemBase
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
             deltaTime = dt,
-            ecbpw = ecb
-        }.ScheduleParallel();
+            ecbpw = ecb,
+            results = rewards,
+            elapsedTime = UnityEngine.Time.timeSinceLevelLoad
+            //}.ScheduleParallel();
+        }.Schedule();
 
         JobHandle rendezvousGoalAdvancement = new WaypointRendezvousGoalAdvancementJob
         {

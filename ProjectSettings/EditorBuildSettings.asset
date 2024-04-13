@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/WaypointsCrowdPsychologyCitySimulator.unity
     guid: b82c07348ea16d045a91a13d3174a9ab
+  - enabled: 1
+    path: Assets/Scenes/MLTestEnvironment.unity
+    guid: 7fcb0969f6d5e9843a2e2d4d7a8697d0
   m_configObjects: {}

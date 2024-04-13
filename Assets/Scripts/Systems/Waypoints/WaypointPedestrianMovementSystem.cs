@@ -414,6 +414,9 @@ public partial class PedestrianMovementSystem : SystemBase
         public float deltaTime;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
+        public float elapsedTime;
+        public NativeList<float> results;
+
         public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
         {
             float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
@@ -448,6 +451,7 @@ public partial class PedestrianMovementSystem : SystemBase
                         }
                         else if (math.distance(t.Value, waypointArray[g[0].key].Value) < p.tolerance)
                         {
+                            results.Add(0.1f - (0.1f*(elapsedTime / 60)));
                             ecbpw.DestroyEntity(entityInQueryIndex, e);
                         }
                         else

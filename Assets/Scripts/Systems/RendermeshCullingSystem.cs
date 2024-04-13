@@ -38,6 +38,7 @@ public partial class RendermeshCullingSystem : SystemBase
 
             Entities
                 .WithAll<AwaitingConversionTag>()
+                .WithNone<MLAgentsWallTag>()
                 .ForEach((Entity e) =>
                 {
                     var rM = EntityManager.GetSharedComponentData<RenderMesh>(e);
@@ -46,6 +47,13 @@ public partial class RendermeshCullingSystem : SystemBase
 
                     ecb.RemoveComponent<AwaitingConversionTag>(e);
                 }).WithoutBurst().Run();
+
+            Entities
+                .WithAll<MLAgentsWallTag>()
+                .ForEach((Entity e) =>
+                {
+                    ecb.RemoveComponent<AwaitingConversionTag>(e);
+                }).Schedule();
 
             end.AddJobHandleForProducer(Dependency);
         }

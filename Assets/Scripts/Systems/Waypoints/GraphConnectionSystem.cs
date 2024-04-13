@@ -7,15 +7,14 @@ using Unity.Physics;
 using Unity.Transforms;
 using Unity.Physics.Systems;
 using Unity.Mathematics;
-using Mapbox.Examples.Voxels;
 
 public partial class GraphConnectionSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem end;
     private EntityQuery waypointQuery;
     private BuildPhysicsWorld physicsWorld;
-    private bool ready;
-    private bool finished;
+
+    public bool onDemand = false; // for all your on-demand grid recalculation needs
 
     protected override void OnStartRunning()
     {
@@ -30,9 +29,6 @@ public partial class GraphConnectionSystem : SystemBase
 
         end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
-
-        ready = false;
-        finished = false;
 
         Entities
             .ForEach((int entityInQueryIndex, ref Waypoint w, in Translation t) =>
@@ -110,12 +106,10 @@ public partial class GraphConnectionSystem : SystemBase
                 parallelWriter.TryAdd(w.key, t);
             }).ScheduleParallel();
 
-        if (needsConversion.CalculateEntityCount() > 0)
-        {
-            ready = true;
-        }
-
-        if (!finished && ready && needsConversion.CalculateEntityCount() == 0)
+        // I think this whole system interacts with the RendermeshCullingSystem?
+        // It waits for the aformentioned system to do its thing then recalculates the paths
+        //if (onDemand || (!finished && ready && needsConversion.CalculateEntityCount() == 0))
+        if (needsConversion.CalculateEntityCount() == 0)
         {
             Entities
             .WithReadOnly(waypoints)
@@ -169,9 +163,9 @@ public partial class GraphConnectionSystem : SystemBase
             {
                 ecb.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
             }).ScheduleParallel();
-
-            finished = true;
         }
+
+        //Debug.Log("Needs conversion: " + needsConversion.CalculateEntityCount());
 
         Entities.ForEach((in Translation t, in DynamicBuffer<BarricadeConnections> b) =>
         {

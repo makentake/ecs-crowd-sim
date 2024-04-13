@@ -4,14 +4,45 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using Random = Unity.Mathematics.Random;
 using Unity.Collections;
+using JetBrains.Annotations;
 
 [UpdateAfter(typeof(CrowdMovementSystem))]
 [UpdateAfter(typeof(GraphConnectionSystem))]
 public partial class SpawningSystem : SystemBase
 {
     private EndFixedStepSimulationEntityCommandBufferSystem end;
-    private bool ready;
-    private bool finished;
+    private bool ready = false;
+    public bool finished = false;
+
+    public partial struct ResetSpawnersJob : IJobEntity
+    {
+        public void Execute(ref WaypointPedestrianSpawner s)
+        {
+            s.done = false;
+        }
+    }
+
+    [WithAll(typeof(WaypointFollower))]
+    public partial struct DeleteAgentsJob : IJobEntity
+    {
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        public void Execute([EntityInQueryIndex] int entityInQueryIndex, Entity e)
+        {
+            ecbpw.DestroyEntity(entityInQueryIndex, e);
+        }
+    }
+
+    [WithAll(typeof(MLAgentsWallTag))]
+    public partial struct DeleteWallsJob : IJobEntity
+    {
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        public void Execute([EntityInQueryIndex] int entityInQueryIndex, Entity e)
+        {
+            ecbpw.DestroyEntity(entityInQueryIndex, e);
+        }
+    }
 
     protected override void OnStartRunning()
     {
@@ -212,6 +243,7 @@ public partial class SpawningSystem : SystemBase
             }).ScheduleParallel();
 
             if ((ready && needsConversion.CalculateEntityCount() == 0) || !TryGetSingletonEntity<ConverterPresentTag>(out presentConverter))
+            //if (!TryGetSingletonEntity<ConverterPresentTag>(out presentConverter))
             {
                 Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in DynamicBuffer<GoalEntityList> p, in DynamicBuffer<RendezvousEntityList> r, in Translation t) =>
                 {
@@ -299,6 +331,23 @@ public partial class SpawningSystem : SystemBase
                         }
                     }
                 }).ScheduleParallel();
+            }
+
+            if (finished)
+            {
+                var deleteAgentsJob = new DeleteAgentsJob
+                {
+                    ecbpw = ecb
+                }.ScheduleParallel();
+
+                var deleteWallsJob = new DeleteWallsJob
+                {
+                    ecbpw = ecb
+                }.ScheduleParallel();
+
+                new ResetSpawnersJob().ScheduleParallel();
+
+                finished = false;
             }
 
             pedestrianArray.Dispose(Dependency);
