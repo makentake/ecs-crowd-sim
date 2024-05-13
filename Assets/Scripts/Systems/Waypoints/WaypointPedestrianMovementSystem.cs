@@ -176,6 +176,7 @@ public partial class PedestrianMovementSystem : SystemBase
 
         public EntityCommandBuffer.ParallelWriter ecbpw;
         public float deltaTime;
+        public float timeScale;
 
         private void CoreVectorCalculationJob(ref Pedestrian p, in Translation t, in Rotation r, in DynamicBuffer<WaypointList> w, NativeList<Translation> lP, NativeList<Translation> hLP, NativeList<Rotation> lPR, NativeList<float> lPS, NativeList<float> lD, NativeList<float> hLD)
         {
@@ -231,7 +232,7 @@ public partial class PedestrianMovementSystem : SystemBase
             }
             else
             {
-                b.elapsedTime += deltaTime;
+                b.elapsedTime += deltaTime*timeScale;
             }
         }
 
@@ -284,6 +285,7 @@ public partial class PedestrianMovementSystem : SystemBase
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
 
         public float deltaTime;
+        public float timeScale;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
         public void Execute(ref Pedestrian p, ref Wait w, ref DynamicBuffer<GoalKeyList> g, in Translation t)
@@ -317,7 +319,7 @@ public partial class PedestrianMovementSystem : SystemBase
             //if (distance <= p.maxDist && !hasHit)
             if (distance <= p.tolerance)
             {
-                w.elapsedTime += deltaTime;
+                w.elapsedTime += deltaTime*timeScale;
             }
         }
     }
@@ -412,7 +414,7 @@ public partial class PedestrianMovementSystem : SystemBase
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
 
         public float deltaTime;
-        public EntityCommandBuffer.ParallelWriter ecbpw;
+        public EntityCommandBuffer ecb;
 
         public float elapsedTime;
         public NativeList<float> results;
@@ -447,21 +449,25 @@ public partial class PedestrianMovementSystem : SystemBase
                             //Debug.Log("Removing in main loop");
                             g.RemoveAt(0);
 
-                            ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                            ecb.AddComponent<AwaitingNavigationTag>(e);
                         }
                         else if (math.distance(t.Value, waypointArray[g[0].key].Value) < p.tolerance)
                         {
-                            results.Add(0.1f - (0.1f*(elapsedTime / 60)));
-                            ecbpw.DestroyEntity(entityInQueryIndex, e);
+                            if (results.IsCreated)
+                            {
+                                results.Add(0.1f - (0.1f * (elapsedTime / 60)));
+                            }
+                            
+                            ecb.DestroyEntity(e);
                         }
                         else
                         {
-                            ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                            ecb.AddComponent<AwaitingNavigationTag>(e);
                         }
                     }
                     else
                     {
-                        ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                        ecb.AddComponent<AwaitingNavigationTag>(e);
                     }
                 }
             }

@@ -71,6 +71,7 @@ public class WallPlacer : Agent
 
         for (int i = 0; i < actions.DiscreteActions[0]; i++)
         {
+            //Debug.Log(actions.ContinuousActions[i]);
             Instantiate(wall, new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i+1])) + transform.position, Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[i+2]), 0));
         }
     }

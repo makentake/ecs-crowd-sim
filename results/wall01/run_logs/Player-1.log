@@ -1,0 +1,477 @@
+Mono path[0] = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Managed'
+Mono config path = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/MonoBleedingEdge/etc'
+Initialize engine version: 2020.3.48f1 (b805b124c6b7)
+[Subsystems] Discovering subsystems at path C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Completed reload, in  0.942 seconds
+ERROR: Shader Hidden/Universal Render Pipeline/Blit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CopyDepth shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/ScreenSpaceShadows shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Sampling shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderLdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderHdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/UberPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Stop NaN shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/PaniniProjection shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/SubpixelMorphologicalAntialiasing shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/FinalPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/StencilDeferred shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/BokehDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CameraMotionBlur shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/GaussianDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Bloom shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Sprites/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+ERROR: Shader Sprites/Mask shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Universal Render Pipeline/Lit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 0.999400 ms
+No SRP present, no compute shader support, or running with -nographics. Hybrid Renderer disabled
+Warning: No Graphics Device found. Deformation systems will not run.
+NullReferenceException: Object reference not set to an instance of an object
+  at Unity.Scenes.ResourceCatalogData.GetGUIDFromPath (System.String path) [0x000b8] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.SceneSystem.GetSceneGUID (System.String scenePath) [0x0000c] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.GameObjectSceneUtility.AddGameObjectSceneReferences () [0x00044] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Entities.AutomaticWorldBootstrap.Initialize () [0x0000d] in <5b4f729cfdd14b019dc7af518decdec6>:0 
+
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBasic/CrowdSim_Data/Mono/libSystem.dylib
+-0.3789426
+1
+-1
+0.2145962
+1
+-1
+1
+-0.2065793
+0.721032
+1
+-1
+-0.3249078
+1
+-1
+1
+-0.5629882
+-0.8972777
+0.3170995
+1
+-1
+-0.302533
+1
+-1
+1
+-0.1701697
+-1
+-0.02781504
+1
+-1
+-0.1978298
+1
+0.138284
+1
+-1
+-0.1601205
+1
+-1
+1
+-0.2170003
+-1
+-0.2134971
+1
+-1
+0.2570678
+1
+0.09882145
+1
+-1
+0.3560968
+1
+0.2209515
+1
+-1
+-0.09495889
+1
+-0.3702748
+1
+-1
+-0.1181412
+1
+0.1136704
+1
+-1
+-0.2971801
+1
+-1
+1
+0.4877214
+1
+-1
+-0.3538912
+1
+0.4561517
+1
+-1
+0.123757
+1
+-0.1780134
+1
+-1
+-0.4535412
+1
+-1
+1
+-0.4489814
+-1
+0.4231795
+1
+-1
+0.009327372
+1
+0.1623395
+1
+-1
+-0.01103516
+1
+-1
+1
+-0.2970554
+0.4141687
+1
+-1
+-0.3682744
+1
+-1
+1
+0.3067072
+-1
+0.2714763
+1
+-1
+-0.1200363
+1
+-1
+1
+-0.2922563
+-0.8558548
+-0.09614698
+1
+-1
+-0.3072495
+1
+-1
+1
+0.1404241
+1
+-1
+-0.05232488
+-0.5590313
+1
+-1
+0.2265794
+1
+-1
+1
+0.4191661
+-1
+-0.01151162
+1
+-1
+-0.4007343
+1
+-1
+1
+-0.3239772
+-1
+0.2148746
+1
+-1
+-0.6488783
+1
+-1
+1
+-0.4167334
+1
+-1
+-0.7722731
+1
+-1
+1
+-0.2781765
+1
+-1
+-0.04310476
+1
+-0.0686681
+1
+-1
+-0.3767225
+1
+-0.2196334
+1
+-1
+0.2868724
+1
+0.4790989
+1
+-1
+-0.5245966
+1
+-1
+1
+-0.4927224
+-1
+-0.1630716
+1
+-1
+-0.4457057
+1
+0.5016399
+1
+-1
+-0.3646232
+1
+-1
+1
+-0.4928796
+-1
+-0.1453513
+1
+-1
+0.09757262
+1
+-1
+1
+-0.06945973
+-1
+-0.02726138
+1
+-1
+-0.3523037
+1
+-1
+1
+-0.4187161
+-0.8214526
+-0.6343
+1
+-1
+-0.2961709
+1
+-1
+1
+0.5866321
+1
+-1
+-0.3978193
+1
+-1
+1
+-0.2870758
+-0.8463569
+0.2410787
+1
+-1
+0.006617367
+0.08789084
+1
+-1
+0.1712408
+1
+-0.179135
+1
+-1
+0.2174346
+1
+-1
+1
+0.3424176
+-1
+0.4236814
+1
+-1
+-0.3903711
+1
+-1
+1
+-1
+-1
+0.04541363
+1
+-1
+-0.2530559
+1
+0.4922581
+1
+-1
+-0.272085
+1
+-1
+1
+0.3564422
+1
+-1
+-0.03488501
+1
+0.5849452
+1
+-1
+0.2347322
+0.4875554
+1
+-1
+-0.1358931
+1
+-1
+1
+-0.3186706
+-0.9676002
+0.2314243
+1
+-1
+0.7435368
+0.7417532
+1
+-1
+-0.4033917
+1
+-1
+1
+0.08144025
+-1
+0.1605241
+1
+-1
+-0.1849546
+1
+-1
+1
+-0.07599465
+-1
+0.2578527
+1
+-1
+-0.4762391
+1
+-1
+1
+0.3150035
+-1
+0.3929926
+1
+-1
+-0.5639982
+1
+-1
+1
+0.09418312
+1
+-1
+-0.3934009
+1
+-1
+1
+-0.5784073
+-0.5626922
+0.08128843
+1
+-1
+-0.1818872
+1
+-1
+1
+0.3028626
+-1
+-0.1515364
+1
+-1
+-0.745847
+1
+-1
+1
+-0.2739719
+-0.7709334
+-0.1315151
+1
+-1
+-0.3711753
+1
+-0.5499623
+1
+-1
+0.2892628
+1
+-0.1467797
+1
+-1
+0.2271531
+1
+-1
+1
+-0.147463
+-1
+0.1047343
+1
+-1
+-0.6189719
+1
+0.218613
+1
+-1
+-0.3306929
+1
+-1
+1
+0.3300426
+-0.8944798
+-1
+1
+-1
+-0.6537141
+1
+0.808669
+1
+-1
+-0.03765371
+1
+-1
+1
+-0.1284388
+-0.9618208
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 3d6c -> priority: 1 
+  Thread -> id: 8088 -> priority: 1 
+  Thread -> id: 6448 -> priority: 1 
+  Thread -> id: 8538 -> priority: 1 

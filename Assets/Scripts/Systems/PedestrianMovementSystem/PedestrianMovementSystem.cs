@@ -458,6 +458,7 @@ public partial class PedestrianMovementSystem : SystemBase
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
         var dt = Time.DeltaTime;
+        var ts = UnityEngine.Time.timeScale;
         var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
 
         pedestrianQuery = GetEntityQuery(ComponentType.ReadOnly<Pedestrian>(), 
@@ -508,8 +509,10 @@ public partial class PedestrianMovementSystem : SystemBase
             pedestrianArray = pedestrians,
             pedestrianRotArray = pedestrianRot,
             pedestrianSpeedArray = pedestrianSpeed,
-            waypointArray = waypoints//,
-            //ecbpw = ecb
+            deltaTime = dt,
+            timeScale = ts,
+            waypointArray = waypoints,
+            ecbpw = ecb
         }.ScheduleParallel();
 
         Entities
@@ -564,6 +567,7 @@ public partial class PedestrianMovementSystem : SystemBase
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
             deltaTime = dt,
+            timeScale = ts,
             ecbpw = ecb
         }.ScheduleParallel();
         
@@ -615,17 +619,6 @@ public partial class PedestrianMovementSystem : SystemBase
             ecbpw = ecb
         }.ScheduleParallel();
 
-        JobHandle goalAdvancement = new WaypointGoalAdvancementJob
-        {
-            collisionWorld = collisionWorld,
-            waypointArray = waypoints,
-            deltaTime = dt,
-            ecbpw = ecb,
-            results = rewards,
-            elapsedTime = UnityEngine.Time.timeSinceLevelLoad
-            //}.ScheduleParallel();
-        }.Schedule();
-
         JobHandle rendezvousGoalAdvancement = new WaypointRendezvousGoalAdvancementJob
         {
             collisionWorld = collisionWorld,
@@ -634,12 +627,23 @@ public partial class PedestrianMovementSystem : SystemBase
             ecbpw = ecb
         }.ScheduleParallel();
 
-        end.AddJobHandleForProducer(Dependency);
+        JobHandle goalAdvancement = new WaypointGoalAdvancementJob
+        {
+            collisionWorld = collisionWorld,
+            waypointArray = waypoints,
+            deltaTime = dt,
+            ecb = end.CreateCommandBuffer(), // DON'T USE PARALLEL COMMAND BUFFERS IN SINGLE-THREADED JOBS
+            results = rewards,
+            elapsedTime = UnityEngine.Time.timeSinceLevelLoad
+            //}.ScheduleParallel();
+        }.Schedule();
 
         pedestrians.Dispose(Dependency);
         pedestrianRot.Dispose(Dependency);
         pedestrianSpeed.Dispose(Dependency);
         lightTranslation.Dispose(Dependency);
         waypoints.Dispose(Dependency);
+
+        end.AddJobHandleForProducer(Dependency);
     }
 }
