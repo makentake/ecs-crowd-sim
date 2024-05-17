@@ -3,8 +3,8 @@ behaviors:
   WallPlacer:
     trainer_type: ppo
     hyperparameters:
-      batch_size: 1024
-      buffer_size: 10240
+      batch_size: 20
+      buffer_size: 100
       learning_rate: 0.0003
       beta: 0.005
       epsilon: 0.2
@@ -35,10 +35,10 @@ behaviors:
           deterministic: false
     init_path: null
     keep_checkpoints: 5
-    checkpoint_interval: 500
-    max_steps: 500
-    time_horizon: 64
-    summary_freq: 5
+    checkpoint_interval: 1000
+    max_steps: 10000
+    time_horizon: 1
+    summary_freq: 20
     threaded: false
     self_play: null
     behavioral_cloning: null
