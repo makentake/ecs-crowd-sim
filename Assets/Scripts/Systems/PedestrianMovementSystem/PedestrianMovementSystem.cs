@@ -27,7 +27,7 @@ public partial class PedestrianMovementSystem : SystemBase
         end = World.GetOrCreateSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
         physicsWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
 
-        rewards = new NativeList<float>(100, Allocator.Persistent);
+        rewards = new NativeList<float>(200, Allocator.Persistent);
     }
 
     protected override void OnDestroy()

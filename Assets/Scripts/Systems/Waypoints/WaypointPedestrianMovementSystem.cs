@@ -419,7 +419,7 @@ public partial class PedestrianMovementSystem : SystemBase
         public float elapsedTime;
         public NativeList<float> results;
 
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
+        public void Execute(Entity e, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
         {
             float dist = math.distance(t.Value, waypointArray[w[0].key].Value);
 
@@ -455,6 +455,7 @@ public partial class PedestrianMovementSystem : SystemBase
                         {
                             if (results.IsCreated)
                             {
+                                Debug.Log($"Reward: {0.1f - (0.1f * (elapsedTime / 60))}");
                                 results.Add(0.1f - (0.1f * (elapsedTime / 60)));
                             }
                             

@@ -53,10 +53,11 @@ public class WallPlacer : Agent
                 totalReward += reward;
             }
 
+            Debug.Log($"Total reward: {totalReward}");
+
             SetReward(totalReward);
 
-            pms.rewards.Dispose();
-            pms.rewards = new NativeList<float>(100, Allocator.Persistent);
+            pms.rewards.Clear();
 
             EndEpisode();
         }
@@ -93,8 +94,8 @@ public class WallPlacer : Agent
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(spawn.transform.position);
-        sensor.AddObservation(goal.transform.position);
+        //sensor.AddObservation(spawn.transform.position);
+        //sensor.AddObservation(goal.transform.position);
         sensor.AddObservation(spawnBounds);
     }
 
