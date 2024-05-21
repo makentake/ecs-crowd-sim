@@ -509,8 +509,7 @@ public partial class PedestrianMovementSystem : SystemBase
             pedestrianArray = pedestrians,
             pedestrianRotArray = pedestrianRot,
             pedestrianSpeedArray = pedestrianSpeed,
-            deltaTime = dt,
-            timeScale = ts,
+            deltaTime = dt * UnityEngine.Time.timeScale,
             waypointArray = waypoints,
             ecbpw = ecb
         }.ScheduleParallel();
@@ -566,8 +565,7 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
-            deltaTime = dt,
-            timeScale = ts,
+            deltaTime = dt * UnityEngine.Time.timeScale,
             ecbpw = ecb
         }.ScheduleParallel();
         
@@ -615,7 +613,7 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
-            deltaTime = dt,
+            deltaTime = dt * UnityEngine.Time.timeScale,
             ecbpw = ecb
         }.ScheduleParallel();
 
@@ -623,7 +621,7 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
-            deltaTime = dt,
+            deltaTime = dt * UnityEngine.Time.timeScale,
             ecbpw = ecb
         }.ScheduleParallel();
 
@@ -631,10 +629,9 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
-            deltaTime = dt,
+            deltaTime = dt*UnityEngine.Time.timeScale,
             ecb = end.CreateCommandBuffer(), // DON'T USE PARALLEL COMMAND BUFFERS IN SINGLE-THREADED JOBS
-            results = rewards,
-            elapsedTime = UnityEngine.Time.timeSinceLevelLoad
+            results = rewards
             //}.ScheduleParallel();
         }.Schedule();
 

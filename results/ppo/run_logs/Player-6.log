@@ -1,0 +1,435 @@
+Mono path[0] = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Managed'
+Mono config path = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/MonoBleedingEdge/etc'
+Initialize engine version: 2020.3.48f1 (b805b124c6b7)
+[Subsystems] Discovering subsystems at path C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Completed reload, in  4.167 seconds
+ERROR: Shader Hidden/Universal Render Pipeline/Blit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CopyDepth shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/ScreenSpaceShadows shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Sampling shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderLdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderHdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/UberPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Stop NaN shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/PaniniProjection shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/SubpixelMorphologicalAntialiasing shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/FinalPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/StencilDeferred shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/BokehDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CameraMotionBlur shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/GaussianDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Bloom shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Sprites/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+ERROR: Shader Sprites/Mask shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Universal Render Pipeline/Lit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 9.213700 ms
+No SRP present, no compute shader support, or running with -nographics. Hybrid Renderer disabled
+Warning: No Graphics Device found. Deformation systems will not run.
+NullReferenceException: Object reference not set to an instance of an object
+  at Unity.Scenes.ResourceCatalogData.GetGUIDFromPath (System.String path) [0x000b8] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.SceneSystem.GetSceneGUID (System.String scenePath) [0x0000c] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.GameObjectSceneUtility.AddGameObjectSceneReferences () [0x00044] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Entities.AutomaticWorldBootstrap.Initialize () [0x0000d] in <35d36e169a874a5891e204ef448431f0>:0 
+
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data/Mono/libSystem.dylib
+Reward: 0.02694444
+Reward: 0.02194444
+Reward: 0.01861111
+Reward: 0.01527777
+Reward: 0.01277778
+Reward: 0.01194444
+Reward: 0.01194444
+Reward: 0.01027777
+Reward: 0.00694444
+Reward: 0.00694444
+Reward: 0.005000003
+Reward: 0.004444435
+Reward: 0.004444435
+Reward: 0.00416667
+Reward: 0.00416667
+Reward: 0.00277777
+Reward: 0.001944438
+Reward: 0.001944438
+Reward: 0.001388893
+Reward: 0.001111105
+Total reward: 0.1749999
+Reward: -0.07111112
+Reward: -0.07749999
+Reward: -0.0788889
+Reward: -0.08222223
+Reward: -0.08305556
+Reward: -0.0838889
+Reward: -0.0838889
+Reward: -0.08444446
+Reward: -0.08555556
+Reward: -0.08583333
+Reward: -0.08583333
+Reward: -0.08666667
+Reward: -0.08972222
+Reward: -0.08972222
+Reward: -0.08972222
+Reward: -0.09055556
+Reward: -0.09083333
+Reward: -0.09083333
+Reward: -0.09083333
+Reward: -0.09305555
+Reward: -0.09305555
+Reward: -0.09388889
+Reward: -0.09416667
+Reward: -0.09472222
+Reward: -0.09555555
+Reward: -0.09555555
+Reward: -0.09555555
+Reward: -0.09722222
+Reward: -0.09722222
+Reward: -0.0975
+Reward: -0.09833334
+Reward: -0.0988889
+Reward: -0.0988889
+Reward: -0.09944446
+Reward: -0.09972223
+Reward: -0.09972223
+Total reward: -3.263611
+Reward: -0.1
+Reward: -0.1
+Reward: -0.1875
+Reward: -0.1888889
+Reward: -0.1897222
+Reward: -0.1908333
+Reward: -0.1922222
+Reward: -0.1947223
+Reward: -0.195
+Reward: -0.1958333
+Reward: -0.1983334
+Reward: -0.1997223
+Total reward: -2.132778
+Reward: -0.2
+Reward: -0.2772222
+Reward: -0.2788889
+Reward: -0.2797222
+Reward: -0.2830556
+Reward: -0.285
+Reward: -0.2855556
+Reward: -0.2855556
+Reward: -0.2863889
+Reward: -0.2863889
+Reward: -0.2875
+Reward: -0.2880556
+Reward: -0.2886111
+Reward: -0.2891667
+Reward: -0.2913889
+Reward: -0.2916667
+Reward: -0.2916667
+Reward: -0.2922223
+Reward: -0.2922223
+Reward: -0.2922223
+Reward: -0.2925
+Reward: -0.2930556
+Reward: -0.2933334
+Reward: -0.2941667
+Reward: -0.2947223
+Reward: -0.2955556
+Reward: -0.2958333
+Reward: -0.2963889
+Reward: -0.2963889
+Reward: -0.2963889
+Reward: -0.2966667
+Reward: -0.2966667
+Reward: -0.2972223
+Reward: -0.2972223
+Reward: -0.2980556
+Reward: -0.2991667
+Reward: -0.2994445
+Reward: -0.2997223
+Reward: -0.2997223
+Total reward: -11.28472
+Reward: -0.3
+Reward: -0.3763889
+Reward: -0.3775
+Reward: -0.3797223
+Reward: -0.3819445
+Reward: -0.3822222
+Reward: -0.3822222
+Reward: -0.3833334
+Reward: -0.3847222
+Reward: -0.3858333
+Reward: -0.3880556
+Reward: -0.3880556
+Reward: -0.3897223
+Reward: -0.3908333
+Reward: -0.3908333
+Reward: -0.3913889
+Reward: -0.3916667
+Reward: -0.3916667
+Reward: -0.3922223
+Reward: -0.3930556
+Reward: -0.3947222
+Reward: -0.395
+Reward: -0.395
+Reward: -0.3955556
+Reward: -0.3958334
+Reward: -0.3963889
+Reward: -0.3972223
+Reward: -0.3980556
+Reward: -0.3983333
+Reward: -0.3988889
+Reward: -0.3988889
+Reward: -0.3988889
+Reward: -0.3991667
+Reward: -0.3997222
+Reward: -0.3997222
+Total reward: -13.60278
+Reward: -0.4722222
+Reward: -0.4758333
+Reward: -0.4772223
+Reward: -0.4780556
+Reward: -0.4808334
+Reward: -0.4822222
+Reward: -0.4833334
+Reward: -0.483889
+Reward: -0.4847222
+Reward: -0.4847222
+Reward: -0.4858333
+Reward: -0.4866667
+Reward: -0.4872223
+Reward: -0.4872223
+Reward: -0.4875
+Reward: -0.4897223
+Reward: -0.4897223
+Reward: -0.49
+Reward: -0.4905556
+Reward: -0.4913889
+Reward: -0.4913889
+Reward: -0.4922223
+Reward: -0.4925
+Reward: -0.4933334
+Reward: -0.4938889
+Reward: -0.4938889
+Reward: -0.4941667
+Reward: -0.4947222
+Reward: -0.4955556
+Reward: -0.4955556
+Reward: -0.4958334
+Reward: -0.4963889
+Reward: -0.4966667
+Reward: -0.4972223
+Reward: -0.4975
+Reward: -0.4975
+Reward: -0.4988889
+Reward: -0.4988889
+Reward: -0.4997223
+Reward: -0.4997223
+Total reward: -19.60444
+Reward: -0.5
+Reward: -0.5788889
+Reward: -0.5813889
+Reward: -0.5847222
+Reward: -0.585
+Reward: -0.5880556
+Reward: -0.5883333
+Reward: -0.5902778
+Reward: -0.5916666
+Reward: -0.5922223
+Reward: -0.5925
+Reward: -0.5930555
+Reward: -0.5947222
+Reward: -0.5947222
+Reward: -0.5955556
+Reward: -0.5955556
+Reward: -0.5958334
+Reward: -0.5980555
+Reward: -0.5980555
+Reward: -0.5980555
+Reward: -0.5988889
+Reward: -0.5988889
+Total reward: -12.93445
+Reward: -0.675
+Reward: -0.6758333
+Reward: -0.6763889
+Reward: -0.6788889
+Reward: -0.6813889
+Reward: -0.6822222
+Reward: -0.6847222
+Reward: -0.6847222
+Reward: -0.6866667
+Reward: -0.6888888
+Reward: -0.6888888
+Reward: -0.6905556
+Reward: -0.6905556
+Reward: -0.6925
+Reward: -0.6930556
+Reward: -0.6938889
+Reward: -0.6938889
+Reward: -0.6947222
+Reward: -0.6963889
+Reward: -0.6963889
+Reward: -0.6972222
+Reward: -0.6975
+Reward: -0.6980556
+Reward: -0.6983333
+Reward: -0.6997222
+Total reward: -17.23639
+Reward: -0.7747223
+Reward: -0.7780557
+Reward: -0.78
+Reward: -0.7816666
+Reward: -0.7838889
+Reward: -0.7841666
+Reward: -0.7847223
+Reward: -0.7855557
+Reward: -0.7855557
+Reward: -0.7866667
+Reward: -0.7872223
+Reward: -0.7872223
+Reward: -0.7875
+Reward: -0.7888889
+Reward: -0.7897223
+Reward: -0.79
+Reward: -0.7905557
+Reward: -0.7905557
+Reward: -0.7905557
+Reward: -0.791389
+Reward: -0.791389
+Reward: -0.7922223
+Reward: -0.7938889
+Reward: -0.7938889
+Reward: -0.795
+Reward: -0.7963889
+Reward: -0.7963889
+Reward: -0.7969445
+Reward: -0.7975
+Reward: -0.7980556
+Reward: -0.7997223
+Reward: -0.7997223
+Total reward: -25.26973
+Reward: -0.886389
+Reward: -0.8908334
+Reward: -0.8922223
+Reward: -0.8930556
+Reward: -0.893889
+Reward: -0.8941666
+Reward: -0.8955556
+Reward: -0.8963889
+Reward: -0.8980556
+Reward: -0.8988889
+Reward: -0.8988889
+Total reward: -9.838333
+Reward: -0.978889
+Reward: -0.9830556
+Reward: -0.9838889
+Reward: -0.9847224
+Reward: -0.9872223
+Reward: -0.9875
+Reward: -0.9875
+Reward: -0.9891666
+Reward: -0.9897223
+Reward: -0.9897223
+Reward: -0.99
+Reward: -0.9905556
+Reward: -0.991389
+Reward: -0.9922223
+Reward: -0.993889
+Reward: -0.9941666
+Reward: -0.9947222
+Reward: -0.9947222
+Reward: -0.995
+Reward: -0.9958333
+Reward: -0.9963889
+Reward: -0.9972223
+Reward: -0.9975001
+Reward: -0.9975001
+Reward: -0.998889
+Reward: -0.998889
+Reward: -0.9997222
+Reward: -0.9997222
+Total reward: -27.77972
+Reward: -1.073056
+Reward: -1.073333
+Reward: -1.076667
+Reward: -1.080556
+Reward: -1.081667
+Reward: -1.082222
+Reward: -1.0825
+Reward: -1.083056
+Reward: -1.083889
+Reward: -1.085
+Reward: -1.085
+Reward: -1.087222
+Reward: -1.088056
+Reward: -1.088333
+Reward: -1.088889
+Reward: -1.090556
+Reward: -1.091389
+Reward: -1.092222
+Reward: -1.092222
+Reward: -1.092222
+Reward: -1.093056
+Reward: -1.093056
+Reward: -1.094167
+Reward: -1.095
+Reward: -1.095556
+Reward: -1.095833
+Reward: -1.096389
+Reward: -1.096667
+Reward: -1.097222
+Reward: -1.098889
+Reward: -1.098889
+Reward: -1.099167
+Reward: -1.099167
+Reward: -1.099722
+Total reward: -37.05083
+Reward: -1.180556
+Reward: -1.183056
+Reward: -1.186389
+Reward: -1.191389
+Reward: -1.1925
+Reward: -1.194722
+Reward: -1.196667
+Reward: -1.197222
+Reward: -1.198889
+Reward: -1.199722
+Total reward: -11.92111
+Reward: -1.2
+Unable to save timers to file C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/TrainingBuildBidirectional/CrowdSim_Data\ML-Agents\Timers\MLTestEnvironment_timers.json
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 5638 -> priority: 1 
+  Thread -> id: 8bc0 -> priority: 1 
+  Thread -> id: 7004 -> priority: 1 
+  Thread -> id: 8b94 -> priority: 1 

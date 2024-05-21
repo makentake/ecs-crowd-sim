@@ -176,7 +176,6 @@ public partial class PedestrianMovementSystem : SystemBase
 
         public EntityCommandBuffer.ParallelWriter ecbpw;
         public float deltaTime;
-        public float timeScale;
 
         private void CoreVectorCalculationJob(ref Pedestrian p, in Translation t, in Rotation r, in DynamicBuffer<WaypointList> w, NativeList<Translation> lP, NativeList<Translation> hLP, NativeList<Rotation> lPR, NativeList<float> lPS, NativeList<float> lD, NativeList<float> hLD)
         {
@@ -232,7 +231,7 @@ public partial class PedestrianMovementSystem : SystemBase
             }
             else
             {
-                b.elapsedTime += deltaTime*timeScale;
+                b.elapsedTime += deltaTime;
             }
         }
 
@@ -285,7 +284,6 @@ public partial class PedestrianMovementSystem : SystemBase
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
 
         public float deltaTime;
-        public float timeScale;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
         public void Execute(ref Pedestrian p, ref Wait w, ref DynamicBuffer<GoalKeyList> g, in Translation t)
@@ -319,7 +317,7 @@ public partial class PedestrianMovementSystem : SystemBase
             //if (distance <= p.maxDist && !hasHit)
             if (distance <= p.tolerance)
             {
-                w.elapsedTime += deltaTime*timeScale;
+                w.elapsedTime += deltaTime;
             }
         }
     }
@@ -416,8 +414,9 @@ public partial class PedestrianMovementSystem : SystemBase
         public float deltaTime;
         public EntityCommandBuffer ecb;
 
-        public float elapsedTime;
+        
         public NativeList<float> results;
+        private float elapsedTime;
 
         public void Execute(Entity e, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
         {

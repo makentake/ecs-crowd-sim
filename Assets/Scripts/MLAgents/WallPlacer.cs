@@ -82,7 +82,8 @@ public class WallPlacer : Agent
         var discActions = actionsOut.DiscreteActions;
         var contActions = actionsOut.ContinuousActions;
 
-        discActions[0] = Random.Range(0, 10);
+        //discActions[0] = Random.Range(0, 10);
+        discActions[0] = Random.Range(0, 2);
 
         for (int i = 0; i < discActions[0]; i += 3)
         {
