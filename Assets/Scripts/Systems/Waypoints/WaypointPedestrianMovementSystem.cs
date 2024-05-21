@@ -411,12 +411,11 @@ public partial class PedestrianMovementSystem : SystemBase
         [ReadOnly] public CollisionWorld collisionWorld;
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
 
-        public float deltaTime;
         public EntityCommandBuffer ecb;
 
         
         public NativeList<float> results;
-        private float elapsedTime;
+        public float elapsedTime;
 
         public void Execute(Entity e, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g)
         {
@@ -481,7 +480,6 @@ public partial class PedestrianMovementSystem : SystemBase
         [ReadOnly] public CollisionWorld collisionWorld;
         [ReadOnly] public NativeParallelHashMap<int, Translation> waypointArray;
 
-        public float deltaTime;
         public EntityCommandBuffer.ParallelWriter ecbpw;
 
         public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref Translation t, ref Pedestrian p, ref DynamicBuffer<WaypointList> w, ref DynamicBuffer<GoalKeyList> g, in Wait wait)

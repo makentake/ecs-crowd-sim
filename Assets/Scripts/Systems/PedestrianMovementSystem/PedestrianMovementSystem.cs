@@ -16,6 +16,7 @@ using Debug = UnityEngine.Debug;
 public partial class PedestrianMovementSystem : SystemBase
 {
     public NativeList<float> rewards;
+    public float t0;
 
     private EndFixedStepSimulationEntityCommandBufferSystem end;
     private EntityQuery pedestrianQuery, lightQuery, waypointQuery;
@@ -28,6 +29,7 @@ public partial class PedestrianMovementSystem : SystemBase
         physicsWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
 
         rewards = new NativeList<float>(200, Allocator.Persistent);
+        t0 = 0f;
     }
 
     protected override void OnDestroy()
@@ -457,8 +459,7 @@ public partial class PedestrianMovementSystem : SystemBase
     {
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
-        var dt = Time.DeltaTime;
-        var ts = UnityEngine.Time.timeScale;
+        var dt = UnityEngine.Time.unscaledDeltaTime; // using this so i don't have to rewrite code that manually applied timeScale to deltaTime for testing
         var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
 
         pedestrianQuery = GetEntityQuery(ComponentType.ReadOnly<Pedestrian>(), 
@@ -621,7 +622,6 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
-            deltaTime = dt * UnityEngine.Time.timeScale,
             ecbpw = ecb
         }.ScheduleParallel();
 
@@ -629,7 +629,7 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
-            deltaTime = dt*UnityEngine.Time.timeScale,
+            elapsedTime = UnityEngine.Time.timeSinceLevelLoad - t0,
             ecb = end.CreateCommandBuffer(), // DON'T USE PARALLEL COMMAND BUFFERS IN SINGLE-THREADED JOBS
             results = rewards
             //}.ScheduleParallel();
