@@ -14,17 +14,21 @@ using Unity.Burst;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
-[UpdateAfter(typeof(PedestrianMovementSystem))]
-[UpdateAfter(typeof(GraphConnectionSystem))]
+[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+//[UpdateAfter(typeof(GraphConnectionSystem))]
+[UpdateAfter(typeof(VoxelizationGenerationEntityCommandBuffer))]
+[UpdateBefore(typeof(PedestrianMovementSystem))]
 public partial class NavigationSystem : SystemBase
 {
     private BuildPhysicsWorld physicsWorld;
-    private EndSimulationEntityCommandBufferSystem end;
+    //private EndSimulationEntityCommandBufferSystem end;
+    private EndVariableRateSimulationEntityCommandBufferSystem end;
     private EntityQuery waypointQuery;
 
     protected override void OnStartRunning()
     {
-        end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        //end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
         waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
         physicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
@@ -110,7 +114,7 @@ public partial class NavigationSystem : SystemBase
 
         // Pseudocode kindly provided by ChatGPT, implemented by me
         // ChatGPT lied to me. This is now been modified according to actual A* pseudocode
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, in Pedestrian p, in Translation t, in DynamicBuffer<GoalKeyList> g)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref AwaitingNavigationTag a, ref WaypointFollower f, in Pedestrian p, in Translation t, in DynamicBuffer<GoalKeyList> g)
         {
             // Each float2 will contain the following information about the waypoint: g, f. The key is the index
             var aStarValues = new NativeParallelHashMap<int, float2>(waypointCount, Allocator.Temp);
@@ -181,6 +185,7 @@ public partial class NavigationSystem : SystemBase
             }
 
             //ecbpw.RemoveComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+            a.hasNavigated = true;
         }
     }
 
@@ -446,6 +451,10 @@ public partial class NavigationSystem : SystemBase
 
     protected override void OnUpdate()
     {
+        if (GetEntityQuery(ComponentType.ReadOnly<Pedestrian>(),
+            ComponentType.ReadOnly<Translation>(),
+            ComponentType.ReadOnly<Rotation>()).CalculateEntityCount() == 0) return;
+
         var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
         var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
         var waypointEntities = new NativeParallelHashMap<int, Entity>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
@@ -517,6 +526,13 @@ public partial class NavigationSystem : SystemBase
                 f.startKey = minDistKey;
             }).ScheduleParallel();
 
+        /*Entities
+            .WithAll<AwaitingNavigationTag>()
+            .ForEach((in DynamicBuffer<GoalKeyList> g) =>
+            {
+                Debug.Log($"Navigating agent: {g[0].key}");
+            }).WithoutBurst().Run();*/
+
         JobHandle navigationJob = new AStarNavigationJob
         {
             waypointArray = waypoints,
@@ -524,7 +540,7 @@ public partial class NavigationSystem : SystemBase
             waypointBuffers = lookUp,
             waypointCount = waypointQuery.CalculateEntityCount(),
             collisionWorld = collisionWorld,
-            ecbpw = ecb,
+            ecbpw = end.CreateCommandBuffer().AsParallelWriter(),
             waypointDensityArray = waypointDensities
         }.ScheduleParallel();
 
@@ -535,16 +551,19 @@ public partial class NavigationSystem : SystemBase
             waypointBuffers = barricadeBufferLookUp,
             waypointCount = waypointQuery.CalculateEntityCount(),
             collisionWorld = collisionWorld,
-            ecbpw = ecb,
+            ecbpw = end.CreateCommandBuffer().AsParallelWriter(),
             waypointDensityArray = waypointDensities
         }.ScheduleParallel();
 
         Entities
             .WithAll<WaypointFollower>()
             .WithNone<WillRendezvousTag>()
-            .ForEach((Entity e, int entityInQueryIndex) =>
+            .ForEach((Entity e, int entityInQueryIndex, in AwaitingNavigationTag a) =>
             {
-                ecb.RemoveComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                if (a.hasNavigated)
+                {
+                    ecb.RemoveComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+                }
             }).ScheduleParallel();
 
         JobHandle closestPointToRendezvous = new AStarClosestPointToRendezvous
@@ -554,7 +573,7 @@ public partial class NavigationSystem : SystemBase
             waypointBuffers = lookUp,
             waypointCount = waypointQuery.CalculateEntityCount(),
             collisionWorld = collisionWorld,
-            ecbpw = ecb//,
+            ecbpw = end.CreateCommandBuffer().AsParallelWriter()//,
             //externalValues = aStarValuesParallelWriter,
             //closestKey = closeKey
         }.ScheduleParallel();
@@ -566,7 +585,7 @@ public partial class NavigationSystem : SystemBase
             waypointBuffers = barricadeBufferLookUp,
             waypointCount = waypointQuery.CalculateEntityCount(),
             collisionWorld = collisionWorld,
-            ecbpw = ecb//,
+            ecbpw = end.CreateCommandBuffer().AsParallelWriter()//,
             //externalValues = aStarValuesParallelWriter,
             //closestKey = closeKey
         }.ScheduleParallel();

@@ -8,7 +8,7 @@ using Unity.Collections;
 using System.IO;
 
 // A system for counting (and outputting) the crowd agents in the simulation
-[UpdateAfter(typeof(SpawningSystem))]
+//[UpdateAfter(typeof(SpawningSystem))]
 public partial class CrowdAreaCountingSystem : SystemBase {
     private NativeArray<int> count;
     private static float lastCountTime;

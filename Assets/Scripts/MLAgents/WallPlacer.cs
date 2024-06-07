@@ -25,6 +25,7 @@ public class WallPlacer : Agent
     public Vector2 spawnBounds;
 
     float t0; // the previous time the thing started at
+    float elapsedTime;
 
     void Start()
     {
@@ -34,6 +35,7 @@ public class WallPlacer : Agent
         }*/
 
         t0 = 0f;
+        elapsedTime = 0f;
 
         RequestDecision();
     }
@@ -44,7 +46,7 @@ public class WallPlacer : Agent
 
         //Debug.Log(Time.timeSinceLevelLoad);
 
-        if (Time.timeSinceLevelLoad - t0 >= 60 || (pms.rewards.IsCreated && pms.rewards.Length >= 100))
+        if (Time.timeSinceLevelLoad - t0 >= 60 || (pms.rewards.IsCreated && pms.rewards.Length >= 200))
         {
             float totalReward = 0;
 
@@ -58,7 +60,7 @@ public class WallPlacer : Agent
             SetReward(totalReward);
 
             pms.rewards.Clear();
-            pms.t0 = Time.timeSinceLevelLoad;
+            pms.t0 = Time.time;
 
             EndEpisode();
         }
@@ -83,8 +85,8 @@ public class WallPlacer : Agent
         var discActions = actionsOut.DiscreteActions;
         var contActions = actionsOut.ContinuousActions;
 
-        discActions[0] = Random.Range(0, 10);
-        //discActions[0] = Random.Range(0, 2);
+        //discActions[0] = Random.Range(0, 10);
+        discActions[0] = Random.Range(0, 2);
 
         for (int i = 0; i < discActions[0]; i += 3)
         {
@@ -107,5 +109,7 @@ public class WallPlacer : Agent
         t0 = Time.timeSinceLevelLoad;
         RequestDecision();
         //Debug.Log("Episode begins");
+
+        World.DefaultGameObjectInjectionWorld.GetExistingSystem<GraphConnectionSystem>().onDemand = true;
     }
 }

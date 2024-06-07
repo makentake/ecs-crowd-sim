@@ -268,7 +268,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: WallPlacer
   TeamId: 0
   m_UseChildSensors: 1
@@ -396,6 +396,10 @@ PrefabInstance:
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
+      propertyPath: percentYoung
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: spawnRadius.z
@@ -1079,6 +1083,10 @@ PrefabInstance:
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
+      propertyPath: percentYoung
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: spawnRadius.z

@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using RaycastHit = Unity.Physics.RaycastHit;
 using Unity.Burst;
 
-[UpdateAfter(typeof(CrowdMovementSystem))]
-[UpdateBefore(typeof(TransformSystemGroup))]
 public partial class PedestrianMovementSystem : SystemBase
 {
     private static bool WaypointVisibilityCheck(int k, NativeParallelHashMap<int, Translation> waypointArray, CollisionWorld collisionWorld, Translation t)
@@ -224,6 +222,8 @@ public partial class PedestrianMovementSystem : SystemBase
             {
                 if (modifier >= b.maxDensityTolerance || modifier <= b.minDensityTolerance)
                 {
+                    //Debug.Log("recalculating");
+
                     ecbpw.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
                 }
 
@@ -374,19 +374,21 @@ public partial class PedestrianMovementSystem : SystemBase
 
             final = isZero ? final : math.normalize(final);
 
-            r.Value.value.x = 0;
-            r.Value.value.z = 0;
-            v.Angular = 0;
+            //r.Value.value.x = 0;
+            //r.Value.value.z = 0;
+            v.Angular = math.float3(0,0,0);
 
             if (!isZero)
             {
-                r.Value = math.slerp(r.Value, quaternion.LookRotation(final, math.up()), deltaTime * p.rotSpeed);
+                r.Value = math.slerp(r.Value, quaternion.LookRotation(final, math.up()), math.clamp(1f, 0f, deltaTime * p.rotSpeed));
 
                 if (p.isClimbing)
                 {
                     t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
 
                     v.Linear = math.forward(r.Value) * (p.speed/2);
+
+
                 }
                 else
                 {
@@ -453,7 +455,7 @@ public partial class PedestrianMovementSystem : SystemBase
                         {
                             if (results.IsCreated)
                             {
-                                Debug.Log($"Reward: {0.1f - (0.1f * (elapsedTime / 60))}");
+                                //Debug.Log($"Reward: {0.1f - (0.1f * (elapsedTime / 60))}");
                                 results.Add(0.1f - (0.1f * (elapsedTime / 60)));
                             }
                             

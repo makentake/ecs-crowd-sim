@@ -14,8 +14,6 @@ using Unity.Burst;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
-[UpdateAfter(typeof(PedestrianMovementSystem))]
-[UpdateAfter(typeof(GraphConnectionSystem))]
 public partial class NavigationSystem : SystemBase
 {
     [BurstCompile]
@@ -99,7 +97,7 @@ public partial class NavigationSystem : SystemBase
 
         // Pseudocode kindly provided by ChatGPT, implemented by me
         // ChatGPT lied to me. This is now been modified according to actual A* pseudocode
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, in Pedestrian p, in Translation t, in DynamicBuffer<GoalKeyList> g)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref AwaitingNavigationTag a, ref WaypointFollower f, in Pedestrian p, in Translation t, in DynamicBuffer<GoalKeyList> g)
         {
             // Each float2 will contain the following information about the waypoint: g, f. The key is the index
             var aStarValues = new NativeParallelHashMap<int, float2>(waypointCount, Allocator.Temp);
@@ -170,6 +168,7 @@ public partial class NavigationSystem : SystemBase
             }
 
             //ecbpw.RemoveComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
+            a.hasNavigated = true;
         }
     }
 

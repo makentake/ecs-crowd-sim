@@ -7,14 +7,75 @@ using Unity.Physics;
 using Unity.Transforms;
 using Unity.Physics.Systems;
 using Unity.Mathematics;
+using Unity.Burst;
 
+//[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+//[UpdateBefore(typeof(PedestrianMovementSystem))]
 public partial class GraphConnectionSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem end;
+    //private EndVariableRateSimulationEntityCommandBufferSystem end;
     private EntityQuery waypointQuery;
     private BuildPhysicsWorld physicsWorld;
 
     public bool onDemand = false; // for all your on-demand grid recalculation needs
+
+    private bool ready;
+    private bool finished;
+
+    [BurstCompile]
+    private partial struct RecalculateConnectionsJob : IJobEntity
+    {
+        [ReadOnly] public NativeParallelHashMap<int, Translation> waypoints;
+        [ReadOnly] public CollisionWorld collisionWorld;
+        [ReadOnly] public VoxelSpawner voxelData;
+        public EntityCommandBuffer.ParallelWriter ecbpw;
+
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, in Waypoint w, in Translation t)
+        {
+            var connections = ecbpw.AddBuffer<Connections>(entityInQueryIndex, e);
+            var barricadeConnections = ecbpw.AddBuffer<BarricadeConnections>(entityInQueryIndex, e);
+
+            for (int i = 0; i < waypoints.Count(); i++)
+            {
+                float3 from = t.Value;
+                float3 to = waypoints[i].Value;
+                float dist = math.distance(from, to);
+                bool haveHit;
+
+                if (dist <= math.sqrt(math.pow(voxelData.voxelSpacing, 2) + math.pow(voxelData.voxelSpacing, 2)))
+                {
+                    haveHit = collisionWorld.SphereCast(from, 0.5f, math.normalizesafe(to - from), dist, new CollisionFilter
+                    {
+                        BelongsTo = 1 << 0,
+                        CollidesWith = 3 << 1
+                    });
+
+                    if (!haveHit && w.key != i)
+                    {
+                        connections.Add(new Connections
+                        {
+                            key = i
+                        });
+                    }
+
+                    haveHit = collisionWorld.SphereCast(from, 0.5f, math.normalizesafe(to - from), dist, new CollisionFilter
+                    {
+                        BelongsTo = 1 << 0,
+                        CollidesWith = 1 << 1
+                    });
+
+                    if (!haveHit && w.key != i)
+                    {
+                        barricadeConnections.Add(new BarricadeConnections
+                        {
+                            key = i
+                        });
+                    }
+                }
+            }
+        }
+    }
 
     protected override void OnStartRunning()
     {
@@ -24,10 +85,11 @@ public partial class GraphConnectionSystem : SystemBase
         var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
         var parallelWriter = waypoints.AsParallelWriter();
 
-        physicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
+        physicsWorld = World.GetExistingSystem<BuildPhysicsWorld>();
         var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
 
         end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        //end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
         var ecb = end.CreateCommandBuffer().AsParallelWriter();
 
         Entities
@@ -38,7 +100,7 @@ public partial class GraphConnectionSystem : SystemBase
                 parallelWriter.TryAdd(entityInQueryIndex, t);
             }).ScheduleParallel();
 
-        Entities
+        /*Entities
             .WithReadOnly(waypoints)
             .WithReadOnly(collisionWorld)
             .ForEach((Entity e, int entityInQueryIndex, in Waypoint w, in Translation t) =>
@@ -84,7 +146,15 @@ public partial class GraphConnectionSystem : SystemBase
                         }
                     }
                 }
-            }).ScheduleParallel();
+            }).ScheduleParallel();*/
+
+        new RecalculateConnectionsJob
+        {
+            waypoints = waypoints,
+            collisionWorld = collisionWorld,
+            voxelData = voxelData,
+            ecbpw = ecb
+        }.ScheduleParallel();
 
         waypoints.Dispose(Dependency);
         end.AddJobHandleForProducer(Dependency);
@@ -106,12 +176,17 @@ public partial class GraphConnectionSystem : SystemBase
                 parallelWriter.TryAdd(w.key, t);
             }).ScheduleParallel();
 
+        if (needsConversion.CalculateEntityCount() > 0)
+        {
+            ready = true;
+        }
+
         // I think this whole system interacts with the RendermeshCullingSystem?
         // It waits for the aformentioned system to do its thing then recalculates the paths
-        //if (onDemand || (!finished && ready && needsConversion.CalculateEntityCount() == 0))
-        if (needsConversion.CalculateEntityCount() == 0)
+        if (onDemand || (!finished && ready && needsConversion.CalculateEntityCount() == 0))
+        //if (needsConversion.CalculateEntityCount() == 0)
         {
-            Entities
+            /*Entities
             .WithReadOnly(waypoints)
             .WithReadOnly(collisionWorld)
             .ForEach((Entity e, int entityInQueryIndex, in Waypoint w, in Translation t) =>
@@ -158,11 +233,25 @@ public partial class GraphConnectionSystem : SystemBase
                     }
                 }
             }).ScheduleParallel();
+            //}).WithoutBurst().Run();*/
+
+            new RecalculateConnectionsJob
+            {
+                waypoints = waypoints,
+                collisionWorld = collisionWorld,
+                voxelData = voxelData,
+                ecbpw = ecb
+            }.ScheduleParallel();
 
             Entities.WithAll<WaypointFollower>().ForEach((Entity e, int entityInQueryIndex) =>
             {
                 ecb.AddComponent<AwaitingNavigationTag>(entityInQueryIndex, e);
             }).ScheduleParallel();
+
+            finished = true;
+            onDemand = false;
+
+            //Debug.Log("running");
         }
 
         //Debug.Log("Needs conversion: " + needsConversion.CalculateEntityCount());
@@ -185,5 +274,8 @@ public partial class GraphConnectionSystem : SystemBase
 
         waypoints.Dispose(Dependency);
         end.AddJobHandleForProducer(Dependency);
+
+        Dependency.Complete();
+
     }
 }

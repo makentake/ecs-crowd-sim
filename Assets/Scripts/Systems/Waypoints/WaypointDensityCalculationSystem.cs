@@ -6,6 +6,8 @@ using Unity.Transforms;
 using Unity.Collections;
 using Unity.Mathematics;
 
+[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+[UpdateBefore(typeof(NavigationSystem))]
 public partial class WaypointDensityCalculationSystem : SystemBase
 {
     protected override void OnStartRunning()

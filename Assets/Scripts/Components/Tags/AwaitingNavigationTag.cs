@@ -6,5 +6,5 @@ using Unity.Entities;
 [GenerateAuthoringComponent]
 public struct AwaitingNavigationTag : IComponentData
 {
-    
+    public bool hasNavigated;
 }

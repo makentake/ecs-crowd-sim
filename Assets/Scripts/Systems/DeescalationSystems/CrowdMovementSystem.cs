@@ -10,7 +10,7 @@ using Unity.Physics;
 // System for moving a riotous crowd
 public partial class CrowdMovementSystem : SystemBase
 {
-    private EndFixedStepSimulationEntityCommandBufferSystem end;
+    private EndFixedStepSimulationEntityCommandBufferSystem end; // USING FIXEDSTEP AGAIN BY ACCIDENT
     private EntityQuery agentQuery, policeQuery;
     private Unity.Physics.Systems.BuildPhysicsWorld physWorld;
 

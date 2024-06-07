@@ -6,11 +6,14 @@ using Random = Unity.Mathematics.Random;
 using Unity.Collections;
 using JetBrains.Annotations;
 
-[UpdateAfter(typeof(CrowdMovementSystem))]
-[UpdateAfter(typeof(GraphConnectionSystem))]
+[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+//[UpdateAfter(typeof(CrowdMovementSystem))]
+//[UpdateAfter(typeof(GraphConnectionSystem))]
+[UpdateAfter(typeof(PedestrianMovementSystem))]
 public partial class SpawningSystem : SystemBase
 {
-    private EndFixedStepSimulationEntityCommandBufferSystem end;
+    private EndVariableRateSimulationEntityCommandBufferSystem end;
+    //private EndSimulationEntityCommandBufferSystem end;
     private bool ready = false;
     public bool finished = false;
 
@@ -46,18 +49,14 @@ public partial class SpawningSystem : SystemBase
 
     protected override void OnStartRunning()
     {
-        end = World.GetOrCreateSystem<EndFixedStepSimulationEntityCommandBufferSystem>();
+        end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
+        //end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 
         // Get the current time to use for random number generation
         uint osTime = (uint)System.DateTime.Now.Ticks;
 
         // Initialize all the random components
         Entities.ForEach((int entityInQueryIndex, ref RioterSpawner s) =>
-        {
-            s.random.InitState((osTime + (uint)entityInQueryIndex) | 0b1);
-        }).ScheduleParallel();
-
-        Entities.ForEach((int entityInQueryIndex, ref PedestrianSpawner s) =>
         {
             s.random.InitState((osTime + (uint)entityInQueryIndex) | 0b1);
         }).ScheduleParallel();
@@ -127,120 +126,12 @@ public partial class SpawningSystem : SystemBase
                     }
                 }
             }).ScheduleParallel();
-
-            // Spawn agents
-            Entities.ForEach((int entityInQueryIndex, ref PedestrianSpawner s, ref Goal g, in Translation translation) =>
-            {
-                if (!s.done)
-                {
-                    // Calculate the goal position
-                    float3 minValue = translation.Value;
-                    float3 maxValue = s.spawnRadius + minValue;
-                    Translation goalPos = GetComponentDataFromEntity<Translation>(true)[s.goal];
-
-                    g.goal = goalPos;
-                    g.exit = GetComponentDataFromEntity<Translation>(true)[s.exit];
-
-                    // Create crowd members
-                    for (int i = 0; i < s.crowdSize; i++)
-                    {
-                        float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
-                        Translation pos = new Translation { Value = spawnPos };
-
-                        Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
-                        ecb.SetComponent(entityInQueryIndex, newAgent, pos);
-                        ecb.SetComponent(entityInQueryIndex, newAgent, g);
-
-                        if (s.random.NextFloat() <= 0.25)
-                        {
-                            Wait tag = new Wait
-                            {
-                                maxTime = 60,
-                                elapsedTime = 0
-                            };
-
-                            ecb.AddComponent(entityInQueryIndex, newAgent, tag);
-                        }
-
-                        if (s.random.NextFloat() <= 0.25)
-                        {
-                            var tag = new YoungTag();
-
-                            ecb.AddComponent(entityInQueryIndex, newAgent, tag);
-                        }
-                    }
-
-                    s.spawned += s.crowdSize;
-
-                    // Stop spawning if the target number of agents has been reached
-                    if (s.spawned >= s.toSpawn)
-                    {
-                        s.done = true;
-                    }
-                }
-            }).ScheduleParallel();
         }
         else
         {
-            EntityQuery pedestrian = GetEntityQuery(ComponentType.ReadOnly<Goal>(), ComponentType.ReadOnly<Pedestrian>(), ComponentType.ReadOnly<Translation>());
-            NativeArray<Goal> pedestrianArray = pedestrian.ToComponentDataArray<Goal>(Allocator.TempJob);
-
             var waypointFollower = GetEntityQuery(ComponentType.ReadOnly<WaypointFollower>(), ComponentType.ReadOnly<Pedestrian>(), ComponentType.ReadOnly<Translation>());
             var waypointFollowerArray = waypointFollower.ToComponentDataArray<WaypointFollower>(Allocator.TempJob);
             Entity presentConverter;
-
-            // Spawn agents
-            Entities.WithReadOnly(pedestrianArray).ForEach((int entityInQueryIndex, ref PedestrianSpawner s, ref Goal g, in Translation translation) =>
-            {
-                s.spawned = 0;
-
-                // Calculate the goal position
-                float3 minValue = translation.Value;
-                float3 maxValue = s.spawnRadius + minValue;
-                Translation goalPos = GetComponentDataFromEntity<Translation>(true)[s.goal];
-
-                g.goal = goalPos;
-                g.exit = GetComponentDataFromEntity<Translation>(true)[s.exit];
-
-                foreach (Goal agent in pedestrianArray)
-                {
-                    if (agent.exit.Value.x == g.exit.Value.x && agent.exit.Value.y == g.exit.Value.y && agent.exit.Value.z == g.exit.Value.z)
-                    {
-                        s.spawned++;
-                    }
-                }
-
-                int spawnsNeeded = s.toSpawn - s.spawned;
-
-                // Create crowd members
-                for (int i = 0; i < spawnsNeeded; i++)
-                {
-                    float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
-                    Translation pos = new Translation { Value = spawnPos };
-
-                    Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, pos);
-                    ecb.SetComponent(entityInQueryIndex, newAgent, g);
-
-                    if (s.random.NextFloat() <= 0.25)
-                    {
-                        Wait tag = new Wait
-                        {
-                            maxTime = 60,
-                            elapsedTime = 0
-                        };
-
-                        ecb.AddComponent(entityInQueryIndex, newAgent, tag);
-                    }
-
-                    if (s.random.NextFloat() <= 0.25)
-                    {
-                        var tag = new YoungTag();
-
-                        ecb.AddComponent(entityInQueryIndex, newAgent, tag);
-                    }
-                }
-            }).ScheduleParallel();
 
             if ((ready && needsConversion.CalculateEntityCount() == 0) || !TryGetSingletonEntity<ConverterPresentTag>(out presentConverter))
             //if (!TryGetSingletonEntity<ConverterPresentTag>(out presentConverter))
@@ -350,7 +241,6 @@ public partial class SpawningSystem : SystemBase
                 finished = false;
             }
 
-            pedestrianArray.Dispose(Dependency);
             waypointFollowerArray.Dispose(Dependency);
         }
 

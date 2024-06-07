@@ -7,7 +7,8 @@ using Unity.Physics.Systems;
 using Unity.Transforms;
 using Unity.Mathematics;
 
-[UpdateBefore(typeof(GraphConnectionSystem))]
+[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+//[UpdateBefore(typeof(GraphConnectionSystem))]
 public partial class VoxelSpawningSystem : SystemBase
 {
     private VoxelizationGenerationEntityCommandBuffer voxelization;

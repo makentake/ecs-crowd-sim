@@ -1,8 +1,10 @@
 using Unity.Entities;
+using Unity.Transforms;
 
-[UpdateBefore(typeof(GraphConnectionSystem))]
+[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+//[UpdateBefore(typeof(GraphConnectionSystem))]
 [UpdateAfter(typeof(VoxelSpawningSystem))]
 public class VoxelizationGenerationEntityCommandBuffer : EntityCommandBufferSystem
 {
-    
+
 }
