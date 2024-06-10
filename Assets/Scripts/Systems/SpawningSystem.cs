@@ -6,14 +6,14 @@ using Random = Unity.Mathematics.Random;
 using Unity.Collections;
 using JetBrains.Annotations;
 
-[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+//[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
 //[UpdateAfter(typeof(CrowdMovementSystem))]
-//[UpdateAfter(typeof(GraphConnectionSystem))]
-[UpdateAfter(typeof(PedestrianMovementSystem))]
+//[UpdateAfter(typeof(PedestrianMovementSystem))]
+[UpdateAfter(typeof(NavigationSystem))]
 public partial class SpawningSystem : SystemBase
 {
-    private EndVariableRateSimulationEntityCommandBufferSystem end;
-    //private EndSimulationEntityCommandBufferSystem end;
+    //private EndVariableRateSimulationEntityCommandBufferSystem end;
+    private EndSimulationEntityCommandBufferSystem end;
     private bool ready = false;
     public bool finished = false;
 
@@ -49,8 +49,8 @@ public partial class SpawningSystem : SystemBase
 
     protected override void OnStartRunning()
     {
-        end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
-        //end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        //end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
+        end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 
         // Get the current time to use for random number generation
         uint osTime = (uint)System.DateTime.Now.Ticks;
