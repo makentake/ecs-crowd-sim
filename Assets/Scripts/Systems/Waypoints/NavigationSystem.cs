@@ -14,21 +14,21 @@ using Unity.Burst;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
 
-[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
-//[UpdateAfter(typeof(GraphConnectionSystem))]
-[UpdateAfter(typeof(VoxelizationGenerationEntityCommandBuffer))]
-[UpdateBefore(typeof(PedestrianMovementSystem))]
+//[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+[UpdateAfter(typeof(GraphConnectionSystem))]
+//[UpdateBefore(typeof(PedestrianMovementSystem))]
+//[UpdateAfter(typeof(VoxelizationGenerationEntityCommandBuffer))]
 public partial class NavigationSystem : SystemBase
 {
     private BuildPhysicsWorld physicsWorld;
-    //private EndSimulationEntityCommandBufferSystem end;
-    private EndVariableRateSimulationEntityCommandBufferSystem end;
+    private EndSimulationEntityCommandBufferSystem end;
+    //private EndVariableRateSimulationEntityCommandBufferSystem end;
     private EntityQuery waypointQuery;
 
     protected override void OnStartRunning()
     {
-        //end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
-        end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
+        end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        //end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
         waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
         physicsWorld = World.GetOrCreateSystem<BuildPhysicsWorld>();
     }
@@ -150,6 +150,8 @@ public partial class NavigationSystem : SystemBase
                 }
 
                 RemoveGivenKey(ref frontier, current);
+
+                if (!waypointBuffers.HasComponent(waypointEntityArray[current])) return;
 
                 foreach (Connections connection in waypointBuffers[waypointEntityArray[current]])
                 {
@@ -380,6 +382,8 @@ public partial class NavigationSystem : SystemBase
                     current = MinimumFinder(frontier, aStarValues);
 
                     RemoveGivenKey(ref frontier, current);
+
+                    if (!waypointBuffers.HasComponent(waypointEntityArray[current])) return;
 
                     foreach (Connections connection in waypointBuffers[waypointEntityArray[current]])
                     {

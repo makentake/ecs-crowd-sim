@@ -8,7 +8,7 @@ public partial class VariableRateManagerSystem : SystemBase
 {
     protected override void OnCreate()
     {
-        var rateManager = new RateUtils.VariableRateManager(17);
+        var rateManager = new RateUtils.VariableRateManager(17*((uint)UnityEngine.Time.timeScale));
         var variableRateSystem = World.GetExistingSystem<VariableRateSimulationSystemGroup>();
         variableRateSystem.RateManager = rateManager;
     }

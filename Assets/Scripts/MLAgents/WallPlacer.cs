@@ -24,9 +24,6 @@ public class WallPlacer : Agent
 
     public Vector2 spawnBounds;
 
-    float t0; // the previous time the thing started at
-    float elapsedTime;
-
     void Start()
     {
         /*for (int i = 0; i < 10; i++)
@@ -34,21 +31,23 @@ public class WallPlacer : Agent
             Instantiate(wall, new Vector3(Random.Range(0, spawnBounds.x), 0, Random.Range(0, spawnBounds.y))+transform.position, Quaternion.Euler(0, Random.Range(0, 360), 0));
         }*/
 
-        t0 = 0f;
-        elapsedTime = 0f;
+        //t0 = 0f;
 
         RequestDecision();
+
+        //World.DefaultGameObjectInjectionWorld.GetExistingSystem<GraphConnectionSystem>().onDemand = true;
     }
 
     private void Update()
     {
         var pms = World.DefaultGameObjectInjectionWorld.GetExistingSystem<PedestrianMovementSystem>();
+        //World.DefaultGameObjectInjectionWorld.GetExistingSystem<GraphConnectionSystem>().onDemand = true;
 
-        //Debug.Log(Time.timeSinceLevelLoad);
+        //Debug.Log(pms.elapsedTime);
 
-        if (Time.timeSinceLevelLoad - t0 >= 60 || (pms.rewards.IsCreated && pms.rewards.Length >= 200))
+        if (pms.elapsedTime >= 60f || (pms.rewards.IsCreated && pms.rewards.Length >= 200))
         {
-            float totalReward = 0;
+            float totalReward = 0f;
 
             foreach (var reward in pms.rewards)
             {
@@ -60,7 +59,7 @@ public class WallPlacer : Agent
             SetReward(totalReward);
 
             pms.rewards.Clear();
-            pms.t0 = Time.time;
+            pms.elapsedTime = 0f;
 
             EndEpisode();
         }
@@ -106,7 +105,6 @@ public class WallPlacer : Agent
     public override void OnEpisodeBegin()
     {
         World.DefaultGameObjectInjectionWorld.GetExistingSystem<SpawningSystem>().finished = true;
-        t0 = Time.timeSinceLevelLoad;
         RequestDecision();
         //Debug.Log("Episode begins");
 

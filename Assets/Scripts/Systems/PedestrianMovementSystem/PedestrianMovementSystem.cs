@@ -17,7 +17,7 @@ using Debug = UnityEngine.Debug;
 public partial class PedestrianMovementSystem : SystemBase
 {
     public NativeList<float> rewards;
-    public float t0;
+    public float elapsedTime;
 
     private EndVariableRateSimulationEntityCommandBufferSystem end;
     //private EndSimulationEntityCommandBufferSystem end;
@@ -36,7 +36,7 @@ public partial class PedestrianMovementSystem : SystemBase
         physicsWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
 
         rewards = new NativeList<float>(200, Allocator.Persistent);
-        t0 = 0f;
+        elapsedTime = 0f;
     }
 
     protected override void OnDestroy()
@@ -65,6 +65,8 @@ public partial class PedestrianMovementSystem : SystemBase
         var lightTranslation = lightQuery.ToComponentDataArray<Translation>(Allocator.TempJob);
         var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
         var waypointsParallelWriter = waypoints.AsParallelWriter();
+
+        elapsedTime += dt;
 
         //Debug.Log("deltaTime: " + dt);
 
@@ -174,7 +176,7 @@ public partial class PedestrianMovementSystem : SystemBase
         {
             collisionWorld = collisionWorld,
             waypointArray = waypoints,
-            elapsedTime = UnityEngine.Time.timeSinceLevelLoad - t0,
+            elapsedTime = elapsedTime,
             ecb = end.CreateCommandBuffer(), // DON'T USE PARALLEL COMMAND BUFFERS IN SINGLE-THREADED JOBS
             results = rewards
             //}.ScheduleParallel();

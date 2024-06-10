@@ -6,7 +6,8 @@ using Unity.Transforms;
 using Unity.Collections;
 using Unity.Mathematics;
 
-[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+//[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
+[UpdateAfter(typeof(VoxelizationGenerationEntityCommandBuffer))]
 [UpdateBefore(typeof(NavigationSystem))]
 public partial class WaypointDensityCalculationSystem : SystemBase
 {

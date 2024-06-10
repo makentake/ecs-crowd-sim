@@ -11,6 +11,7 @@ using Unity.Burst;
 
 //[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
 //[UpdateBefore(typeof(PedestrianMovementSystem))]
+//[UpdateBefore(typeof(VariableRateSimulationSystemGroup))]
 public partial class GraphConnectionSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem end;
@@ -79,6 +80,7 @@ public partial class GraphConnectionSystem : SystemBase
 
     protected override void OnStartRunning()
     {
+        //onDemand = GameObject.FindObjectOfType<WallPlacer>() != null;
         var voxelData = GetSingleton<VoxelSpawner>();
 
         waypointQuery = GetEntityQuery(ComponentType.ReadOnly<Waypoint>(), ComponentType.ReadOnly<Translation>());
@@ -183,7 +185,7 @@ public partial class GraphConnectionSystem : SystemBase
 
         // I think this whole system interacts with the RendermeshCullingSystem?
         // It waits for the aformentioned system to do its thing then recalculates the paths
-        if (onDemand || (!finished && ready && needsConversion.CalculateEntityCount() == 0))
+        if ((onDemand && needsConversion.CalculateEntityCount() > 0) || (!finished && ready && needsConversion.CalculateEntityCount() == 0))
         //if (needsConversion.CalculateEntityCount() == 0)
         {
             /*Entities
@@ -249,7 +251,7 @@ public partial class GraphConnectionSystem : SystemBase
             }).ScheduleParallel();
 
             finished = true;
-            onDemand = false;
+            //onDemand = false;
 
             //Debug.Log("running");
         }

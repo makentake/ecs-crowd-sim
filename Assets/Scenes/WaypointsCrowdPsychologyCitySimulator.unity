@@ -327,7 +327,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7074959570525628304, guid: b71a3f1c9f6dd76488b88b4566c85e7a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7074959570525628316, guid: b71a3f1c9f6dd76488b88b4566c85e7a, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2175,7 +2175,7 @@ PrefabInstance:
       objectReference: {fileID: 6555772023942994503, guid: 17d0f141194c5e14c825ca38aa4df922, type: 3}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
-      value: 750
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: percentYoung
@@ -3112,7 +3112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7074959570525628304, guid: b71a3f1c9f6dd76488b88b4566c85e7a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7074959570525628316, guid: b71a3f1c9f6dd76488b88b4566c85e7a, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -3333,7 +3333,7 @@ PrefabInstance:
       objectReference: {fileID: 6555772023942994503, guid: 17d0f141194c5e14c825ca38aa4df922, type: 3}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
-      value: 750
+      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: percentYoung

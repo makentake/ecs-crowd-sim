@@ -134,6 +134,8 @@ public partial class NavigationSystem : SystemBase
 
                 RemoveGivenKey(ref frontier, current);
 
+                if (!waypointBuffers.HasComponent(waypointEntityArray[current])) return;
+
                 foreach (BarricadeConnections connection in waypointBuffers[waypointEntityArray[current]])
                 {
                     int neighbour = connection.key;
@@ -363,6 +365,8 @@ public partial class NavigationSystem : SystemBase
                     current = MinimumFinder(frontier, aStarValues);
 
                     RemoveGivenKey(ref frontier, current);
+
+                    if (!waypointBuffers.HasComponent(waypointEntityArray[current])) return;
 
                     foreach (BarricadeConnections connection in waypointBuffers[waypointEntityArray[current]])
                     {
