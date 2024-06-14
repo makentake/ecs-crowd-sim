@@ -72,7 +72,7 @@ public class WallPlacer : Agent
         Debug.Log(actions.ContinuousActions[1]);
         Debug.Log(actions.ContinuousActions[2]);*/
 
-        for (int i = 0; i < actions.DiscreteActions[0]; i++)
+        for (int i = 0; i < actions.DiscreteActions[0] + 1; i++)
         {
             //Debug.Log(actions.ContinuousActions[i]);
             Instantiate(wall, new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i+1])) + transform.position, Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[i+2]), 0));
@@ -85,9 +85,9 @@ public class WallPlacer : Agent
         var contActions = actionsOut.ContinuousActions;
 
         //discActions[0] = Random.Range(0, 10);
-        discActions[0] = Random.Range(0, 2);
+        discActions[0] = 0;
 
-        for (int i = 0; i < discActions[0]; i += 3)
+        for (int i = 0; i < discActions[0] + 1; i += 3)
         {
             contActions[i] = Random.Range(0f, 1f);
             contActions[i+1] = Random.Range(0f, 1f);

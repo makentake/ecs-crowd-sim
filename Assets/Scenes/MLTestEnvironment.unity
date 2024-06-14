@@ -243,7 +243,7 @@ MonoBehaviour:
   wall: {fileID: 7074959570525628304, guid: d46cc4a716bb2a044883b467606ec1fa, type: 3}
   goal: {fileID: 653885754}
   spawn: {fileID: 208051152}
-  spawnBounds: {x: 40, y: 120}
+  spawnBounds: {x: 24, y: 65}
 --- !u!114 &838090072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +261,7 @@ MonoBehaviour:
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 3
-      BranchSizes: 02000000
+      BranchSizes: 01000000
     VectorActionSize: 
     VectorActionDescriptions: []
     VectorActionSpaceType: 0
@@ -283,7 +283,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 838090070}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -52.44, y: 1.5, z: -78.3}
+  m_LocalPosition: {x: -44.21, y: 1.5, z: -45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

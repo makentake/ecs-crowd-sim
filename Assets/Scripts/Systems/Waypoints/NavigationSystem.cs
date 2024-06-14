@@ -505,7 +505,7 @@ public partial class NavigationSystem : SystemBase
 
                     if (dist <= p.maxDist && dist <= minDist)
                     {
-                        var input = new RaycastInput
+                        /*var input = new RaycastInput
                         {
                             Start = t.Value,
                             End = waypoints[i].Value,
@@ -520,7 +520,20 @@ public partial class NavigationSystem : SystemBase
                         {
                             minDistKey = i;
                             minDist = dist;
+                        }*/
+
+                        var to = waypoints[i].Value-t.Value;
+
+                        if (!collisionWorld.SphereCast(t.Value, 0.5f, math.normalizesafe(to), math.length(to), new CollisionFilter
+                        {
+                            BelongsTo = 1 << 0,
+                            CollidesWith = 3 << 1
+                        }))
+                        {
+                            minDistKey = i;
+                            minDist = dist;
                         }
+
                     }
                 }
 
