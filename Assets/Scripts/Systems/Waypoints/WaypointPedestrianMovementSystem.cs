@@ -379,19 +379,22 @@ public partial class PedestrianMovementSystem : SystemBase
             v.Angular = math.float3(0,0,0);
             v.Linear = math.float3(0,0,0);
 
-            r.Value = math.slerp(r.Value, quaternion.LookRotation(final, math.up()), math.clamp(1f, 0f, deltaTime * p.rotSpeed));
-
-            if (p.isClimbing)
+            if (!isZero)
             {
-                t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
+                r.Value = math.slerp(r.Value, quaternion.LookRotation(final, math.up()), math.clamp(1f, 0f, deltaTime * p.rotSpeed));
 
-                t.Value += math.forward(r.Value) * (p.speed / 2) * deltaTime;
-            }
-            else
-            {
-                t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
+                if (p.isClimbing)
+                {
+                    t.Value -= math.float3(0, t.Value.y - 3.5f, 0);
 
-                t.Value += math.forward(r.Value) * p.speed * deltaTime;
+                    t.Value += math.forward(r.Value) * (p.speed / 2) * deltaTime;
+                }
+                else
+                {
+                    t.Value -= math.float3(0, t.Value.y - 1.5f, 0);
+
+                    t.Value += math.forward(r.Value) * p.speed * deltaTime;
+                }
             }
         }
     }

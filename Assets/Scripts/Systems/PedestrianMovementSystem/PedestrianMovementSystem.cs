@@ -35,7 +35,7 @@ public partial class PedestrianMovementSystem : SystemBase
         //end = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         physicsWorld = World.GetOrCreateSystem<Unity.Physics.Systems.BuildPhysicsWorld>();
 
-        rewards = new NativeList<float>(200, Allocator.Persistent);
+        rewards = new NativeList<float>(400, Allocator.Persistent);
         elapsedTime = 0f;
     }
 

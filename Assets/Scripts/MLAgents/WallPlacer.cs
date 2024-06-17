@@ -45,7 +45,7 @@ public class WallPlacer : Agent
 
         //Debug.Log(pms.elapsedTime);
 
-        if (pms.elapsedTime >= 60f || (pms.rewards.IsCreated && pms.rewards.Length >= 200))
+        if (pms.elapsedTime >= 60f || (pms.rewards.IsCreated && pms.rewards.Length >= 400))
         {
             float totalReward = 0f;
 
