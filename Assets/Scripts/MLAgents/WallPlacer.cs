@@ -54,7 +54,7 @@ public class WallPlacer : Agent
                 totalReward += reward;
             }
 
-            Debug.Log($"Total reward: {totalReward}");
+            Debug.Log($"Total reward: {totalReward}, elapsed time: {pms.elapsedTime}");
 
             SetReward(totalReward);
 
