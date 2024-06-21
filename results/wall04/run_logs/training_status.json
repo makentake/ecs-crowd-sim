@@ -1,0 +1,65 @@
+{
+    "WallPlacer": {
+        "checkpoints": [
+            {
+                "steps": 179999,
+                "file_path": "results\\wall04\\WallPlacer\\WallPlacer-179999.onnx",
+                "reward": 19.746942967793217,
+                "creation_time": 1718931423.5185506,
+                "auxillary_file_paths": [
+                    "results\\wall04\\WallPlacer\\WallPlacer-179999.pt"
+                ]
+            },
+            {
+                "steps": 189999,
+                "file_path": "results\\wall04\\WallPlacer\\WallPlacer-189999.onnx",
+                "reward": 19.73791097783078,
+                "creation_time": 1718946083.3040135,
+                "auxillary_file_paths": [
+                    "results\\wall04\\WallPlacer\\WallPlacer-189999.pt"
+                ]
+            },
+            {
+                "steps": 199999,
+                "file_path": "results\\wall04\\WallPlacer\\WallPlacer-199999.onnx",
+                "reward": 19.750760334633203,
+                "creation_time": 1718960726.3138847,
+                "auxillary_file_paths": [
+                    "results\\wall04\\WallPlacer\\WallPlacer-199999.pt"
+                ]
+            },
+            {
+                "steps": 209999,
+                "file_path": "results\\wall04\\WallPlacer\\WallPlacer-209999.onnx",
+                "reward": 19.74527894652765,
+                "creation_time": 1718975359.7357416,
+                "auxillary_file_paths": [
+                    "results\\wall04\\WallPlacer\\WallPlacer-209999.pt"
+                ]
+            },
+            {
+                "steps": 218357,
+                "file_path": "results\\wall04\\WallPlacer\\WallPlacer-218357.onnx",
+                "reward": 19.74271414359626,
+                "creation_time": 1718987589.5967295,
+                "auxillary_file_paths": [
+                    "results\\wall04\\WallPlacer\\WallPlacer-218357.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 218357,
+            "file_path": "results\\wall04\\WallPlacer.onnx",
+            "reward": 19.74271414359626,
+            "creation_time": 1718987589.5967295,
+            "auxillary_file_paths": [
+                "results\\wall04\\WallPlacer\\WallPlacer-218357.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

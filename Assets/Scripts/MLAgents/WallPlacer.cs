@@ -45,7 +45,7 @@ public class WallPlacer : Agent
 
         //Debug.Log(pms.elapsedTime);
 
-        if (pms.elapsedTime >= 60f || (pms.rewards.IsCreated && pms.rewards.Length >= 400))
+        if (pms.elapsedTime >= 60f || (pms.rewards.IsCreated && pms.rewards.Length >= 600))
         {
             float totalReward = 0f;
 
@@ -75,7 +75,8 @@ public class WallPlacer : Agent
         for (int i = 0; i < actions.DiscreteActions[0] + 1; i++)
         {
             //Debug.Log(actions.ContinuousActions[i]);
-            Instantiate(wall, new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i+1])) + transform.position, Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[i+2]), 0));
+            var newWall = Instantiate(wall, new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i+1])) + transform.position, Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[i+2]), 0));
+            newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y, newWall.transform.localScale.z*Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[i + 3]), 0.1f, 1f));
         }
     }
 
@@ -92,7 +93,10 @@ public class WallPlacer : Agent
             contActions[i] = Random.Range(0f, 1f);
             contActions[i+1] = Random.Range(0f, 1f);
             contActions[i+2] = Random.Range(0f, 1f);
+            contActions[i+3] = Random.Range(0f, 1f);
         }
+
+        Debug.Log(contActions[3]);
     }
 
     public override void CollectObservations(VectorSensor sensor)

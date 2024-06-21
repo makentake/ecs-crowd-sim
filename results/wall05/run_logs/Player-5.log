@@ -1,0 +1,439 @@
+Mono path[0] = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Managed'
+Mono config path = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/MonoBleedingEdge/etc'
+Initialize engine version: 2020.3.48f1 (b805b124c6b7)
+[Subsystems] Discovering subsystems at path C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Completed reload, in  1.883 seconds
+ERROR: Shader Hidden/Universal Render Pipeline/Blit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CopyDepth shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/ScreenSpaceShadows shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Sampling shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderLdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderHdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/UberPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Stop NaN shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/PaniniProjection shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/SubpixelMorphologicalAntialiasing shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/FinalPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/StencilDeferred shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/BokehDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CameraMotionBlur shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/GaussianDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Bloom shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Sprites/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+ERROR: Shader Sprites/Mask shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Universal Render Pipeline/Lit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 6.799000 ms
+No SRP present, no compute shader support, or running with -nographics. Hybrid Renderer disabled
+Warning: No Graphics Device found. Deformation systems will not run.
+NullReferenceException: Object reference not set to an instance of an object
+  at Unity.Scenes.ResourceCatalogData.GetGUIDFromPath (System.String path) [0x000b8] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.SceneSystem.GetSceneGUID (System.String scenePath) [0x0000c] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.GameObjectSceneUtility.AddGameObjectSceneReferences () [0x00044] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Entities.AutomaticWorldBootstrap.Initialize () [0x0000d] in <5b4f729cfdd14b019dc7af518decdec6>:0 
+
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ScaleableWall/CrowdSim_Data/Mono/libSystem.dylib
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Total reward: 22.82831, elapsed time: 53.3796
+Total reward: 20.12568, elapsed time: 60.00953
+Total reward: 23.25244, elapsed time: 60.00953
+Total reward: 23.41693, elapsed time: 54.82459
+Total reward: 22.59752, elapsed time: 60.00953
+Total reward: 9.763731, elapsed time: 60.00953
+Total reward: 10.52131, elapsed time: 60.00953
+Total reward: 23.19753, elapsed time: 60.00953
+Total reward: 22.34012, elapsed time: 60.00953
+Total reward: 23.11417, elapsed time: 53.8896
+Total reward: 11.89723, elapsed time: 60.00953
+Total reward: 10.80846, elapsed time: 60.00953
+Total reward: 22.46215, elapsed time: 60.00953
+Total reward: 9.028934, elapsed time: 60.00953
+Total reward: 9.038722, elapsed time: 60.00953
+Total reward: 10.89705, elapsed time: 60.00953
+Total reward: 10.2049, elapsed time: 60.00953
+Total reward: 10.13507, elapsed time: 60.00953
+Total reward: 11.51595, elapsed time: 60.00953
+Total reward: 22.0854, elapsed time: 53.8896
+Total reward: 23.05712, elapsed time: 60.00953
+Total reward: 10.05196, elapsed time: 60.00953
+Total reward: 10.87181, elapsed time: 60.00953
+Total reward: 22.60173, elapsed time: 60.00953
+Total reward: 23.32965, elapsed time: 60.00953
+Total reward: 20.29293, elapsed time: 56.86457
+Total reward: 11.25226, elapsed time: 60.00953
+Total reward: 11.054, elapsed time: 60.00953
+Total reward: 23.01035, elapsed time: 53.6346
+Total reward: 23.07318, elapsed time: 60.00953
+Total reward: 11.56249, elapsed time: 60.00953
+Total reward: 10.99347, elapsed time: 60.00953
+Total reward: 23.13012, elapsed time: 60.00953
+Total reward: 22.65848, elapsed time: 60.00953
+Total reward: 23.08329, elapsed time: 53.03961
+Total reward: 23.90157, elapsed time: 50.48964
+Total reward: 21.79131, elapsed time: 60.00953
+Total reward: 22.86695, elapsed time: 60.00953
+Total reward: 23.1791, elapsed time: 60.00953
+Total reward: 23.60109, elapsed time: 52.01962
+Total reward: 23.35489, elapsed time: 50.99963
+Total reward: 12.12955, elapsed time: 60.00953
+Total reward: 10.25884, elapsed time: 60.00953
+Total reward: 23.46013, elapsed time: 51.93462
+Total reward: 22.37293, elapsed time: 60.00953
+Total reward: 23.87068, elapsed time: 51.67962
+Total reward: 10.16751, elapsed time: 60.00953
+Total reward: 10.57983, elapsed time: 60.00953
+Total reward: 22.96536, elapsed time: 60.00953
+Total reward: 23.85439, elapsed time: 54.90959
+Total reward: 23.53536, elapsed time: 57.11956
+Total reward: 21.79317, elapsed time: 60.00953
+Total reward: 11.22871, elapsed time: 60.00953
+Total reward: 10.82405, elapsed time: 60.00953
+Total reward: 23.26073, elapsed time: 60.00953
+Total reward: 12.05221, elapsed time: 60.00953
+Total reward: 10.43563, elapsed time: 60.00953
+Total reward: 23.22312, elapsed time: 60.00953
+Total reward: 23.81813, elapsed time: 57.37456
+Total reward: 22.64927, elapsed time: 60.00953
+Total reward: 23.88314, elapsed time: 51.08463
+Total reward: 22.24392, elapsed time: 60.00953
+Total reward: 23.04009, elapsed time: 54.39959
+Total reward: 23.20495, elapsed time: 60.00953
+Total reward: 22.53408, elapsed time: 55.33458
+Total reward: 9.775329, elapsed time: 60.00953
+Total reward: 11.11992, elapsed time: 60.00953
+Total reward: 23.47869, elapsed time: 52.35962
+Total reward: 24.04197, elapsed time: 60.00953
+Total reward: 23.42032, elapsed time: 50.82963
+Total reward: 22.74708, elapsed time: 60.00953
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 23.10485, elapsed time: 51.84962
+Total reward: 23.3675, elapsed time: 60.00953
+Total reward: 23.08117, elapsed time: 55.16459
+Total reward: 12.10689, elapsed time: 60.00953
+Total reward: 10.49515, elapsed time: 60.00953
+Total reward: 12.01326, elapsed time: 60.00953
+Total reward: 10.71236, elapsed time: 60.00953
+Total reward: 23.38166, elapsed time: 55.84458
+Total reward: 23.03258, elapsed time: 52.95461
+Total reward: 20.672, elapsed time: 60.00953
+Total reward: 22.86403, elapsed time: 60.00953
+Total reward: 23.69048, elapsed time: 51.16963
+Total reward: 20.37142, elapsed time: 60.00953
+Total reward: 22.51598, elapsed time: 60.00953
+Total reward: 22.58903, elapsed time: 56.77957
+Total reward: 23.0113, elapsed time: 60.00953
+Total reward: 21.99996, elapsed time: 60.00953
+Total reward: 22.82447, elapsed time: 60.00953
+Total reward: 23.71116, elapsed time: 52.69961
+Total reward: 23.42068, elapsed time: 60.00953
+Total reward: 23.9578, elapsed time: 48.19466
+Total reward: 22.57826, elapsed time: 58.90454
+Total reward: 23.81556, elapsed time: 55.50458
+Total reward: 22.42633, elapsed time: 60.00953
+Total reward: 21.16852, elapsed time: 60.00953
+Total reward: 22.11118, elapsed time: 55.24958
+Total reward: 22.04263, elapsed time: 55.16459
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 11.29985, elapsed time: 60.00953
+Total reward: 9.709561, elapsed time: 60.00953
+Total reward: 22.70619, elapsed time: 54.73959
+Total reward: 22.13791, elapsed time: 60.00953
+Total reward: 22.3047, elapsed time: 60.00953
+Total reward: 21.88984, elapsed time: 60.00953
+Total reward: 11.94979, elapsed time: 60.00953
+Total reward: 10.0792, elapsed time: 60.00953
+Total reward: 23.51112, elapsed time: 49.97964
+Total reward: 20.94065, elapsed time: 60.00953
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 9.129733, elapsed time: 60.00953
+Total reward: 10.77614, elapsed time: 60.00953
+Total reward: 22.89397, elapsed time: 60.00953
+Total reward: 22.61901, elapsed time: 60.00953
+Total reward: 12.21258, elapsed time: 60.00953
+Total reward: 11.27164, elapsed time: 60.00953
+Total reward: 9.449643, elapsed time: 60.00953
+Total reward: 12.08309, elapsed time: 60.00953
+Total reward: 0, elapsed time: 60.00953
+Total reward: 0, elapsed time: 60.00953
+Total reward: 23.71924, elapsed time: 51.16963
+Total reward: 21.11701, elapsed time: 60.00953
+Total reward: 22.91111, elapsed time: 60.00953
+Total reward: 22.84233, elapsed time: 54.31459
+Total reward: 22.48659, elapsed time: 60.00953
+Total reward: 23.9238, elapsed time: 51.33963
+Total reward: 22.93583, elapsed time: 60.00953
+Total reward: 23.09803, elapsed time: 52.78461
+Total reward: 22.9266, elapsed time: 60.00953
+Total reward: 23.60294, elapsed time: 51.84962
+Total reward: 22.92888, elapsed time: 50.74463
+Total reward: 23.05704, elapsed time: 60.00953
+Total reward: 23.1053, elapsed time: 60.00953
+Total reward: 23.33604, elapsed time: 52.27462
+Total reward: 23.0177, elapsed time: 53.03961
+Total reward: 11.95546, elapsed time: 60.00953
+Total reward: 10.4402, elapsed time: 60.00953
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 22.3652, elapsed time: 54.90959
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Total reward: 23.13014, elapsed time: 60.00953
+Total reward: 23.68071, elapsed time: 51.16963
+Total reward: 10.16964, elapsed time: 60.00953
+Total reward: 10.97581, elapsed time: 60.00953
+Total reward: 22.93796, elapsed time: 54.31459
+Total reward: 22.93852, elapsed time: 60.00953
+Total reward: 22.7251, elapsed time: 60.00953
+Total reward: 23.58057, elapsed time: 51.16963
+Total reward: 12.162, elapsed time: 60.00953
+Total reward: 0, elapsed time: 60.00953
+Total reward: 0, elapsed time: 60.00953
+Total reward: 11.0728, elapsed time: 60.00953
+Total reward: 23.7558, elapsed time: 54.56959
+Total reward: 9.5444, elapsed time: 60.00953
+Total reward: 8.401329, elapsed time: 60.00953
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Total reward: 23.24245, elapsed time: 60.00953
+Total reward: 23.39383, elapsed time: 55.07959
+Total reward: 23.35328, elapsed time: 60.00953
+Total reward: 23.37927, elapsed time: 60.00953
+Total reward: 23.85042, elapsed time: 52.35962
+Total reward: 23.31125, elapsed time: 51.08463
+Total reward: 21.32447, elapsed time: 60.00953
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Total reward: 22.98924, elapsed time: 51.16963
+Total reward: 22.72743, elapsed time: 60.00953
+Total reward: 23.0895, elapsed time: 60.00953
+Total reward: 24.36908, elapsed time: 60.00953
+Total reward: 22.79427, elapsed time: 60.00953
+Total reward: 23.54386, elapsed time: 53.4646
+Total reward: 12.06581, elapsed time: 60.00953
+Total reward: 10.81086, elapsed time: 60.00953
+Total reward: 23.43408, elapsed time: 60.00953
+Total reward: 22.69571, elapsed time: 60.00953
+Total reward: 23.00477, elapsed time: 60.00953
+Total reward: 22.91898, elapsed time: 60.00953
+Total reward: 22.6862, elapsed time: 55.16459
+Total reward: 23.46783, elapsed time: 60.00953
+Total reward: 23.45652, elapsed time: 60.00953
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 6)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Total reward: 22.75382, elapsed time: 60.00953
+Total reward: 22.6253, elapsed time: 58.13955
+Total reward: 23.2696, elapsed time: 52.61461
+Total reward: 23.04196, elapsed time: 60.00953
+Total reward: 21.19779, elapsed time: 60.00953
+Total reward: 22.6671, elapsed time: 53.29461
+Total reward: 22.82093, elapsed time: 55.16459
+Total reward: 24.01661, elapsed time: 55.50458
+Total reward: 21.75501, elapsed time: 60.00953
+Total reward: 23.27768, elapsed time: 49.21465
+Total reward: 10.02051, elapsed time: 60.00953
+Total reward: 11.05399, elapsed time: 60.00953
+Total reward: 23.30116, elapsed time: 60.00953
+Total reward: 23.06827, elapsed time: 52.95461
+Total reward: 23.38011, elapsed time: 60.00953
+Total reward: 20.91464, elapsed time: 60.00953
+Total reward: 22.92443, elapsed time: 60.00953
+Total reward: 22.61609, elapsed time: 60.00953
+Total reward: 22.53066, elapsed time: 53.8046
+Total reward: 23.23795, elapsed time: 60.00953
+Total reward: 23.42259, elapsed time: 51.50962
+Total reward: 20.01732, elapsed time: 60.00953
+Total reward: 22.754, elapsed time: 60.00953
+Total reward: 23.57629, elapsed time: 54.73959
+Total reward: 23.66102, elapsed time: 51.76462
+Total reward: 1.005553, elapsed time: 60.00953
+Total reward: 0.625151, elapsed time: 60.00953
+Total reward: 23.23559, elapsed time: 51.93462
+Total reward: 23.62121, elapsed time: 49.72464
+Total reward: 22.38173, elapsed time: 60.00953
+Total reward: 23.01256, elapsed time: 60.00953
+Total reward: 22.43845, elapsed time: 60.00953
+Total reward: 12.2701, elapsed time: 60.00953
+Total reward: 10.93591, elapsed time: 60.00953
+Total reward: 20.72354, elapsed time: 60.00953
+Total reward: 22.54243, elapsed time: 53.6346
+Total reward: 22.93854, elapsed time: 60.00953
+Total reward: 9.353834, elapsed time: 60.00953
+Total reward: 8.773416, elapsed time: 60.00953
+Total reward: 23.34364, elapsed time: 60.00953
+Total reward: 23.10454, elapsed time: 52.44461
+Total reward: 23.27569, elapsed time: 52.10462
+Total reward: 23.71513, elapsed time: 50.14964
+Total reward: 23.20782, elapsed time: 53.4646
+Total reward: 22.63633, elapsed time: 60.00953
+Total reward: 23.26296, elapsed time: 60.00953
+Total reward: 23.6875, elapsed time: 51.33963
+Total reward: 21.27159, elapsed time: 60.00953
+Total reward: 23.31993, elapsed time: 60.00953
+Total reward: 23.2992, elapsed time: 52.44461
+Total reward: 20.27627, elapsed time: 60.00953
+Total reward: 22.96126, elapsed time: 60.00953
+Total reward: 23.57106, elapsed time: 49.97964
+Total reward: 23.53819, elapsed time: 49.63964
+Total reward: 23.19962, elapsed time: 51.16963
+Total reward: 21.61079, elapsed time: 60.00953
+Total reward: 23.13175, elapsed time: 52.10462
+Total reward: 22.74514, elapsed time: 53.9746
+Total reward: 17.84981, elapsed time: 60.00953
+Total reward: 22.74128, elapsed time: 60.00953
+Total reward: 23.64855, elapsed time: 50.74463
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Internal: deleting an allocation that is older than its permitted lifetime of 4 frames (age = 5)
+Total reward: 23.32713, elapsed time: 60.00953
+Total reward: 22.59318, elapsed time: 60.00953
+Total reward: 23.01775, elapsed time: 60.00953
+Total reward: 24.12057, elapsed time: 52.27462
+Total reward: 23.43472, elapsed time: 60.00953
+Total reward: 23.45332, elapsed time: 51.25463
+Total reward: 22.42528, elapsed time: 60.00953
+Total reward: 23.71953, elapsed time: 49.89464
+Total reward: 22.9622, elapsed time: 52.27462
+Total reward: 22.04022, elapsed time: 60.00953
+Total reward: 23.78214, elapsed time: 56.43957
+Total reward: 22.20254, elapsed time: 60.00953
+Total reward: 22.6708, elapsed time: 60.00953
+Total reward: 22.74414, elapsed time: 60.00953
+Total reward: 23.58223, elapsed time: 51.33963
+Total reward: 22.71256, elapsed time: 60.00953
