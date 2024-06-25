@@ -2,33 +2,6 @@
     "WallPlacer": {
         "checkpoints": [
             {
-                "steps": 100442,
-                "file_path": "results\\wall05\\WallPlacer\\WallPlacer-100442.onnx",
-                "reward": 20.646717934995085,
-                "creation_time": 1719247313.9706187,
-                "auxillary_file_paths": [
-                    "results\\wall05\\WallPlacer\\WallPlacer-100442.pt"
-                ]
-            },
-            {
-                "steps": 101954,
-                "file_path": "results\\wall05\\WallPlacer\\WallPlacer-101954.onnx",
-                "reward": 20.934572890952783,
-                "creation_time": 1719255487.6777513,
-                "auxillary_file_paths": [
-                    "results\\wall05\\WallPlacer\\WallPlacer-101954.pt"
-                ]
-            },
-            {
-                "steps": 105909,
-                "file_path": "results\\wall05\\WallPlacer\\WallPlacer-105909.onnx",
-                "reward": 20.828348400603065,
-                "creation_time": 1719267636.5534575,
-                "auxillary_file_paths": [
-                    "results\\wall05\\WallPlacer\\WallPlacer-105909.pt"
-                ]
-            },
-            {
                 "steps": 109999,
                 "file_path": "results\\wall05\\WallPlacer\\WallPlacer-109999.onnx",
                 "reward": 21.061160081348206,
@@ -45,15 +18,42 @@
                 "auxillary_file_paths": [
                     "results\\wall05\\WallPlacer\\WallPlacer-118616.pt"
                 ]
+            },
+            {
+                "steps": 119999,
+                "file_path": "results\\wall05\\WallPlacer\\WallPlacer-119999.onnx",
+                "reward": 18.372715082189266,
+                "creation_time": 1719304127.392455,
+                "auxillary_file_paths": [
+                    "results\\wall05\\WallPlacer\\WallPlacer-119999.pt"
+                ]
+            },
+            {
+                "steps": 129999,
+                "file_path": "results\\wall05\\WallPlacer\\WallPlacer-129999.onnx",
+                "reward": 18.28284308405902,
+                "creation_time": 1719324223.6977417,
+                "auxillary_file_paths": [
+                    "results\\wall05\\WallPlacer\\WallPlacer-129999.pt"
+                ]
+            },
+            {
+                "steps": 139925,
+                "file_path": "results\\wall05\\WallPlacer\\WallPlacer-139925.onnx",
+                "reward": 18.391539943639312,
+                "creation_time": 1719344171.286013,
+                "auxillary_file_paths": [
+                    "results\\wall05\\WallPlacer\\WallPlacer-139925.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 118616,
+            "steps": 139925,
             "file_path": "results\\wall05\\WallPlacer.onnx",
-            "reward": 21.233959671931203,
-            "creation_time": 1719300374.9576786,
+            "reward": 18.391539943639312,
+            "creation_time": 1719344171.286013,
             "auxillary_file_paths": [
-                "results\\wall05\\WallPlacer\\WallPlacer-118616.pt"
+                "results\\wall05\\WallPlacer\\WallPlacer-139925.pt"
             ]
         }
     },
