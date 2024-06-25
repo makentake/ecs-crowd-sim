@@ -75,8 +75,11 @@ public class WallPlacer : Agent
         for (int i = 0; i < actions.DiscreteActions[0] + 1; i++)
         {
             //Debug.Log(actions.ContinuousActions[i]);
-            var newWall = Instantiate(wall, new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i+1])) + transform.position, Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[i+2]), 0));
-            newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y, newWall.transform.localScale.z*Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[i + 3]), 0.1f, 1f));
+            var newWall = Instantiate(wall, 
+                new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i+1])) + transform.position, 
+                Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[i+2]), 0));
+            newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y, 
+                newWall.transform.localScale.z*Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[i + 3]), 0.5f, 1f));
         }
     }
 
