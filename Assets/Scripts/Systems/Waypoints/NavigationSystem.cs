@@ -116,6 +116,8 @@ public partial class NavigationSystem : SystemBase
         // ChatGPT lied to me. This is now been modified according to actual A* pseudocode
         public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref AwaitingNavigationTag a, ref WaypointFollower f, in Pedestrian p, in Translation t, in DynamicBuffer<GoalKeyList> g)
         {
+            if (!a.foundStart) return;
+
             // Each float2 will contain the following information about the waypoint: g, f. The key is the index
             var aStarValues = new NativeParallelHashMap<int, float2>(waypointCount, Allocator.Temp);
             var parents = new NativeParallelHashMap<int, int>(waypointCount, Allocator.Temp);
@@ -352,8 +354,10 @@ public partial class NavigationSystem : SystemBase
 
         // Pseudocode kindly provided by ChatGPT, implemented by me
         // ChatGPT lied to me. This is now been modified according to actual A* pseudocode
-        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, ref DynamicBuffer<GoalKeyList> g, ref DynamicBuffer<RendezvousPosList> r, in Pedestrian p, in Translation t)
+        public void Execute(Entity e, [EntityInQueryIndex] int entityInQueryIndex, ref WaypointFollower f, ref DynamicBuffer<GoalKeyList> g, ref DynamicBuffer<RendezvousPosList> r, in AwaitingNavigationTag a, in Pedestrian p, in Translation t)
         {
+            if (!a.foundStart || !a.hasNavigated) return;
+
             // Each float2 will contain the following information about the waypoint: g, f. The key is the index
             var aStarValues = new NativeParallelHashMap<int, float2>(waypointCount, Allocator.Temp);
             var parents = new NativeParallelHashMap<int, int>(waypointCount, Allocator.Temp);
@@ -457,7 +461,8 @@ public partial class NavigationSystem : SystemBase
     {
         if (GetEntityQuery(ComponentType.ReadOnly<Pedestrian>(),
             ComponentType.ReadOnly<Translation>(),
-            ComponentType.ReadOnly<Rotation>()).CalculateEntityCount() == 0) return;
+            ComponentType.ReadOnly<Rotation>(),
+            ComponentType.ReadOnly<AwaitingNavigationTag>()).CalculateEntityCount() == 0) return;
 
         var collisionWorld = physicsWorld.PhysicsWorld.CollisionWorld;
         var waypoints = new NativeParallelHashMap<int, Translation>(waypointQuery.CalculateEntityCount(), Allocator.TempJob);
@@ -490,8 +495,8 @@ public partial class NavigationSystem : SystemBase
         Entities
             .WithReadOnly(waypoints)
             .WithReadOnly(collisionWorld)
-            .WithAll<AwaitingNavigationTag>()
-            .ForEach((ref WaypointFollower f, in Pedestrian p, in Translation t) =>
+            //.WithAll<AwaitingNavigationTag>()
+            .ForEach((ref WaypointFollower f, ref AwaitingNavigationTag a, in Pedestrian p, in Translation t) =>
             {
                 /*Debug.Log("Start of new startfinder thing");
 
@@ -541,6 +546,8 @@ public partial class NavigationSystem : SystemBase
                 Debug.Log($"Elapsed startfinder time: {watch.ElapsedMilliseconds}");*/
 
                 f.startKey = minDistKey;
+
+                if (minDist != math.INFINITY) a.foundStart = true;
             }).ScheduleParallel();
 
         /*Entities

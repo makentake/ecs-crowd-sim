@@ -119,7 +119,7 @@ MonoBehaviour:
   obstacleFac: 4
   lightFac: 32
   baseSpeed: 6
-  rotSpeed: 18
+  rotSpeed: 6.75
   baseMinDist: 3
   maxDist: 5
   wallTolerance: 2
@@ -373,6 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d6a64c4d6aa42b478c66b4ab2062308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  foundStart: 0
   hasNavigated: 0
 --- !u!114 &-2961738587076147499
 MonoBehaviour:

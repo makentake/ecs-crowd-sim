@@ -47,6 +47,8 @@ public partial class SpawningSystem : SystemBase
         }
     }
 
+
+
     protected override void OnStartRunning()
     {
         //end = World.GetOrCreateSystem<EndVariableRateSimulationEntityCommandBufferSystem>();
@@ -187,7 +189,7 @@ public partial class SpawningSystem : SystemBase
                         ecb.AddComponent(entityInQueryIndex, newAgent, new DensityAvoidanceBrain
                         {
                             maxTime = s.maxRecalculationTime,
-                            elapsedTime = s.random.NextFloat(s.maxRecalculationTime),
+                            startTime = s.random.NextFloat(s.maxRecalculationTime),
                             minDensityTolerance = s.minDensity,
                             maxDensityTolerance = s.maxDensity
                         });
@@ -237,6 +239,11 @@ public partial class SpawningSystem : SystemBase
                 }.ScheduleParallel();
 
                 new ResetSpawnersJob().ScheduleParallel();
+
+                SetSingleton(new ElapsedTimeComponent
+                {
+                    elapsedTime = 0f
+                });
 
                 finished = false;
             }

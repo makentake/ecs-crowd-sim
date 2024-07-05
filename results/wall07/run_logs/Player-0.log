@@ -1,0 +1,1203 @@
+Mono path[0] = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Managed'
+Mono config path = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/MonoBleedingEdge/etc'
+Initialize engine version: 2020.3.48f1 (b805b124c6b7)
+[Subsystems] Discovering subsystems at path C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Completed reload, in  1.077 seconds
+ERROR: Shader Hidden/Universal Render Pipeline/Blit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CopyDepth shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/ScreenSpaceShadows shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Sampling shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderLdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderHdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/UberPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Stop NaN shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/PaniniProjection shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/SubpixelMorphologicalAntialiasing shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/FinalPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/StencilDeferred shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/BokehDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CameraMotionBlur shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/GaussianDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Bloom shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Sprites/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+ERROR: Shader Sprites/Mask shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Universal Render Pipeline/Lit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 4.084100 ms
+No SRP present, no compute shader support, or running with -nographics. Hybrid Renderer disabled
+Warning: No Graphics Device found. Deformation systems will not run.
+NullReferenceException: Object reference not set to an instance of an object
+  at Unity.Scenes.ResourceCatalogData.GetGUIDFromPath (System.String path) [0x000b8] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.SceneSystem.GetSceneGUID (System.String scenePath) [0x0000c] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Scenes.GameObjectSceneUtility.AddGameObjectSceneReferences () [0x00044] in <8bb897719c904c72aec2a1b03525dd53>:0 
+  at Unity.Entities.AutomaticWorldBootstrap.Initialize () [0x0000d] in <5b4f729cfdd14b019dc7af518decdec6>:0 
+
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data/Mono/libSystem.dylib
+x: 9.768141
+y: 60.22776
+rotation: 359.4972
+size: 24.99386
+Total reward: 7.853698, elapsed time: 60.06592
+x: 2.570205
+y: 46.54769
+rotation: 243.4962
+size: 55.12959
+Total reward: 0.2, elapsed time: 60.08259
+x: 9.977331
+y: 13.19296
+rotation: 214.1757
+size: 42.05674
+Total reward: 0, elapsed time: 60.08259
+x: 11.701
+y: 23.65002
+rotation: 344.6315
+size: 3.137281
+Total reward: 0, elapsed time: 60.08259
+x: 7.412258
+y: 43.17207
+rotation: 351.8528
+size: 51.17938
+Total reward: 10.68611, elapsed time: 60.08259
+x: 13.31051
+y: 35.32599
+rotation: 167.0659
+size: 15.3442
+Total reward: 4.981589, elapsed time: 60.08259
+x: 11.13392
+y: 44.63122
+rotation: 269.1163
+size: 48.79402
+Total reward: 0, elapsed time: 60.08259
+x: 18.33583
+y: 38.27715
+rotation: 125.2227
+size: 29.96615
+Total reward: 0, elapsed time: 60.08259
+x: 17.15607
+y: 51.74018
+rotation: 136.5778
+size: 45.44412
+Total reward: 3.16184, elapsed time: 60.08259
+x: 7.414735
+y: 51.53888
+rotation: 172.0417
+size: 3.748461
+Total reward: 10.49834, elapsed time: 60.08259
+x: 12.642
+y: 35.66795
+rotation: 16.84893
+size: 52.63245
+Total reward: 0.694878, elapsed time: 60.08259
+x: 6.53664
+y: 1.338462
+rotation: 263.8153
+size: 11.12377
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 3.082945, elapsed time: 60.08259
+x: 14.85324
+y: 48.51513
+rotation: 3.962145
+size: 20.40542
+Total reward: 7.283043, elapsed time: 60.08259
+x: 19.90514
+y: 34.63375
+rotation: 69.53465
+size: 37.64666
+Total reward: 0, elapsed time: 60.08259
+x: 0.4970242
+y: 47.48483
+rotation: 211.5497
+size: 32.35722
+Total reward: 0, elapsed time: 60.08259
+x: 19.84957
+y: 50.81332
+rotation: 55.17413
+size: 23.34285
+Total reward: 0.6668103, elapsed time: 60.08259
+x: 8.835265
+y: 11.38257
+rotation: 11.04598
+size: 16.22477
+Total reward: 5.997163, elapsed time: 60.08259
+x: 1.202209
+y: 31.1492
+rotation: 134.7785
+size: 15.97957
+Total reward: 0.9127924, elapsed time: 60.08259
+x: 14.84445
+y: 17.92749
+rotation: 6.04524
+size: 3.113317
+Total reward: 8.264356, elapsed time: 60.08259
+x: 12.77194
+y: 39.33777
+rotation: 296.4484
+size: 22.83762
+Total reward: 0, elapsed time: 60.08259
+x: 4.498219
+y: 49.48614
+rotation: 124.8336
+size: 20.48614
+Total reward: 0, elapsed time: 60.08259
+x: 4.197259
+y: 57.78376
+rotation: 76.58366
+size: 16.25296
+Total reward: 3.447263, elapsed time: 60.08259
+x: 6.3467
+y: 21.13653
+rotation: 315.2148
+size: 2.700921
+Total reward: 7.310869, elapsed time: 60.08259
+x: 0.01869866
+y: 62.36779
+rotation: 311.2468
+size: 46.61164
+Total reward: 0.8868131, elapsed time: 60.08259
+x: 5.458165
+y: 41.43629
+rotation: 339.1628
+size: 49.37444
+Total reward: 0.09347451, elapsed time: 60.08259
+x: 17.5946
+y: 55.96655
+rotation: 164.1143
+size: 44.21911
+Total reward: 11.12081, elapsed time: 60.08259
+x: 9.605103
+y: 47.41386
+rotation: 17.40101
+size: 12.7656
+Total reward: 6.818625, elapsed time: 60.08259
+x: 11.5902
+y: 10.52214
+rotation: 313.8849
+size: 36.34206
+Total reward: 0.1, elapsed time: 60.08259
+x: 5.87275
+y: 25.77455
+rotation: 279.769
+size: 6.664259
+Total reward: 0, elapsed time: 60.08259
+x: 14.71818
+y: 56.70422
+rotation: 137.1669
+size: 34.36821
+Total reward: 3.436574, elapsed time: 60.08259
+x: 4.926343
+y: 12.59665
+rotation: 78.52409
+size: 5.728073
+Total reward: 4.795752, elapsed time: 60.08259
+x: 16.28497
+y: 57.61421
+rotation: 39.67467
+size: 51.22488
+Total reward: 3.541835, elapsed time: 60.08259
+x: 12.66366
+y: 6.739163
+rotation: 351.3218
+size: 0.6045
+Total reward: 0, elapsed time: 60.08259
+x: 18.87795
+y: 5.263808
+rotation: 155.2296
+size: 13.65322
+Total reward: 3.977425, elapsed time: 60.08259
+x: 5.575677
+y: 15.06277
+rotation: 217.0862
+size: 42.62016
+Total reward: 4.103122, elapsed time: 60.08259
+x: 9.740991
+y: 52.14127
+rotation: 112.0921
+size: 44.68863
+Total reward: 0, elapsed time: 60.08259
+x: 18.81138
+y: 13.06862
+rotation: 189.6103
+size: 12.69712
+Total reward: 0, elapsed time: 60.08259
+x: 5.613856
+y: 48.75719
+rotation: 290.8273
+size: 4.902392
+Total reward: 2.712666, elapsed time: 60.08259
+x: 18.68991
+y: 61.42854
+rotation: 287.1508
+size: 22.04852
+Total reward: 4.795768, elapsed time: 60.08259
+x: 2.754357
+y: 32.88543
+rotation: 29.72842
+size: 3.507997
+Total reward: 5.63952, elapsed time: 60.08259
+x: 15.80746
+y: 21.74265
+rotation: 151.7431
+size: 30.68999
+Total reward: 0.1, elapsed time: 60.08259
+x: 3.224845
+y: 36.41361
+rotation: 221.984
+size: 12.97906
+Total reward: 1.262106, elapsed time: 60.08259
+x: 12.6641
+y: 26.26624
+rotation: 124.196
+size: 35.32942
+Total reward: 0, elapsed time: 60.08259
+x: 4.694821
+y: 18.05284
+rotation: 225.6087
+size: 10.0759
+Total reward: 0, elapsed time: 60.08259
+x: 3.821392
+y: 12.34295
+rotation: 348.3689
+size: 4.498163
+Total reward: 10.42084, elapsed time: 60.08259
+x: 0.1085138
+y: 62.81895
+rotation: 304.5575
+size: 59.57336
+Total reward: 0.4, elapsed time: 60.08259
+x: 11.72982
+y: 5.580616
+rotation: 153.6712
+size: 54.1221
+Total reward: 0, elapsed time: 60.08259
+x: 2.209337
+y: 42.54618
+rotation: 65.08952
+size: 50.88261
+Total reward: 0, elapsed time: 60.08259
+x: 4.186178
+y: 46.58807
+rotation: 318.8083
+size: 33.30618
+Total reward: 0, elapsed time: 60.08259
+x: 5.449342
+y: 17.98354
+rotation: 227.9351
+size: 56.84575
+Total reward: 0, elapsed time: 60.08259
+x: 17.22992
+y: 35.89247
+rotation: 95.58248
+size: 24.30619
+Total reward: 0, elapsed time: 60.08259
+x: 18.95916
+y: 42.54851
+rotation: 308.9872
+size: 0.6045
+Total reward: 0, elapsed time: 60.08259
+x: 7.709603
+y: 50.9297
+rotation: 202.9233
+size: 17.42367
+Total reward: 19.10435, elapsed time: 57.08263
+x: 18.69824
+y: 25.58933
+rotation: 122.8967
+size: 11.60859
+Total reward: 0, elapsed time: 60.08259
+x: 14.59393
+y: 64.66827
+rotation: 336.981
+size: 27.41437
+Total reward: 10.30966, elapsed time: 60.08259
+x: 10.55686
+y: 63.07868
+rotation: 347.3989
+size: 0.6045
+Total reward: 11.49087, elapsed time: 60.08259
+x: 15.11542
+y: 55.41738
+rotation: 104.5301
+size: 51.26497
+Total reward: 0, elapsed time: 60.08259
+x: 0.2275749
+y: 50.24527
+rotation: 60.43734
+size: 5.654955
+Total reward: 0, elapsed time: 60.08259
+x: 4.353131
+y: 56.58165
+rotation: 180.1375
+size: 19.99095
+Total reward: 7.694664, elapsed time: 60.08259
+x: 10.41504
+y: 54.10509
+rotation: 159.0857
+size: 50.04037
+Total reward: 19.29127, elapsed time: 60.08259
+x: 14.56052
+y: 26.46898
+rotation: 239.5201
+size: 3.444429
+Total reward: 13.63217, elapsed time: 60.08259
+x: 9.620661
+y: 2.586674
+rotation: 180.1229
+size: 17.2677
+Total reward: 8.649654, elapsed time: 60.08259
+x: 4.088269
+y: 21.72629
+rotation: 285.9152
+size: 10.36323
+Total reward: 1.504455, elapsed time: 60.08259
+x: 10.01346
+y: 59.8231
+rotation: 182.6228
+size: 30.66262
+Total reward: 6.212197, elapsed time: 60.08259
+x: 7.959626
+y: 58.28675
+rotation: 175.4635
+size: 2.368775
+Total reward: 9.396616, elapsed time: 60.08259
+x: 6.54718
+y: 50.31392
+rotation: 271.0982
+size: 1.03768
+Total reward: 8.573236, elapsed time: 60.08259
+x: 12.7412
+y: 56.26268
+rotation: 148.2534
+size: 0.6045
+Total reward: 7.320826, elapsed time: 60.08259
+x: 1.533785
+y: 37.16595
+rotation: 209.0197
+size: 22.48535
+Total reward: 2.421449, elapsed time: 60.08259
+x: 6.917014
+y: 28.61552
+rotation: 297.3711
+size: 25.83399
+Total reward: 0, elapsed time: 60.08259
+x: 12.34158
+y: 45.33002
+rotation: 319.6427
+size: 21.89443
+Total reward: 0, elapsed time: 60.08259
+x: 6.071229
+y: 28.03989
+rotation: 146.2085
+size: 0.6045
+Total reward: 9.707794, elapsed time: 60.08259
+x: 4.522223
+y: 63.27885
+rotation: 167.0852
+size: 53.03044
+Total reward: 1.614037, elapsed time: 60.08259
+x: 12.90654
+y: 38.6373
+rotation: 340.6032
+size: 35.20814
+Total reward: 7.62528, elapsed time: 60.08259
+x: 5.440301
+y: 38.32907
+rotation: 111.5971
+size: 55.22994
+Total reward: 0.1, elapsed time: 60.08259
+x: 17.21986
+y: 0.6431938
+rotation: 314.6852
+size: 7.005716
+Total reward: 0, elapsed time: 60.08259
+x: 8.227647
+y: 43.61922
+rotation: 238.3151
+size: 8.832766
+Total reward: 1.020008, elapsed time: 60.08259
+x: 11.20961
+y: 27.00811
+rotation: 197.1189
+size: 48.20469
+Total reward: 4.748855, elapsed time: 60.08259
+x: 19.57124
+y: 31.59712
+rotation: 213.304
+size: 9.441975
+Total reward: 1.554457, elapsed time: 60.08259
+x: 6.494465
+y: 45.12798
+rotation: 54.39697
+size: 22.15508
+Total reward: 0.917388, elapsed time: 60.08259
+x: 11.74546
+y: 63.91673
+rotation: 233.3834
+size: 36.1907
+Total reward: 0, elapsed time: 60.08259
+x: 8.753258
+y: 45.41242
+rotation: 252.5292
+size: 25.65058
+Total reward: 0, elapsed time: 60.08259
+x: 5.501878
+y: 52.34918
+rotation: 335.4129
+size: 8.991913
+Total reward: 0, elapsed time: 60.08259
+x: 1.304418
+y: 64.61753
+rotation: 90.82162
+size: 26.44356
+Total reward: 5.588163, elapsed time: 60.08259
+x: 9.340051
+y: 18.57463
+rotation: 125.6751
+size: 21.63566
+Total reward: 0, elapsed time: 60.08259
+x: 0.9000603
+y: 44.58014
+rotation: 99.24703
+size: 14.29661
+Total reward: 0, elapsed time: 60.08259
+x: 11.83675
+y: 61.30761
+rotation: 176.2473
+size: 20.57282
+Total reward: 7.135033, elapsed time: 60.08259
+x: 11.11307
+y: 51.75224
+rotation: 2.838976
+size: 11.97101
+Total reward: 11.73403, elapsed time: 60.08259
+x: 2.171965
+y: 63.92619
+rotation: 300.4359
+size: 0.7894036
+Total reward: 12.00331, elapsed time: 60.08259
+x: 15.19948
+y: 6.829085
+rotation: 258.0673
+size: 40.08262
+Total reward: 0.3, elapsed time: 60.08259
+x: 3.722826
+y: 54.66058
+rotation: 52.64714
+size: 7.387704
+Total reward: 0, elapsed time: 60.08259
+x: 7.517528
+y: 63.48685
+rotation: 205.7493
+size: 54.37538
+Total reward: 3.103927, elapsed time: 60.08259
+x: 8.246351
+y: 23.64624
+rotation: 205.4405
+size: 27.07056
+Total reward: 17.78794, elapsed time: 60.08259
+x: 4.081978
+y: 2.76349
+rotation: 108.4192
+size: 49.67428
+Total reward: 0, elapsed time: 60.08259
+x: 18.75045
+y: 60.5522
+rotation: 347.675
+size: 5.969426
+Total reward: 0, elapsed time: 60.08259
+x: 18.00402
+y: 61.57769
+rotation: 192.3441
+size: 30.54453
+Total reward: 2.606833, elapsed time: 60.08259
+x: 15.49296
+y: 58.82895
+rotation: 195.8546
+size: 10.4722
+Total reward: 10.16817, elapsed time: 60.08259
+x: 2.83818
+y: 25.20442
+rotation: 188.5819
+size: 12.21481
+Total reward: 6.815333, elapsed time: 60.08259
+x: 2.462572
+y: 43.303
+rotation: 32.3828
+size: 13.95815
+Total reward: 3.471996, elapsed time: 60.08259
+x: 5.482487
+y: 28.2045
+rotation: 26.0931
+size: 10.54077
+Total reward: 7.766307, elapsed time: 60.08259
+x: 11.13664
+y: 15.11949
+rotation: 306.966
+size: 0.8363639
+Total reward: 7.630177, elapsed time: 60.08259
+x: 14.57701
+y: 3.890508
+rotation: 169.4651
+size: 0.6045
+Total reward: 7.030003, elapsed time: 60.08259
+x: 11.31779
+y: 54.9688
+rotation: 235.7469
+size: 45.39257
+Total reward: 0.2, elapsed time: 60.08259
+x: 15.55249
+y: 22.65675
+rotation: 102.6476
+size: 5.160263
+Total reward: 0, elapsed time: 60.08259
+x: 0.398149
+y: 34.46423
+rotation: 222.2459
+size: 51.97801
+Total reward: 1.231824, elapsed time: 60.08259
+x: 2.967697
+y: 18.47137
+rotation: 291.0909
+size: 57.1849
+Total reward: 0, elapsed time: 60.08259
+x: 17.74964
+y: 8.365933
+rotation: 276.5867
+size: 17.95374
+Total reward: 0, elapsed time: 60.08259
+x: 15.34825
+y: 47.14847
+rotation: 86.96755
+size: 15.64649
+Total reward: 0.7952856, elapsed time: 60.08259
+x: 18.82913
+y: 52.55991
+rotation: 303.5765
+size: 16.81958
+Total reward: 6.528147, elapsed time: 60.08259
+x: 9.314078
+y: 53.31223
+rotation: 232.4146
+size: 37.94724
+Total reward: 0, elapsed time: 60.08259
+x: 18.60221
+y: 31.16619
+rotation: 54.91571
+size: 7.069788
+Total reward: 0, elapsed time: 60.08259
+x: 19.31173
+y: 3.893031
+rotation: 46.9272
+size: 36.7821
+Total reward: 8.858488, elapsed time: 60.08259
+x: 18.52368
+y: 16.79378
+rotation: 276.4024
+size: 6.010931
+Total reward: 2.880166, elapsed time: 60.08259
+x: 10.24695
+y: 47.68988
+rotation: 93.48246
+size: 23.3689
+Total reward: 0.1, elapsed time: 60.08259
+x: 14.80156
+y: 53.78557
+rotation: 221.2033
+size: 4.559597
+Total reward: 0, elapsed time: 60.08259
+x: 15.65109
+y: 58.04799
+rotation: 121.9522
+size: 17.71322
+Total reward: 4.832845, elapsed time: 60.08259
+x: 18.72593
+y: 55.32167
+rotation: 292.8487
+size: 55.45848
+Total reward: 0, elapsed time: 60.08259
+x: 16.79898
+y: 56.98934
+rotation: 33.09929
+size: 8.024698
+Total reward: 0, elapsed time: 60.08259
+x: 16.44535
+y: 52.37463
+rotation: 73.19238
+size: 32.49196
+Total reward: 0, elapsed time: 60.08259
+x: 17.95566
+y: 62.61171
+rotation: 301.75
+size: 16.40613
+Total reward: 0, elapsed time: 60.08259
+x: 16.28128
+y: 31.85783
+rotation: 332.3557
+size: 1.982896
+Total reward: 5.216947, elapsed time: 60.08259
+x: 10.98616
+y: 17.25249
+rotation: 143.4657
+size: 25.36843
+Total reward: 0, elapsed time: 60.08259
+x: 3.721533
+y: 29.3628
+rotation: 291.3431
+size: 33.92578
+Total reward: 0, elapsed time: 60.08259
+x: 11.27075
+y: 44.13517
+rotation: 298.8967
+size: 7.814785
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 0, elapsed time: 60.08259
+x: 17.49619
+y: 29.62667
+rotation: 181.4082
+size: 53.94229
+Total reward: 7.263923, elapsed time: 60.08259
+x: 17.73206
+y: 39.609
+rotation: 304.293
+size: 9.883272
+Total reward: 2.263498, elapsed time: 60.08259
+x: 8.003536
+y: 60.64136
+rotation: 91.15357
+size: 3.874134
+Total reward: 9.155092, elapsed time: 60.08259
+x: 5.747633
+y: 44.02865
+rotation: 106.4736
+size: 27.23653
+Total reward: 0, elapsed time: 60.08259
+x: 15.43539
+y: 46.46098
+rotation: 24.53099
+size: 23.20546
+Total reward: 0, elapsed time: 60.08259
+x: 18.57594
+y: 44.47604
+rotation: 63.53454
+size: 1.108652
+Total reward: 5.379975, elapsed time: 60.08259
+x: 14.25942
+y: 14.75662
+rotation: 244.9214
+size: 32.0525
+Total reward: 0.1, elapsed time: 60.08259
+x: 19.64314
+y: 41.89755
+rotation: 156.1209
+size: 40.11786
+Total reward: 0, elapsed time: 60.08259
+x: 14.67445
+y: 39.84885
+rotation: 219.6812
+size: 41.38646
+Total reward: 0, elapsed time: 60.08259
+x: 4.450247
+y: 28.14071
+rotation: 97.08614
+size: 18.18386
+Total reward: 0.182362, elapsed time: 60.08259
+x: 18.03725
+y: 37.68412
+rotation: 229.739
+size: 29.28666
+Total reward: 0.1275005, elapsed time: 60.08259
+x: 10.8031
+y: 48.98279
+rotation: 128.942
+size: 39.20472
+Total reward: 0, elapsed time: 60.08259
+x: 10.55018
+y: 60.81413
+rotation: 140.7167
+size: 0.6045
+Total reward: 0, elapsed time: 60.08259
+x: 1.137017
+y: 17.65889
+rotation: 17.60504
+size: 19.20057
+Total reward: 0.35292, elapsed time: 60.08259
+x: 11.98377
+y: 18.49316
+rotation: 272.8399
+size: 10.12528
+Total reward: 0.8711177, elapsed time: 60.08259
+x: 13.17909
+y: 38.22451
+rotation: 336.8114
+size: 54.70907
+Total reward: 0.5644544, elapsed time: 60.08259
+x: 13.24191
+y: 42.53016
+rotation: 275.49
+size: 44.22748
+Total reward: 0, elapsed time: 60.08259
+x: 8.720525
+y: 63.62183
+rotation: 354.5154
+size: 0.9260515
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 0, elapsed time: 60.08259
+x: 5.103802
+y: 19.12782
+rotation: 158.985
+size: 7.285845
+Total reward: 9.926125, elapsed time: 60.08259
+x: 17.0353
+y: 58.18156
+rotation: 238.3352
+size: 30.05928
+Total reward: 1.344315, elapsed time: 60.08259
+x: 18.87257
+y: 9.714476
+rotation: 51.53919
+size: 1.411297
+Total reward: 10.25702, elapsed time: 60.08259
+x: 2.820071
+y: 11.55366
+rotation: 1.384304
+size: 50.10979
+Total reward: 7.537171, elapsed time: 60.08259
+x: 19.44816
+y: 34.52035
+rotation: 181.4462
+size: 0.7507091
+Total reward: 7.094977, elapsed time: 60.08259
+x: 15.12243
+y: 53.30168
+rotation: 234.2428
+size: 0.6045
+Total reward: 8.079479, elapsed time: 60.08259
+x: 15.8145
+y: 63.18505
+rotation: 197.4376
+size: 4.41711
+Total reward: 9.807577, elapsed time: 60.08259
+x: 15.02525
+y: 60.42699
+rotation: 259.8748
+size: 57.05825
+Total reward: 0.1, elapsed time: 60.08259
+x: 11.96674
+y: 2.329031
+rotation: 192.4948
+size: 2.734702
+Total reward: 0, elapsed time: 60.08259
+x: 13.24205
+y: 54.17251
+rotation: 210.4291
+size: 0.8625575
+Total reward: 6.374012, elapsed time: 60.08259
+x: 11.98204
+y: 17.98625
+rotation: 161.178
+size: 0.666321
+Total reward: 8.412992, elapsed time: 60.08259
+x: 9.371353
+y: 57.33737
+rotation: 67.27933
+size: 24.88151
+Total reward: 0.2, elapsed time: 60.08259
+x: 10.39706
+y: 56.4567
+rotation: 110.6045
+size: 3.694986
+Total reward: 0, elapsed time: 60.08259
+x: 13.12852
+y: 53.14064
+rotation: 116.6643
+size: 14.14342
+Total reward: 2.711832, elapsed time: 60.08259
+x: 6.735162
+y: 62.05287
+rotation: 303.702
+size: 40.63039
+Total reward: 0, elapsed time: 60.08259
+x: 18.8669
+y: 59.22782
+rotation: 265.9573
+size: 2.824437
+Total reward: 0, elapsed time: 60.08259
+x: 1.387059
+y: 7.283914
+rotation: 127.0919
+size: 40.78666
+Total reward: 5.399283, elapsed time: 60.08259
+x: 6.314107
+y: 30.20165
+rotation: 109.7102
+size: 22.48888
+Total reward: 0, elapsed time: 60.08259
+x: 11.50098
+y: 20.11234
+rotation: 272.0361
+size: 4.095511
+Total reward: 0, elapsed time: 60.08259
+x: 18.07833
+y: 12.07553
+rotation: 152.7121
+size: 24.46418
+Total reward: 0.6883427, elapsed time: 60.08259
+x: 14.4936
+y: 54.51363
+rotation: 294.2415
+size: 55.51237
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 0, elapsed time: 60.08259
+x: 0.7086983
+y: 61.07053
+rotation: 326.8215
+size: 0.9522013
+Total reward: 0, elapsed time: 60.08259
+x: 17.09146
+y: 28.74072
+rotation: 178.1533
+size: 3.686933
+Total reward: 8.427988, elapsed time: 60.08259
+x: 15.85797
+y: 38.17299
+rotation: 353.3058
+size: 0.6045
+Total reward: 6.202359, elapsed time: 60.08259
+x: 7.382217
+y: 45.16131
+rotation: 257.8987
+size: 17.84734
+Total reward: 0.1, elapsed time: 60.08259
+x: 10.44443
+y: 53.54575
+rotation: 174.5288
+size: 8.348766
+Total reward: 0, elapsed time: 60.08259
+x: 19.35747
+y: 58.39322
+rotation: 333.4659
+size: 49.53355
+Total reward: 11.21935, elapsed time: 60.08259
+x: 18.37756
+y: 47.53227
+rotation: 342.1257
+size: 2.277654
+Total reward: 11.6499, elapsed time: 60.08259
+x: 16.80057
+y: 55.67033
+rotation: 184.1712
+size: 45.52603
+Total reward: 3.980075, elapsed time: 60.08259
+x: 19.50478
+y: 14.48089
+rotation: 36.80689
+size: 21.13776
+Total reward: 11.35799, elapsed time: 60.08259
+x: 11.96691
+y: 22.87301
+rotation: 278.4706
+size: 23.60427
+Total reward: 0.1, elapsed time: 60.08259
+x: 19.85129
+y: 54.32254
+rotation: 176.1005
+size: 7.898131
+Internal: JobTempAlloc has allocations that are more than 4 frames old - this is not allowed and likely a leak
+Total reward: 0, elapsed time: 60.08259
+x: 7.402859
+y: 6.582359
+rotation: 42.86057
+size: 0.6185904
+Total reward: 8.342483, elapsed time: 60.08259
+x: 19.12699
+y: 13.04638
+rotation: 193.2801
+size: 42.07763
+Total reward: 11.26414, elapsed time: 60.08259
+x: 10.25787
+y: 50.929
+rotation: 346.4963
+size: 18.89931
+Total reward: 15.83213, elapsed time: 60.08259
+x: 3.412354
+y: 30.21844
+rotation: 149.4123
+size: 34.76911
+Total reward: 0.7365351, elapsed time: 60.08259
+x: 16.3405
+y: 52.81013
+rotation: 46.03835
+size: 1.225999
+Total reward: 7.005546, elapsed time: 60.08259
+x: 19.48324
+y: 33.07707
+rotation: 129.3943
+size: 23.94691
+Total reward: 2.433804, elapsed time: 60.08259
+x: 15.33724
+y: 60.13747
+rotation: 282.7945
+size: 46.42376
+Total reward: 0, elapsed time: 60.08259
+x: 12.13813
+y: 21.09324
+rotation: 270.0409
+size: 30.22897
+Total reward: 0, elapsed time: 60.08259
+x: 14.91663
+y: 44.48513
+rotation: 198.846
+size: 42.59246
+Total reward: 0, elapsed time: 60.08259
+x: 14.82783
+y: 61.44909
+rotation: 252.9514
+size: 34.28437
+Total reward: 0, elapsed time: 60.08259
+x: 18.09772
+y: 56.30315
+rotation: 157.3977
+size: 10.91291
+Total reward: 0, elapsed time: 60.08259
+x: 12.57566
+y: 20.84546
+rotation: 107.0331
+size: 11.42398
+Total reward: 0.03152854, elapsed time: 60.08259
+x: 17.15772
+y: 9.354198
+rotation: 278.1858
+size: 1.235575
+Total reward: 9.452457, elapsed time: 60.08259
+x: 5.216598
+y: 43.05482
+rotation: 94.39191
+size: 29.08
+Total reward: 0, elapsed time: 60.08259
+x: 1.115249
+y: 22.49103
+rotation: 118.0444
+size: 0.6045
+Total reward: 0, elapsed time: 60.08259
+x: 14.24912
+y: 59.73633
+rotation: 197.8139
+size: 12.69705
+Total reward: 13.42002, elapsed time: 60.08259
+x: 9.754381
+y: 28.31231
+rotation: 327.2291
+size: 34.56435
+Total reward: 0.4293148, elapsed time: 60.08259
+x: 10.36887
+y: 60.1965
+rotation: 8.686743
+size: 0.6045
+Total reward: 0, elapsed time: 60.08259
+x: 6.343336
+y: 63.03095
+rotation: 226.2392
+size: 34.58965
+Total reward: 0.07000017, elapsed time: 60.08259
+x: 10.76665
+y: 20.3868
+rotation: 323.3047
+size: 23.22174
+Total reward: 0.06597246, elapsed time: 60.08259
+x: 3.380946
+y: 42.23969
+rotation: 60.97102
+size: 21.36495
+Total reward: 1.391678, elapsed time: 60.08259
+x: 14.02061
+y: 28.56194
+rotation: 58.12471
+size: 9.58389
+Total reward: 0.330424, elapsed time: 60.08259
+x: 17.23739
+y: 58.46405
+rotation: 92.27942
+size: 16.30944
+Total reward: 3.579764, elapsed time: 60.08259
+x: 15.38449
+y: 45.96937
+rotation: 112.9232
+size: 3.578384
+Total reward: 2.715165, elapsed time: 60.08259
+x: 19.35777
+y: 27.88136
+rotation: 15.77205
+size: 1.333511
+Total reward: 5.097289, elapsed time: 60.08259
+x: 19.69286
+y: 45.83025
+rotation: 316.1194
+size: 12.67227
+Total reward: 6.010811, elapsed time: 60.08259
+x: 0.1111889
+y: 55.881
+rotation: 334.2967
+size: 51.37345
+Total reward: 0, elapsed time: 60.08259
+x: 19.28342
+y: 13.10071
+rotation: 166.8061
+size: 58.13459
+Total reward: 0.6286176, elapsed time: 60.08259
+x: 9.703901
+y: 45.44268
+rotation: 89.35726
+size: 9.342179
+Total reward: 5.045532, elapsed time: 60.08259
+x: 12.91288
+y: 6.692803
+rotation: 339.7726
+size: 2.938728
+Total reward: 0, elapsed time: 60.08259
+x: 12.71132
+y: 38.01936
+rotation: 179.889
+size: 39.82487
+Total reward: 6.382082, elapsed time: 60.08259
+x: 5.611994
+y: 15.8659
+rotation: 340.7969
+size: 18.98589
+Total reward: 13.24299, elapsed time: 60.08259
+x: 5.196733
+y: 4.001654
+rotation: 291.7521
+size: 35.52192
+Total reward: 0.3, elapsed time: 60.08259
+x: 2.803375
+y: 34.92371
+rotation: 185.4471
+size: 15.44619
+Total reward: 0, elapsed time: 60.08259
+x: 13.56572
+y: 64.40429
+rotation: 315.0272
+size: 20.20434
+Total reward: 7.233858, elapsed time: 60.08259
+x: 1.280217
+y: 31.81945
+rotation: 80.48653
+size: 0.6045
+Total reward: 2.722273, elapsed time: 60.08259
+x: 1.321565
+y: 57.68526
+rotation: 224.2647
+size: 0.6045
+Total reward: 6.909579, elapsed time: 60.08259
+x: 5.341726
+y: 22.93263
+rotation: 118.3901
+size: 4.807075
+Total reward: 1.685149, elapsed time: 60.08259
+x: 1.123017
+y: 49.05758
+rotation: 339.2338
+size: 39.7965
+Total reward: 0.2341743, elapsed time: 60.08259
+x: 14.7007
+y: 38.16246
+rotation: 297.6992
+size: 50.91035
+Total reward: 0, elapsed time: 60.08259
+x: 8.73439
+y: 53.60118
+rotation: 101.2183
+size: 1.171537
+Total reward: 0, elapsed time: 60.08259
+x: 7.122407
+y: 55.054
+rotation: 276.7939
+size: 1.30839
+Total reward: 8.063943, elapsed time: 60.08259
+x: 9.08786
+y: 49.91824
+rotation: 250.5313
+size: 12.84084
+Total reward: 0.3263897, elapsed time: 60.08259
+x: 0.799363
+y: 4.91599
+rotation: 194.4907
+size: 0.817915
+Total reward: 0, elapsed time: 60.08259
+x: 11.6183
+y: 18.32535
+rotation: 21.51322
+size: 4.749457
+Total reward: 11.73205, elapsed time: 60.08259
+x: 12.30389
+y: 28.91593
+rotation: 187.0621
+size: 20.95091
+Total reward: 7.024223, elapsed time: 60.08259
+x: 13.078
+y: 2.30912
+rotation: 164.2715
+size: 29.46794
+Total reward: 14.8382, elapsed time: 60.08259
+x: 9.149256
+y: 22.6046
+rotation: 115.1945
+size: 8.121148
+Total reward: 6.717701, elapsed time: 60.08259
+x: 8.787782
+y: 43.35874
+rotation: 351.3165
+size: 20.93708
+Total reward: 9.852073, elapsed time: 60.08259
+x: 17.78648
+y: 53.94975
+rotation: 274.3105
+size: 58.3531
+Total reward: 0.1, elapsed time: 60.08259
+x: 13.10045
+y: 5.182353
+rotation: 274.1301
+size: 52.38774
+Unable to save timers to file C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/ProperFixedUpdate/CrowdSim_Data\ML-Agents\Timers\MLTestEnvironment_timers.json
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 8b38 -> priority: 1 
+  Thread -> id: 54d0 -> priority: 1 
+  Thread -> id: 4e18 -> priority: 1 
+  Thread -> id: 9f24 -> priority: 1 
+Internal: There are remaining Allocations on the JobTempAlloc. This is a leak, and will impact performance

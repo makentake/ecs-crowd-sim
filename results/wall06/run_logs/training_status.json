@@ -1,0 +1,29 @@
+{
+    "WallPlacer": {
+        "checkpoints": [
+            {
+                "steps": 152907,
+                "file_path": "results\\wall06\\WallPlacer\\WallPlacer-152907.onnx",
+                "reward": null,
+                "creation_time": 1719939034.3822944,
+                "auxillary_file_paths": [
+                    "results\\wall06\\WallPlacer\\WallPlacer-152907.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 152907,
+            "file_path": "results\\wall06\\WallPlacer.onnx",
+            "reward": null,
+            "creation_time": 1719939034.3822944,
+            "auxillary_file_paths": [
+                "results\\wall06\\WallPlacer\\WallPlacer-152907.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

@@ -59,7 +59,7 @@ public class WallPlacer : Agent
             SetReward(totalReward);
 
             pms.rewards.Clear();
-            pms.elapsedTime = 0f;
+            //pms.elapsedTime = 0f;
 
             EndEpisode();
         }
@@ -67,39 +67,55 @@ public class WallPlacer : Agent
 
     public override void OnActionReceived(ActionBuffers actions)
     {
-        /*Debug.Log(actions.DiscreteActions[0]);
-        Debug.Log(actions.ContinuousActions[0]);
-        Debug.Log(actions.ContinuousActions[1]);
-        Debug.Log(actions.ContinuousActions[2]);*/
-
-        for (int i = 0; i < actions.DiscreteActions[0] + 1; i++)
+        /*for (int i = 0; i < actions.DiscreteActions[0] + 1; i++)
         {
-            //Debug.Log(actions.ContinuousActions[i]);
             var newWall = Instantiate(wall, 
                 new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i+1])) + transform.position, 
                 Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[i+2]), 0));
             newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y, 
-                newWall.transform.localScale.z*Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[i + 3]), 0.5f, 1f));
-        }
+                newWall.transform.localScale.z*Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[i + 3]), 0.1f, 1f));
+
+            Debug.Log($"# of walls: {actions.DiscreteActions[0]}\n" +
+                $"x: {spawnBounds.x * Mathf.Abs(actions.ContinuousActions[i])}\n" +
+                $"y: {spawnBounds.y * Mathf.Abs(actions.ContinuousActions[i + 1])}\n" +
+                $"rotation: {360 * Mathf.Abs(actions.ContinuousActions[i + 2])}\n" +
+                $"size: {newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[i + 3]), 0.1f, 1f)}");
+        }*/
+
+        var newWall = Instantiate(wall,
+                new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[0]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[1])) + transform.position,
+                Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[2]), 0));
+        newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y,
+            newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[3]), 0.1f, 1f));
+
+        Debug.Log($"x: {spawnBounds.x * Mathf.Abs(actions.ContinuousActions[0])}\n" +
+            $"y: {spawnBounds.y * Mathf.Abs(actions.ContinuousActions[1])}\n" +
+            $"rotation: {360 * Mathf.Abs(actions.ContinuousActions[2])}\n" +
+            $"size: {newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[3]), 0.1f, 1f)}");
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
     {
-        var discActions = actionsOut.DiscreteActions;
+        //var discActions = actionsOut.DiscreteActions;
         var contActions = actionsOut.ContinuousActions;
 
         //discActions[0] = Random.Range(0, 10);
-        discActions[0] = 0;
+        //discActions[0] = 0;
 
-        for (int i = 0; i < discActions[0] + 1; i += 3)
+        /*for (int i = 0; i < discActions[0] + 1; i += 3)
         {
             contActions[i] = Random.Range(0f, 1f);
             contActions[i+1] = Random.Range(0f, 1f);
             contActions[i+2] = Random.Range(0f, 1f);
             contActions[i+3] = Random.Range(0f, 1f);
-        }
+        }*/
 
-        Debug.Log(contActions[3]);
+        contActions[0] = Random.Range(0f, 1f);
+        contActions[1] = Random.Range(0f, 1f);
+        contActions[2] = Random.Range(0f, 1f);
+        contActions[3] = Random.Range(0f, 1f);
+
+        //Debug.Log(contActions[3]);
     }
 
     public override void CollectObservations(VectorSensor sensor)

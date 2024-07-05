@@ -6,7 +6,7 @@ using Unity.Entities;
 [GenerateAuthoringComponent]
 public struct DensityAvoidanceBrain : IComponentData
 {
-    public float maxTime, elapsedTime;
+    public float maxTime, startTime;
     public float minDensityTolerance;
     public float maxDensityTolerance;
 }
