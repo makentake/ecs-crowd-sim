@@ -1066,7 +1066,7 @@ PrefabInstance:
       objectReference: {fileID: 6555772023942994503, guid: 17d0f141194c5e14c825ca38aa4df922, type: 3}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
-      value: 5000
+      value: 15000
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: spawnRadius.x
@@ -1130,7 +1130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068430, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
@@ -2175,7 +2175,7 @@ PrefabInstance:
       objectReference: {fileID: 6555772023942994503, guid: 17d0f141194c5e14c825ca38aa4df922, type: 3}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
-      value: 10000
+      value: 1800
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: percentYoung
@@ -2247,7 +2247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068430, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
@@ -3352,7 +3352,7 @@ PrefabInstance:
       objectReference: {fileID: 6555772023942994503, guid: 17d0f141194c5e14c825ca38aa4df922, type: 3}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
-      value: 10000
+      value: 1800
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: percentYoung
@@ -3424,7 +3424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068430, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8630563747061068416, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
@@ -4750,7 +4750,7 @@ PrefabInstance:
       objectReference: {fileID: 6555772023942994503, guid: 17d0f141194c5e14c825ca38aa4df922, type: 3}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: toSpawn
-      value: 5000
+      value: 15000
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068417, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: spawnRadius.x
@@ -4814,7 +4814,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630563747061068430, guid: 034134eeee147d846ba419ccb17dece4, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 8630563747061068416, guid: 034134eeee147d846ba419ccb17dece4, type: 3}

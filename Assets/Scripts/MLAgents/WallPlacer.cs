@@ -13,8 +13,6 @@ using Unity.Scenes;
 using Unity.Collections;
 using System.Linq;
 
-
-
 public class WallPlacer : Agent
 {
     public GameObject wall; // the wall that will be spawned
@@ -24,6 +22,9 @@ public class WallPlacer : Agent
 
     public Vector2 spawnBounds;
 
+    // stuff for averaging
+    private List<float> resultsList;
+
     void Start()
     {
         /*for (int i = 0; i < 10; i++)
@@ -32,6 +33,8 @@ public class WallPlacer : Agent
         }*/
 
         //t0 = 0f;
+
+        resultsList = new List<float>(32);
 
         RequestDecision();
 
@@ -57,6 +60,15 @@ public class WallPlacer : Agent
             Debug.Log($"Total reward: {totalReward}, elapsed time: {pms.elapsedTime}");
 
             SetReward(totalReward);
+
+            // stuff for averaging
+            resultsList.Add(totalReward);
+
+            if (resultsList.Count >= 32)
+            {
+                Debug.Log($"32 RUN AVERAGE: {resultsList.Average()}");
+                Debug.Break();
+            }
 
             pms.rewards.Clear();
             //pms.elapsedTime = 0f;

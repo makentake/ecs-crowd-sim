@@ -9,15 +9,33 @@
                 "auxillary_file_paths": [
                     "results\\wall07\\WallPlacer\\WallPlacer-901.pt"
                 ]
+            },
+            {
+                "steps": 55064,
+                "file_path": "results\\wall07\\WallPlacer\\WallPlacer-55064.onnx",
+                "reward": null,
+                "creation_time": 1720456693.3763666,
+                "auxillary_file_paths": [
+                    "results\\wall07\\WallPlacer\\WallPlacer-55064.pt"
+                ]
+            },
+            {
+                "steps": 129718,
+                "file_path": "results\\wall07\\WallPlacer\\WallPlacer-129718.onnx",
+                "reward": null,
+                "creation_time": 1720802495.4679046,
+                "auxillary_file_paths": [
+                    "results\\wall07\\WallPlacer\\WallPlacer-129718.pt"
+                ]
             }
         ],
         "final_checkpoint": {
-            "steps": 901,
+            "steps": 129718,
             "file_path": "results\\wall07\\WallPlacer.onnx",
             "reward": null,
-            "creation_time": 1720217499.2518206,
+            "creation_time": 1720802495.4679046,
             "auxillary_file_paths": [
-                "results\\wall07\\WallPlacer\\WallPlacer-901.pt"
+                "results\\wall07\\WallPlacer\\WallPlacer-129718.pt"
             ]
         }
     },
