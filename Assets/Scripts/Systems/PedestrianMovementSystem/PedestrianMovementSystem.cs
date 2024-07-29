@@ -389,7 +389,8 @@ public partial class PedestrianMovementSystem : SystemBase
                             if (results.IsCreated)
                             {
                                 //Debug.Log($"Reward: {0.1f - (0.1f * (elapsedTime / 60f))}");
-                                results.Add(0.1f - (0.1f * (elapsedTime / 60f)));
+                                //results.Add(0.1f - (0.1f * (elapsedTime / 60f)));
+                                results.Add(0.1f);
                             }
 
                             ecb.DestroyEntity(e);

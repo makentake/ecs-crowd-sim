@@ -15,6 +15,7 @@ public partial class SpawningSystem : SystemBase
     //private EndVariableRateSimulationEntityCommandBufferSystem end;
     private EndSimulationEntityCommandBufferSystem end;
     private bool ready = false;
+    private bool isFirstRun = true;
     public bool finished = false;
 
     public partial struct ResetSpawnersJob : IJobEntity
@@ -75,6 +76,7 @@ public partial class SpawningSystem : SystemBase
         var needsConversion = GetEntityQuery(typeof(AwaitingConversionTag));
 
         bool spawnTest = true;
+        spawnTest = false;
 
         if (needsConversion.CalculateEntityCount() > 0)
         {
@@ -128,6 +130,117 @@ public partial class SpawningSystem : SystemBase
                     }
                 }
             }).ScheduleParallel();
+
+            var waypointFollower = GetEntityQuery(ComponentType.ReadOnly<WaypointFollower>(), ComponentType.ReadOnly<Pedestrian>(), ComponentType.ReadOnly<Translation>());
+            var waypointFollowerArray = waypointFollower.ToComponentDataArray<WaypointFollower>(Allocator.TempJob);
+            Entity presentConverter;
+
+            var scopedIsFirstRun = isFirstRun;
+
+            if ((ready && needsConversion.CalculateEntityCount() == 0) || !TryGetSingletonEntity<ConverterPresentTag>(out presentConverter))
+            //if (!TryGetSingletonEntity<ConverterPresentTag>(out presentConverter))
+            {
+                Entities.WithReadOnly(waypointFollowerArray).ForEach((int entityInQueryIndex, ref WaypointPedestrianSpawner s, in DynamicBuffer<GoalEntityList> p, in DynamicBuffer<RendezvousEntityList> r, in Translation t) =>
+                {
+                    s.spawned = 0;
+                    int spawnsNeeded;
+                    float3 spawnRadius;
+                    
+                    float3 minValue = t.Value;
+
+                    spawnRadius = math.float3(s.spawnRadius.x, s.spawnRadius.y, s.spawnRadius.z * 5);
+
+                    if (!scopedIsFirstRun)
+                    {
+                        spawnRadius = s.spawnRadius;
+                    }
+
+                    float3 maxValue = spawnRadius + minValue;
+
+                    // Calculate the goal position
+                    int goalKey = GetComponentDataFromEntity<Waypoint>(true)[p[p.Length - 1].waypoint].key;
+
+                    foreach (WaypointFollower agent in waypointFollowerArray)
+                    {
+                        if (agent.goalKey == goalKey)
+                        {
+                            s.spawned++;
+                        }
+                    }
+
+                    spawnsNeeded = s.toSpawn - s.spawned;
+
+                    /*if (spawnsNeeded == 0)
+                    {
+                        s.done = true;
+                    }
+
+                    if (s.done)
+                    {
+                        spawnsNeeded = 0;
+                    }*/
+
+                    // Create crowd members
+                    for (int i = 0; i < spawnsNeeded; i++)
+                    {
+                        //  !!! DO NOT FORGET TO UPDATE THESE WHEN YOU ADD MORE CRAP TO COMPONENTS, OTHERWISE YOUR HEAD WILL HURT !!!
+                        float3 spawnPos = s.random.NextFloat3(minValue, maxValue);
+                        Translation pos = new Translation { Value = spawnPos };
+                        WaypointFollower follower = new WaypointFollower
+                        {
+                            weight = s.navigationWeight,
+                            goalKey = goalKey,
+                            lastSavedMinimum = math.INFINITY
+                        };
+                        DynamicBuffer<GoalKeyList> givenWaypoints;
+                        DynamicBuffer<RendezvousPosList> givenRendezvousPoints;
+
+                        Entity newAgent = ecb.Instantiate(entityInQueryIndex, s.agent);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, pos);
+                        ecb.SetComponent(entityInQueryIndex, newAgent, follower);
+                        ecb.AddComponent(entityInQueryIndex, newAgent, new DensityAvoidanceBrain
+                        {
+                            maxTime = s.maxRecalculationTime,
+                            startTime = s.random.NextFloat(s.maxRecalculationTime),
+                            minDensityTolerance = s.minDensity,
+                            maxDensityTolerance = s.maxDensity
+                        });
+
+                        if (s.random.NextFloat() <= s.percentWaiting)
+                        {
+                            ecb.AddComponent(entityInQueryIndex, newAgent, new WillRendezvousTag());
+                            givenRendezvousPoints = ecb.AddBuffer<RendezvousPosList>(entityInQueryIndex, newAgent);
+
+                            for (int j = 0; j < r.Length; j++)
+                            {
+                                givenRendezvousPoints.Add(new RendezvousPosList
+                                {
+                                    pos = GetComponentDataFromEntity<Translation>(true)[r[j].point].Value
+                                });
+                            }
+                        }
+
+                        if (s.random.NextFloat() <= s.percentYoung)
+                        {
+                            ecb.AddComponent(entityInQueryIndex, newAgent, new YoungTag());
+                        }
+
+                        givenWaypoints = ecb.AddBuffer<GoalKeyList>(entityInQueryIndex, newAgent);
+
+                        for (int j = 0; j < p.Length; j++)
+                        {
+                            givenWaypoints.Add(new GoalKeyList
+                            {
+                                key = GetComponentDataFromEntity<Waypoint>(true)[p[j].waypoint].key
+                            });
+                        }
+                    }
+                }).ScheduleParallel();
+            }
+
+            isFirstRun = false;
+
+            waypointFollowerArray.Dispose(Dependency);
         }
         else
         {
@@ -226,29 +339,30 @@ public partial class SpawningSystem : SystemBase
                 }).ScheduleParallel();
             }
 
-            if (finished)
-            {
-                var deleteAgentsJob = new DeleteAgentsJob
-                {
-                    ecbpw = ecb
-                }.ScheduleParallel();
-
-                var deleteWallsJob = new DeleteWallsJob
-                {
-                    ecbpw = ecb
-                }.ScheduleParallel();
-
-                new ResetSpawnersJob().ScheduleParallel();
-
-                SetSingleton(new ElapsedTimeComponent
-                {
-                    elapsedTime = 0f
-                });
-
-                finished = false;
-            }
-
             waypointFollowerArray.Dispose(Dependency);
+        }
+
+        if (finished)
+        {
+            var deleteAgentsJob = new DeleteAgentsJob
+            {
+                ecbpw = ecb
+            }.ScheduleParallel();
+
+            var deleteWallsJob = new DeleteWallsJob
+            {
+                ecbpw = ecb
+            }.ScheduleParallel();
+
+            new ResetSpawnersJob().ScheduleParallel();
+
+            SetSingleton(new ElapsedTimeComponent
+            {
+                elapsedTime = 0f
+            });
+
+            finished = false;
+            isFirstRun = true;
         }
 
         end.AddJobHandleForProducer(Dependency);

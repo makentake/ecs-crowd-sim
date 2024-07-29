@@ -1,0 +1,65 @@
+{
+    "WallPlacer": {
+        "checkpoints": [
+            {
+                "steps": 39999,
+                "file_path": "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-39999.onnx",
+                "reward": 94.29834433348387,
+                "creation_time": 1721549280.3381114,
+                "auxillary_file_paths": [
+                    "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-39999.pt"
+                ]
+            },
+            {
+                "steps": 49999,
+                "file_path": "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-49999.onnx",
+                "reward": 94.28062893437945,
+                "creation_time": 1721582162.2558937,
+                "auxillary_file_paths": [
+                    "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-49999.pt"
+                ]
+            },
+            {
+                "steps": 59999,
+                "file_path": "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-59999.onnx",
+                "reward": 94.31274098331859,
+                "creation_time": 1721615192.161869,
+                "auxillary_file_paths": [
+                    "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-59999.pt"
+                ]
+            },
+            {
+                "steps": 69999,
+                "file_path": "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-69999.onnx",
+                "reward": 94.2950298106562,
+                "creation_time": 1721647806.3458836,
+                "auxillary_file_paths": [
+                    "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-69999.pt"
+                ]
+            },
+            {
+                "steps": 75800,
+                "file_path": "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-75800.onnx",
+                "reward": 94.35242802263743,
+                "creation_time": 1721666690.7730854,
+                "auxillary_file_paths": [
+                    "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-75800.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 75800,
+            "file_path": "results\\ppoWall08Rot\\WallPlacer.onnx",
+            "reward": 94.35242802263743,
+            "creation_time": 1721666690.7730854,
+            "auxillary_file_paths": [
+                "results\\ppoWall08Rot\\WallPlacer\\WallPlacer-75800.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

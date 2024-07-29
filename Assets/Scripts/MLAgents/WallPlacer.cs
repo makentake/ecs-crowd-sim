@@ -48,7 +48,7 @@ public class WallPlacer : Agent
 
         //Debug.Log(pms.elapsedTime);
 
-        if (pms.elapsedTime >= 60f || (pms.rewards.IsCreated && pms.rewards.Length >= 600))
+        if (pms.elapsedTime >= 60f)// || (pms.rewards.IsCreated && pms.rewards.Length >= 600))
         {
             float totalReward = 0f;
 
@@ -94,16 +94,33 @@ public class WallPlacer : Agent
                 $"size: {newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[i + 3]), 0.1f, 1f)}");
         }*/
 
-        var newWall = Instantiate(wall,
+        /*var newWall = Instantiate(wall,
                 new Vector3(spawnBounds.x * Mathf.Abs(actions.ContinuousActions[0]), 0, spawnBounds.y * Mathf.Abs(actions.ContinuousActions[1])) + transform.position,
                 Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[2]), 0));
         newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y,
-            newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[3]), 0.1f, 1f));
+            newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[3]), 0.1f, 1f));*/
 
-        Debug.Log($"x: {spawnBounds.x * Mathf.Abs(actions.ContinuousActions[0])}\n" +
+        /*Debug.Log($"x: {spawnBounds.x * Mathf.Abs(actions.ContinuousActions[0])}\n" +
             $"y: {spawnBounds.y * Mathf.Abs(actions.ContinuousActions[1])}\n" +
             $"rotation: {360 * Mathf.Abs(actions.ContinuousActions[2])}\n" +
-            $"size: {newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[3]), 0.1f, 1f)}");
+            $"size: {newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[3]), 0.1f, 1f)}");*/
+
+        // SCALE TRAINING
+        /*var newWall = Instantiate(wall,
+                new Vector3(spawnBounds.x * 0.5f, 0, spawnBounds.y * 0.5f) + transform.position,
+                Quaternion.Euler(0, 360 * 0, 0));
+        newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y,
+            newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[0]), 0.1f, 1f));
+
+        Debug.Log("Scale: " + (newWall.transform.localScale.z * Mathf.Clamp(Mathf.Abs(actions.ContinuousActions[0]), 0.1f, 1f)));*/
+
+        // ROTATION TRAINING
+        var newWall = Instantiate(wall,
+                new Vector3(spawnBounds.x * 0.5f, 0, spawnBounds.y * 0.5f) + transform.position,
+                Quaternion.Euler(0, 360 * Mathf.Abs(actions.ContinuousActions[0]), 0));
+        newWall.transform.localScale = new Vector3(newWall.transform.localScale.x, newWall.transform.localScale.y, 57.74611f);
+
+        Debug.Log("Rotation: " + (360 * Mathf.Abs(actions.ContinuousActions[0])));
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -123,9 +140,9 @@ public class WallPlacer : Agent
         }*/
 
         contActions[0] = Random.Range(0f, 1f);
-        contActions[1] = Random.Range(0f, 1f);
-        contActions[2] = Random.Range(0f, 1f);
-        contActions[3] = Random.Range(0f, 1f);
+        //contActions[1] = Random.Range(0f, 1f);
+        //contActions[2] = Random.Range(0f, 1f);
+        //contActions[3] = Random.Range(0f, 1f);
 
         //Debug.Log(contActions[3]);
     }

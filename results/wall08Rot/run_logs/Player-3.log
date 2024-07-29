@@ -1,0 +1,90 @@
+Mono path[0] = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Managed'
+Mono config path = 'C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/MonoBleedingEdge/etc'
+Initialize engine version: 2020.3.48f1 (b805b124c6b7)
+[Subsystems] Discovering subsystems at path C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/UnitySubsystems
+Forcing GfxDevice: Null
+GfxDevice: creating device client; threaded=0
+NullGfxDevice:
+    Version:  NULL 1.0 [1.0]
+    Renderer: Null Device
+    Vendor:   Unity Technologies
+Begin MonoManager ReloadAssembly
+- Completed reload, in  6.090 seconds
+ERROR: Shader Hidden/Universal Render Pipeline/Blit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CopyDepth shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/ScreenSpaceShadows shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Sampling shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderLdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/LutBuilderHdr shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/UberPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Stop NaN shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/PaniniProjection shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/SubpixelMorphologicalAntialiasing shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/FinalPost shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/StencilDeferred shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Hidden/Universal Render Pipeline/StencilDeferred' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Hidden/Universal Render Pipeline/BokehDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/CameraMotionBlur shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/GaussianDepthOfField shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Hidden/Universal Render Pipeline/Bloom shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+ERROR: Shader Sprites/Default shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+Microsoft Media Foundation video decoding to texture disabled: graphics device is Null, only Direct3D 11 and Direct3D 12 (only on desktop) are supported for hardware-accelerated video decoding.
+ERROR: Shader Sprites/Mask shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+ERROR: Shader Universal Render Pipeline/Lit shader is not supported on this GPU (none of subshaders/fallbacks are suitable)
+WARNING: Shader Unsupported: 'Universal Render Pipeline/Lit' - All subshaders removed
+WARNING: Shader Did you use #pragma only_renderers and omit this platform?
+WARNING: Shader If subshaders removal was intentional, you may have forgotten turning Fallback off?
+UnloadTime: 1.559200 ms
+No SRP present, no compute shader support, or running with -nographics. Hybrid Renderer disabled
+Warning: No Graphics Device found. Deformation systems will not run.
+NullReferenceException: Object reference not set to an instance of an object
+  at Unity.Scenes.ResourceCatalogData.GetGUIDFromPath (System.String path) [0x000b8] in <65d29a64eb9344b1b5bc89a2b35fe189>:0 
+  at Unity.Scenes.SceneSystem.GetSceneGUID (System.String scenePath) [0x0000c] in <65d29a64eb9344b1b5bc89a2b35fe189>:0 
+  at Unity.Scenes.GameObjectSceneUtility.AddGameObjectSceneReferences () [0x00044] in <65d29a64eb9344b1b5bc89a2b35fe189>:0 
+  at Unity.Entities.AutomaticWorldBootstrap.Initialize () [0x0000d] in <9af79f28d6604cada3f8c971e79fd400>:0 
+
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libcoreclr.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libcoreclr.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libdl.so.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libdl.so
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libSystem.dylib
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libSystem.dylib.dll
+Fallback handler could not load library C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data/Mono/libSystem.dylib
+Rotation: 359.3825
+Total reward: 92.79916, elapsed time: 60.06592
+Rotation: 356.7338
+Total reward: 90.89919, elapsed time: 60.08259
+Rotation: 358.5872
+Total reward: 94.09914, elapsed time: 60.08259
+Rotation: 359.6939
+Total reward: 94.29913, elapsed time: 60.08259
+Rotation: 359.5179
+Total reward: 95.09912, elapsed time: 60.08259
+Rotation: 357.8006
+Total reward: 92.59916, elapsed time: 60.08259
+Rotation: 358.5929
+Unable to save timers to file C:/Users/elect/OneDrive/Desktop/CSPractice/ECSCrowdSim/Builds/Rotation/CrowdSim_Data\ML-Agents\Timers\MLTestEnvironment_timers.json
+Setting up 4 worker threads for Enlighten.
+  Thread -> id: 8d1c -> priority: 1 
+  Thread -> id: 3ec4 -> priority: 1 
+  Thread -> id: 63d8 -> priority: 1 
+  Thread -> id: 7eac -> priority: 1 

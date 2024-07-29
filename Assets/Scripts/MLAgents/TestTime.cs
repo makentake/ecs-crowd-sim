@@ -23,7 +23,7 @@ public class TestTime : MonoBehaviour
 
         //Debug.Log(pms.elapsedTime);
 
-        if (pms.elapsedTime >= 60f || (pms.rewards.IsCreated && pms.rewards.Length >= 600))
+        if (pms.elapsedTime >= 60f)// || (pms.rewards.IsCreated && pms.rewards.Length >= 600))
         {
             float totalReward = 0f;
 
