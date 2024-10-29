@@ -10,8 +10,6 @@ using Unity.Mathematics;
 using Unity.Burst;
 
 //[UpdateInGroup(typeof(VariableRateSimulationSystemGroup))]
-//[UpdateBefore(typeof(PedestrianMovementSystem))]
-//[UpdateBefore(typeof(VariableRateSimulationSystemGroup))]
 public partial class GraphConnectionSystem : SystemBase
 {
     private EndSimulationEntityCommandBufferSystem end;
