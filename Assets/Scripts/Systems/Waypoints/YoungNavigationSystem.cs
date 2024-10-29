@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Unity.Entities;
 using Unity.Transforms;
 using Unity.Collections;
 using Unity.Mathematics;
-using Unity.Jobs;
 using Unity.Physics;
-using Unity.Physics.Systems;
 using System.Linq;
-using Unity.Entities.UniversalDelegates;
 using Unity.Burst;
 using System.Diagnostics;
 using Debug = UnityEngine.Debug;
